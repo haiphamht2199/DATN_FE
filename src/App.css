@@ -1277,3 +1277,31 @@ button {
 .MuiDataGrid-main.css-204u17-MuiDataGrid-main {
   font-size: 16px;
 }
+
+.MuiBox-root.css-8atqhb span {
+  font-size: 16px !important;
+}
+
+.MuiTableBody-root.css-apqrd9-MuiTableBody-root td,
+.MuiTableBody-root.css-apqrd9-MuiTableBody-root th {
+  font-size: 16px;
+}
+
+.MuiTablePagination-selectLabel.css-pdct74-MuiTablePagination-selectLabel {
+  font-size: 16px;
+  margin-top: 14px;
+}
+
+.MuiInputBase-root.MuiInputBase-colorPrimary.css-16c50h-MuiInputBase-root-MuiTablePagination-select {
+  font-size: 16px;
+}
+
+.MuiTablePagination-displayedRows.css-levciy-MuiTablePagination-displayedRows {
+  font-size: 16px;
+  margin-top: 12px;
+}
+
+.iconSetting {
+  font-size: 30px !important;
+  color: rgb(31, 68, 189);
+}
