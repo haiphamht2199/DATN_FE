@@ -28,6 +28,7 @@ function ProgramLession(props) {
   const ThemChuongTrinhOnClick = () => {
     setOpenCt(!openCt)
   }
+
   const onChageNameLession = (value) => {
     setNewLession(value)
   }

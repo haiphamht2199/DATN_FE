@@ -26,6 +26,7 @@ const formats = [
   "color",
   "code-block"
 ];
+
 const useStyles = makeStyles(theme => ({
   dialogWrapper: {
     // padding: theme.spacing(2),

@@ -52,6 +52,7 @@ const initialState = {
     editStudent: ""
 
   },
+
   modal: {
     editStudent: false
   }

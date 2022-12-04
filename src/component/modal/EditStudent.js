@@ -128,6 +128,7 @@ function EditStudent(props) {
   const onChageEvalute = (value) => {
     setEvaluate(value)
   }
+
   useEffect(() => {
     if (openEditStudent) {
       setStudentId(EditStudent.IdStudent);

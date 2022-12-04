@@ -224,6 +224,7 @@ function Lessions() {
           <div className='icon_status_class'>
            <RemoveRedEyeIcon className='eye_icon' />
           </div>
+
           <div className='text_infor'>
            Không công khai
           </div>

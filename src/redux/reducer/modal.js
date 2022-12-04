@@ -24,4 +24,6 @@ export default function Modal(state = {}, action) {
     default:
       return state;
   }
+
+
 }

@@ -61,4 +61,5 @@ function DetailClass() {
  )
 }
 
+
 export default DetailClass

@@ -40,6 +40,7 @@ function AddStudent(props) {
     } else {
       setisLoading(true);
     }
+
     if (studentName) {
       setisLoading1(false);
     } else {

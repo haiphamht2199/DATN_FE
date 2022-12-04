@@ -112,4 +112,5 @@ function InformationListProgramStudy() {
  )
 }
 
+
 export default InformationListProgramStudy

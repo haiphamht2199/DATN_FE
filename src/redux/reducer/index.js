@@ -4,6 +4,7 @@ import menu from './menu';
 import user from './user';
 import modal from './modal';
 import _class from './class';
+
 export default combineReducers({
  lession: lession,
  menu: menu,

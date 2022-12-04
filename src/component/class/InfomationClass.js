@@ -243,6 +243,7 @@ function InfomationClass() {
     </div>
    </div>
   </div>
+
  )
 }
 
