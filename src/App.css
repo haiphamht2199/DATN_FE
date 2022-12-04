@@ -10,6 +10,8 @@
 
 .container {
   display: flex;
+  width: 100%;
+  height: auto;
 }
 
 .overview_container {
@@ -71,8 +73,17 @@
 .content_lession {
   margin-left: 15%;
   margin-top: 30px;
-  width: 65%;
+  width: 60%;
   height: 100%;
+}
+
+.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-fullWidth.MuiInputBase-formControl {
+  height: 40px !important;
+}
+
+.MuiOutlinedInput-adornedEnd {
+
+  height: 40px !important;
 }
 
 .MuiGrid-root {
@@ -340,13 +351,13 @@ button {
 /*add class*/
 .bloc-tabs_add_class {
   display: flex;
-  width: 100%;
+  width: 50%;
 }
 
 .tabs_add_class {
   padding: 15px;
   text-align: center;
-  width: 50%;
+  width: 25%;
   background: rgba(128, 128, 128, 0.075);
   cursor: pointer;
   box-sizing: content-box;
@@ -367,7 +378,7 @@ button {
   left: 50%;
   transform: translateX(-50%);
   width: calc(100% + 2px);
-  height: 5px;
+  height: 3px;
   background: rgb(88, 147, 241);
 }
 
@@ -540,7 +551,12 @@ button {
   align-items: center;
   border-radius: 8px;
   margin-bottom: 10px;
+
 }
+
+/* .image_class_info {
+  background-image: url('../../../resource/classes\\20221128\\MICROSOFTTEAMS-IMAGE.PNG_28112022233950029A3loMm1FKE.PNG');
+} */
 
 .new_content_lession .left_new_lession {
   display: flex;
@@ -598,7 +614,8 @@ button {
 }
 
 .edit_name_lession {
-  margin-top: 30px;
+  width: 20%;
+  font-weight: 600 !important;
 }
 
 .image_edit_lesstion {
@@ -711,7 +728,13 @@ button {
 .search_lession {
   display: flex;
   gap: 60px;
-  padding: 30px 30px
+  padding: 30px 30px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search {
+  display: flex;
 }
 
 .icon_filter {
@@ -1304,4 +1327,62 @@ button {
 .iconSetting {
   font-size: 30px !important;
   color: rgb(31, 68, 189);
+}
+
+.btn_manager_student {
+  margin-left: 0px !important;
+  padding-left: 30px !important;
+}
+
+.css-1x0waax-MuiModal-root-MuiPopover-root-MuiMenu-root .MuiPaper-root {
+  margin-top: 0 !important;
+}
+
+.addStudent {
+  display: flex;
+  gap: 30px;
+}
+
+.left_top_manager {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+}
+
+.MuiTableCell-root.MuiTableCell-head.MuiTableCell-alignRight.MuiTableCell-sizeMedium.css-1azl6jz-MuiTableCell-root {
+  text-align: center !important;
+}
+
+.edit_student_group {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.edit_student_group_status {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 20px;
+}
+
+.edit_student_status_point {
+  width: 100%;
+  display: flex;
+  justify-content: space-between !important;
+}
+
+.edit_student_group_status .MuiFormControl-root {
+  width: 30% !important;
+}
+
+.edit_student_point .MuiFormControl-root {
+  width: 30% !important;
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 100%;
+  }
 }

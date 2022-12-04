@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuill } from 'react-quilljs';
+import ReactQuill from "react-quill";
 import 'quill/dist/quill.snow.css';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Grid, TextField, Card, FormControl, InputLabel, Select, MenuItem, Button, TextareaAutosize } from "@material-ui/core";

@@ -1,3 +1,4 @@
+/* eslint-disable no-octal-escape */
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { styled, alpha } from '@mui/material/styles';
@@ -17,7 +18,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import './style.css'
 const StyledMenu = styled((props) => (
  <Menu
   elevation={0}
@@ -156,7 +157,7 @@ function Lessions() {
      <div className='array_lesions_ìno'>
       <div className='infomation_lession'>
        <div className='image_class_info'>
-        <img src='https://eskipaper.com/images/beautiful-book-wallpaper-1.jpg' alt="book"></img>
+        <img style={{ backgroundImage: "unset('../../../resource/classes\\20221128\\MICROSOFTTEAMS-IMAGE.PNG_28112022233950029A3loMm1FKE.PNG')" }} alt="book" />
        </div>
        <div className='detail_infomation'>
         <div className='name_class_info'>

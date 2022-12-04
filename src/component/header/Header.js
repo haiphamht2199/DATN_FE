@@ -12,7 +12,7 @@ function Header() {
   <>
    <div className='header_teacher'>
     <div className='left-header'>
-     <Link to="/">
+     <Link to="/home">
       <div className='logo_header' style={{ cursor: "pointer" }}>
        <img src='https://stylemixthemes.com/masterstudy/wp-content/themes/landing/assets/svg/logo.svg' alt='image' />
       </div>

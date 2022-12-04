@@ -15,7 +15,8 @@ const initialState = {
     success: false,
     updateSuccess: false,
     error: false,
-    messageUpdate: ""
+    messageUpdate: "",
+    isTeacher: ""
   },
   lessions: [],
   menu: {
@@ -31,6 +32,28 @@ const initialState = {
     document: [],
     program: [],
     examAndTest: []
+  },
+  _class: {
+    nameClass: "",
+    moduleClass: 0,
+    description: "",
+    dateTimeStart: "",
+    dateTimeEnd: "",
+    pathFileImage: "",
+    scope: 0,
+    documentList: [
+      {
+        nameDocumentClass: "",
+        pathFileDocument: ""
+      }
+    ],
+    exam: [],
+    listStudent: [],
+    editStudent: ""
+
+  },
+  modal: {
+    editStudent: false
   }
 }
 const store = () => {

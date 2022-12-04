@@ -91,7 +91,7 @@ function Sidebar() {
          <div style={{ display: isOpen ? "block" : "none" }} onClick={() => handleSxpan(index)} className=' icon_expan'>{index === 1 ? expan ? item.icon_expan_less : item.icon_expan : expan1 ? item.icon_expan_less : item.icon_expan}</div>
 
         </div>
-        {index === 1 ? expan && <Link to={item.path}><div style={{ marginLeft: "70px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div></Link> : expan1 && <div style={{ marginLeft: "70px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div>}
+        {index === 1 ? expan && <Link to={item.path}><div style={{ marginLeft: "48px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div></Link> : expan1 && <div style={{ marginLeft: "48px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div>}
        </div>
       ))
      }

@@ -46,10 +46,11 @@ function DescriptionLession() {
 
  }, [quill]);
  const handleImage = (files) => {
-  console.log("files", files)
-  const formData = new FormData();
-  formData.append("file", files[0]);
-  // formData.append("upload_preset")
+
+  dispatch({
+   type: 'UPLOAD_IMAGE_CLASS',
+   payload: { file_image_class: files }
+  })
  }
 
  return (
@@ -67,7 +68,7 @@ function DescriptionLession() {
       <p style={{ fontWeight: "500", marginBottom: "10px" }}>Tải hình ảnh lớp học</p>
       <Button variant="contained" component="label" >
        Chọn thư mục
-       <input onChange={(e) => handleImage(e.target.files[0])} hidden multiple type="file" />
+       <input onChange={(e) => handleImage(e.target.files)} hidden multiple type="file" />
       </Button>
 
      </div>

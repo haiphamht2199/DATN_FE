@@ -42,6 +42,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 function ModalEditLession(props) {
+
   const { quill, quillRef } = useQuill();
   const [value, setValue] = useState();
   const [auth, setAuth] = useState(true);

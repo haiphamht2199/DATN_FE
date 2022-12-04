@@ -1,4 +1,4 @@
-.header_teacher{
+.header_teacher {
  width: 102%;
  height: 60px;
  border-bottom: 1px #555;
@@ -8,39 +8,48 @@
  align-items: center;
 
 }
-.left-header{
+
+.left-header {
  justify-content: center;
  align-items: center;
-padding-left: 40px;
-font-size: 20px;
-font-weight: 600;
-width: 60%;
+ padding-left: 40px;
+ font-size: 20px;
+ font-weight: 600;
+ width: 60%;
 }
-.right_header{
+
+.right_header {
  width: 40%;
 }
-.right_header{
+
+.right_header {
  display: flex;
  gap: 30px;
  justify-content: center;
 }
-.icon_header{
+
+.icon_header {
  box-sizing: border-box;
  display: flex;
  align-items: center;
  gap: 30px;
 }
-.seacrh_header ,.person_header{
+
+.seacrh_header,
+.person_header {
  height: 25px;
  width: 25px;
  background: blue;
  border-radius: 50%;
  cursor: pointer;
+ padding-left: 1px;
 }
-.icon_search{
+
+.icon_search {
  color: white;
  padding-left: 2px;
 }
-.person_search{
+
+.person_search {
  color: white;
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import InfomationClass from '../../component/class/InfomationClass';
 import InformationListProgramStudy from '../../component/class/InformationListProgramStudy';
+import ManagerStudent from '../../component/class/ManagerStudent';
 function DetailClass() {
  const [toggleStateAddClass, setToggleStateAddClass] = useState(1);
  const toggleTabAddClass = (index) => {
@@ -49,6 +50,10 @@ function DetailClass() {
      {
       toggleStateAddClass === 2 &&
       <InformationListProgramStudy />
+     }
+     {
+      toggleStateAddClass === 3 &&
+      <ManagerStudent />
      }
     </div>
    </div>

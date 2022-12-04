@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useState, useCallback, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Sidebar from './component/sidebar/Sidebar';
 import Header from './component/header/Header';
@@ -8,31 +9,54 @@ import AddLesssion from './pages/teacher/AddLesssion';
 import Lessions from './pages/teacher/Lessions';
 import { useDispatch, useSelector } from "react-redux";
 import DetailClass from './pages/teacher/DetailClass';
+import Login from './pages/autho/Login';
+import Signup from './pages/autho/Signup';
 
 function App() {
+  const dispatch = useDispatch()
   const isOpen = useSelector(state => state.menu.isOpenMenu);
-
+  let token = useSelector(state => state.user.token);
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      dispatch({
+        type: 'AUTO_LOGIN',
+        payload: localStorage.getItem('token')
+      })
+    }
+  }, [token]);
+  console.log("token:", token)
   return (
-    <div className='container'>
+    <>
       <BrowserRouter>
-        <Sidebar />
-        <div style={{ width: isOpen ? "85%" : "95%" }} className="content_container">
-          <Header />
-          <Routes>
-            <Route path="/" element={<Overview />} />
-          </Routes>
-          <Routes>
-            <Route path="/bai-hoc" element={<Lessions />} />
-          </Routes>
-          <Routes>
-            <Route path="/tao-bai-giang" element={<AddLesssion />} />
-          </Routes>
-          <Routes>
-            <Route path="/bai-hoc/chi-tiet-lop-hoc" element={<DetailClass />} />
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Login />} />
+        </Routes>
+        <Routes>
+          <Route path="/register" element={<Signup />} />
+        </Routes>
+        {/* {
+          token && */}
+        <div className='container'>
+          <Sidebar />
+          <div style={{ width: isOpen ? "85%" : "95%" }} className="content_container">
+            <Header />
+            <Routes>
+              <Route path="/home" element={<Overview />} />
+            </Routes>
+            <Routes>
+              <Route path="/bai-hoc" element={<Lessions />} />
+            </Routes>
+            <Routes>
+              <Route path="/tao-bai-giang" element={<AddLesssion />} />
+            </Routes>
+            <Routes>
+              <Route path="/bai-hoc/chi-tiet-lop-hoc" element={<DetailClass />} />
+            </Routes>
+          </div>
         </div>
+        {/* } */}
       </BrowserRouter>
-    </div>
+    </>
   );
 }
 
