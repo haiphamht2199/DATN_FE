@@ -265,14 +265,12 @@ function ListStudents(props) {
     setOpenAction(!openAction);
     setId(id)
   }, [id]);
-  console.log("id:", id)
   const handleClose = (anchorEl, modalOpenEditStudent) => {
 
     setAnchorEl(null);
     setOpenAction(false)
   };
   const handleOpenModal = useCallback((id) => {
-    console.log("id:", id)
     dispatch({
       type: "GET_STUDENT_CLASS",
       id: id

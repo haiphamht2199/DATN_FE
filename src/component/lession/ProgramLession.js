@@ -11,7 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 function ProgramLession(props) {
   const dispatch = useDispatch();
   const programs = useSelector((state) => state.lession.program);
-  console.log("programs:", programs)
+  const _class = useSelector((state) => state._class);
+  console.log("_class:", _class)
   const [openCt, setOpenCt] = useState(false);
   const [modalOpen, SetModalOpen] = useState(false);
   const [toggleStateAddClass, setToggleStateAddClass] = useState(1);
@@ -35,7 +36,6 @@ function ProgramLession(props) {
   const saveNewLession = useCallback((nameLession, arrayLesstion, toggleStateAddClass, nameActive, programs) => {
     if (toggleStateAddClass === 1) {
       if (nameLession) {
-        console.log("nameLession:", nameLession)
         dispatch({
           type: 'ADD_NEW_CONTENT_LESSION',
           nameLession,
@@ -61,7 +61,6 @@ function ProgramLession(props) {
     }
   }, []);
   const DeleteNewLession = useCallback((id, programs) => {
-    console.log({ id, programs })
     dispatch({
       type: 'DELETE_LESSISON_ACTIVE',
       id,
@@ -69,7 +68,6 @@ function ProgramLession(props) {
     })
   }, []);
   const EditLession = useCallback((name, _key) => {
-    console.log("_key:", _key)
     setEditNameLession(name);
     SetModalOpen(true);
     setKey(_key)
@@ -113,7 +111,7 @@ function ProgramLession(props) {
                     <div className='ten_ctd_new'>
                       <InputLabel style={{ marginBottom: "10px" }} required >Tên chương trình </InputLabel>
                       <TextField
-                        name="fullName"
+                        name="nameNewLession"
                         variant="outlined"
                         type='text'
                         fullWidth

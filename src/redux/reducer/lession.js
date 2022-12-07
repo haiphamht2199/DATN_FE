@@ -5,35 +5,7 @@ export default function Lession(state = {}, action) {
     case HYDRATE:
       let nextState = action.payload.lession; // apply delta from hydration
       return nextState
-    case "CHANGE_NAME_LESSION":
-      return {
-        ...state,
-        nameLession: action.value
-      }
-    case "CHANGE_MAJOR":
-      return {
-        ...state,
-        majors: action.value
-      }
-    case 'CHANGE_DECRIPTION':
-      return {
-        ...state,
-        description: action.description
-      }
-    case 'CHANGE_START_DATE':
-      return {
-        ...state,
-        startDate: action.startDate
 
-
-
-      }
-    case 'CHANGE_END_DATE':
-      return {
-        ...state,
-        endDate: action.endDate
-
-      }
     case 'ADD_NEW_CONTENT_LESSION':
 
       let programs = action.programs;
@@ -63,7 +35,6 @@ export default function Lession(state = {}, action) {
         program: programs1
       }
     case 'DELETE_LESSISON_ACTIVE':
-      console.log("actionDelete:", action)
       return {
         ...state,
         program: action.programs.filter(pr => pr.id !== action.id)

@@ -5,55 +5,83 @@ import 'quill/dist/quill.snow.css';
 import { Grid, TextField, Card, FormControl, InputLabel, Select, MenuItem, Button, TextareaAutosize } from "@material-ui/core";
 import ImageIcon from '@mui/icons-material/Image';
 import { useDispatch, useSelector } from "react-redux";
-import axios from 'axios'
+import axios from 'axios';
+import './test.css';
+const formats = [
+ "header",
+ "font",
+ "size",
+ "bold",
+ "italic",
+ "underline",
+ "align",
+ "strike",
+ "script",
+ "blockquote",
+ "background",
+ "list",
+ "bullet",
+ "indent",
+ "link",
+ "image",
+ "video",
+ "color",
+ "code-block"
+];
 function DescriptionLession() {
  const dispatch = useDispatch();
  const lession = useSelector((state) => state.lession);
- const [image, setImage] = useState(useSelector((state) => state.lession.image))
- console.log("lession:", lession)
- const { quill, quillRef } = useQuill();
- const [startDate, setStartDate] = useState(lession.startDate);
- const [endDate, setEndDate] = useState(lession.endDate);
- const [description, setDecription] = useState(useSelector((state) => state.lession.description));
- console.log("description:", description);
- console.log("type:", typeof (description))
- const changeStartDate = useCallback((value) => {
-  setStartDate(value);
+ const _class = useSelector((state) => state._class);
+ const image = useSelector((state) => state._class.pathFileImage);
+ const [value, setValue] = useState("")
+ let startDate = useSelector((state) => state._class.dateTimeStart);
+ let endDate = _class.dateTimeEnd;
+ const [description, setDescription] = useState(useSelector((state) => state._class.description));
+
+ const changeStartDate = (value) => {
+  startDate = value;
   dispatch({
    type: 'CHANGE_START_DATE',
-   value
+   value: value
   })
- }, [startDate])
+ }
  const changeEndDate = useCallback((value) => {
-  setEndDate(value);
+  endDate = value;
   dispatch({
    type: 'CHANGE_END_DATE',
-   value
+   value: value
   })
  }, [endDate])
+
+ const handleChangeDecription = useCallback(value => {
+  setDescription(value)
+  dispatch({
+   type: 'CHANGE_DECRIPTION',
+   description: value
+  })
+ }, [description])
  useEffect(() => {
-  if (quill) {
-   quill.on('text-change', () => {
-
-    setDecription(quillRef.current.firstChild.innerHTML);
-    dispatch({
-     type: 'CHANGE_DECRIPTION',
-     description
-    })
-   });
-
-  }
-
- }, [quill]);
- const handleImage = (files) => {
-
+  dispatch({
+   type: "GET_ALL_MODULE_CLASS"
+  })
+ }, [])
+ const handleImage = (e) => {
+  let file = e.target.files[0];
+  const imageData = new FormData();
+  imageData.append("file_image_class", file);
+  setValue({
+   ...value,
+   filePreview: URL.createObjectURL(file)
+  })
   dispatch({
    type: 'UPLOAD_IMAGE_CLASS',
-   payload: { file_image_class: files }
+   payload: imageData
   })
  }
 
-
+ const AddNewClassBtn = useCallback(() => {
+  console.log("_class:", _class)
+ }, [_class])
  return (
   <>
    <div
@@ -61,23 +89,37 @@ function DescriptionLession() {
    >
     <div className='image_class'>
      <div className='content_image'>
+      {
+       image && <img src={value.filePreview} alt="updateimage" className='image_class_preview'></img>
+      }
 
      </div>
-     <div className='icon_image'>
-      <ImageIcon className='icon_customize_image' />
+     {
+      !image && <div className='icon_image'>
+       <ImageIcon className='icon_customize_image' />
 
-      <p style={{ fontWeight: "500", marginBottom: "10px" }}>Tải hình ảnh lớp học</p>
-      <Button variant="contained" component="label" >
-       Chọn thư mục
-       <input onChange={(e) => handleImage(e.target.files)} hidden multiple type="file" />
-      </Button>
+       <p style={{ fontWeight: "500", marginBottom: "10px" }}>Tải hình ảnh lớp học</p>
+       <Button variant="contained" component="label" >
+        Chọn thư mục
+        <input onChange={handleImage} hidden multiple type="file" />
+       </Button>
 
-     </div>
+      </div>
+     }
+
     </div>
     <div className='descript_class'>
      <InputLabel required >Mô tả môn hoc</InputLabel>
      <div style={{ width: "100%", height: '300px' }}>
-      <div ref={quillRef} />
+      <ReactQuill
+       theme="snow"
+       value={description}
+       onChange={handleChangeDecription}
+       placeholder={" Nhập mô tả lớp học tại đây"}
+       // modules={modules('t1')}
+       formats={formats}
+       style={{ height: "300px" }}
+      />
      </div>
 
     </div>
@@ -90,6 +132,7 @@ function DescriptionLession() {
        variant="outlined"
        type='date'
        fullWidth
+       value={startDate}
        onChange={(e) => changeStartDate(e.target.value)}
       />
      </div>
@@ -100,6 +143,7 @@ function DescriptionLession() {
        variant="outlined"
        type='date'
        fullWidth
+       value={endDate}
        onChange={(e) => changeEndDate(e.target.value)}
       />
      </div>
@@ -114,7 +158,7 @@ function DescriptionLession() {
      </div>
     </div>
     <div className='next_button'>
-     <Button variant="contained">Tiếp tục</Button>
+     <Button variant="contained" onClick={AddNewClassBtn}>Tạo lớp học</Button>
     </div>
    </div>
   </>

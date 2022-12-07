@@ -12,6 +12,7 @@ import DetailClass from './pages/teacher/DetailClass';
 import Login from './pages/autho/Login';
 import Signup from './pages/autho/Signup';
 
+
 function App() {
   const dispatch = useDispatch()
   const isOpen = useSelector(state => state.menu.isOpenMenu);
@@ -21,10 +22,12 @@ function App() {
       dispatch({
         type: 'AUTO_LOGIN',
         payload: localStorage.getItem('token')
-      })
+      });
     }
+
   }, [token]);
-  console.log("token:", token)
+
+
   return (
     <>
       <BrowserRouter>
@@ -34,27 +37,27 @@ function App() {
         <Routes>
           <Route path="/register" element={<Signup />} />
         </Routes>
-        {/* {
-          token && */}
-        <div className='container'>
-          <Sidebar />
-          <div style={{ width: isOpen ? "85%" : "95%" }} className="content_container">
-            <Header />
-            <Routes>
-              <Route path="/home" element={<Overview />} />
-            </Routes>
-            <Routes>
-              <Route path="/bai-hoc" element={<Lessions />} />
-            </Routes>
-            <Routes>
-              <Route path="/tao-bai-giang" element={<AddLesssion />} />
-            </Routes>
-            <Routes>
-              <Route path="/bai-hoc/chi-tiet-lop-hoc" element={<DetailClass />} />
-            </Routes>
+        {
+          token &&
+          <div className='container'>
+            <Sidebar />
+            <div style={{ width: isOpen ? "85%" : "95%" }} className="content_container">
+              <Header />
+              <Routes>
+                <Route path="/home" element={<Overview />} />
+              </Routes>
+              <Routes>
+                <Route path="/bai-hoc" element={<Lessions />} />
+              </Routes>
+              <Routes>
+                <Route path="/tao-bai-giang" element={<AddLesssion />} />
+              </Routes>
+              <Routes>
+                <Route path="/bai-hoc/chi-tiet-lop-hoc" element={<DetailClass />} />
+              </Routes>
+            </div>
           </div>
-        </div>
-        {/* } */}
+        }
       </BrowserRouter>
     </>
   );

@@ -1,10 +1,15 @@
-import axios from 'axios';
-const token = window.localStorage.getItem('token');
-const axiosIntance = axios.create({
- baseURL: "http://localhost:8080/api/v1/",
+
+import axios from 'axios'
+
+const axiosInstance = axios.create({
+ baseURL: 'http://localhost:8080/api/v1',
+ timeout: 5000,
  headers: {
-  'Authorization': token ? `Bearer ${token}` : ''
- },
+  'Access-Control-Allow-Origin': '*',
+  'Authorization': "Bearer " + localStorage.getItem('token'),
+  'Content-Type': 'multipart/form-data',
+  'accept': 'application/json'
+ }
 });
 
-export default axiosIntance
+export default axiosInstance;

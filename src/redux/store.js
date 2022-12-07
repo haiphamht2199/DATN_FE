@@ -36,7 +36,7 @@ const initialState = {
   _class: {
     nameClass: "",
     moduleClass: 0,
-    description: "",
+    description: "sdfdsf",
     dateTimeStart: "",
     dateTimeEnd: "",
     pathFileImage: "",
@@ -55,6 +55,9 @@ const initialState = {
 
   modal: {
     editStudent: false
+  },
+  moduleClass: {
+    modules: {}
   }
 }
 const store = () => {

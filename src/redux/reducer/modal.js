@@ -6,7 +6,6 @@ export default function Modal(state = {}, action) {
       let nextState = action.payload.modal; // apply delta from hydration
       return nextState
     case 'CHANGE_MODAL_EDIT_STUDENT':
-      console.log("actions:", action)
       return {
         ...state,
         editStudent: true

@@ -51,7 +51,6 @@ function EditStudent(props) {
   const dispatch = useDispatch();
   let openEditStudent = useSelector(state => state.modal.editStudent);
   let EditStudent = useSelector(state => state._class.editStudent);
-  console.log("EditStudent:", EditStudent)
   const { quill, quillRef } = useQuill();
   const [value, setValue] = useState();
   const [studentId, setStudentId] = useState(EditStudent.IdStudent);
@@ -97,7 +96,7 @@ function EditStudent(props) {
     }
 
     if (studentId && studentName && validateEmail && studentEmail) {
-      console.log({ studentId, studentName, studentEmail, studentStatus, isLoading1, isLoading2, validateEmail, point, evaluate })
+
       let id = EditStudent.id;
       let editDateClass = "10:00,29/10/2022";
       let data = {
@@ -158,7 +157,7 @@ function EditStudent(props) {
       <DialogContent dividers>
         <div className='content_edit'>
           <div className='edit_student_group'>
-            <InputLabel className='edit_name_lession' >Mã số sinh viên:</InputLabel>
+            <InputLabel className='edit_name_Student' >Mã số sinh viên:</InputLabel>
             <TextField
               fullWidth
               variant="outlined"
@@ -171,7 +170,7 @@ function EditStudent(props) {
 
 
           <div className='edit_student_group'>
-            <InputLabel className='edit_name_lession'>Họ và tên </InputLabel>
+            <InputLabel className='edit_name_Student'>Họ và tên </InputLabel>
 
             <TextField
               fullWidth
@@ -185,7 +184,7 @@ function EditStudent(props) {
           {isLoading1 && <Alert severity="error" style={{ color: "red", marginTop: "-15px", paddingLeft: "15%" }}>Tên sinh viên không được để trống!</Alert>}
 
           <div className='edit_student_group'>
-            <InputLabel className='edit_name_lession'>Địa chỉ email: </InputLabel>
+            <InputLabel className='edit_name_Student'>Địa chỉ email: </InputLabel>
 
             <TextField
               fullWidth
@@ -200,9 +199,9 @@ function EditStudent(props) {
 
 
           <div className='edit_student_group'>
-            <InputLabel className='edit_name_lession'>File tài liệu: </InputLabel>
+            <InputLabel className='edit_name_Student'>File tài liệu: </InputLabel>
 
-            <div className='edit_name_lession'>https://sped/file/resoure/bai_hoc_1/active_1/hai_pd.zip</div>
+            <div className='edit_name_Student'>https://sped/file/resoure/bai_hoc_1/active_1/hai_pd.zip</div>
 
           </div>
           {
@@ -210,7 +209,7 @@ function EditStudent(props) {
             <div className='edit_student_status_point'>
               <Grid item xs={12}>
                 <div className='edit_student_group_status'>
-                  <InputLabel className='edit_name_lession'>Trạng thái: </InputLabel>
+                  <InputLabel className='edit_name_Student'>Trạng thái: </InputLabel>
                   <FormControl variant="outlined"   >
 
                     <Select
@@ -229,7 +228,7 @@ function EditStudent(props) {
               </Grid>
               <Grid item xs={6} className="edit_student_point">
                 <div className='edit_student_group_status'>
-                  <InputLabel className='edit_name_lession'>Điểm: </InputLabel>
+                  <InputLabel className='edit_name_Student'>Điểm: </InputLabel>
                   <FormControl variant="outlined"   >
 
                     <Select

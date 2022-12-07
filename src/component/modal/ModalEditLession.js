@@ -60,7 +60,6 @@ function ModalEditLession(props) {
   useEffect(() => {
     if (quill) {
       quill.on('text-change', () => {
-        console.log(quillRef.current.firstChild.innerHTML);
         setValue(quillRef.current.firstChild.innerHTML)
       });
     }

@@ -1,5 +1,5 @@
 import { call, put, all, takeEvery, takeLatest } from 'redux-saga/effects';
-import axios from '../../helper/axios'
+import axios from 'axios'
 let config = {
  headers: {
   "Content-Type": "application/json",
@@ -13,7 +13,7 @@ let config = {
 function* handleLogin(action) {
  try {
 
-  const user = yield all([axios.post('http://localhost:8080/api/v1/auth/login', action.payload)]);
+  const user = yield all([axios.post('http://localhost:8080/api/auth/login', action.payload)]);
   let userRes = user[0].data;
   if (userRes.code === 200) {
    localStorage.setItem('token', userRes.data.access_token)

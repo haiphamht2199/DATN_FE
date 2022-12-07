@@ -11,7 +11,6 @@ export default function Class(state = {}, action) {
         listStudent: action.payload
       }
     case 'ADD_NEW_STUDENT_REST':
-      console.log("data:", action.data)
       return {
         ...state,
         listStudent: state.listStudent.push(action.data)
@@ -19,7 +18,6 @@ export default function Class(state = {}, action) {
     case "GET_STUDENT_CLASS":
 
       let studentEdit = state.listStudent.filter(student => student.id === action.id);
-      console.log("studentEdit:", studentEdit)
       if (studentEdit.length) {
         return {
           ...state,
@@ -33,7 +31,6 @@ export default function Class(state = {}, action) {
       if (data.length) {
         for (let i = 0; i < data.length; i++) {
           if (data[i].id === action.data.id) {
-            console.log("action:", action.data)
             data[i] = action.data;
             break;
           }
@@ -48,6 +45,38 @@ export default function Class(state = {}, action) {
       return {
         ...state,
         editStudent: ""
+      }
+    case 'UPLOAD_IMAGE_CLASS_SUCCESS':
+      console.log("action:", action)
+      return {
+        ...state,
+        pathFileImage: action.payload
+      }
+    case "CHANGE_NAME_LESSION":
+      return {
+        ...state,
+        nameClass: action.value
+      }
+    case "CHANGE_MAJOR":
+      return {
+        ...state,
+        moduleClass: action.value
+      }
+    case 'CHANGE_DECRIPTION':
+      return {
+        ...state,
+        description: action.description
+      }
+    case 'CHANGE_START_DATE':
+      return {
+        ...state,
+        dateTimeStart: action.value
+      }
+    case 'CHANGE_END_DATE':
+      return {
+        ...state,
+        dateTimeEnd: action.value
+
       }
     default:
       return state;

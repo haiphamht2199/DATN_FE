@@ -9,6 +9,7 @@ import AddAlarmIcon from '@mui/icons-material/AddAlarm';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import LayersIcon from '@mui/icons-material/Layers';
 import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
+import { Link } from 'react-router-dom'
 function InfomationClass() {
  const [toggleState, setToggleState] = useState(1);
  const toggleTab = (index) => {
@@ -126,7 +127,7 @@ function InfomationClass() {
            <FeedIcon className='icon_document' />
           </div>
           <div className='name_document'>
-           Học liệu tăng cường.zip
+           <Link to="/PHAM DINH HAI.DOCX_07122022160645263s7PsgwU9rX.DOCX" target="_blank" download>Download</Link>
           </div>
          </div>
          <div className='downt_document'>

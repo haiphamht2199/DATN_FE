@@ -13,7 +13,9 @@ const AddLesssion = ({ props }) => {
   const [toggleState, setToggleState] = useState(1);
   const { quill, quillRef } = useQuill();
   const [nameLession, setNameLession] = useState(lession.nameLession);
-  const [majors, setMajors] = useState(lession.majors);
+  const [majors, setMajors] = useState(1);
+  const modules = useSelector((state) => state.moduleClass.modules);
+  console.log("module:", modules)
   const dispatch = useDispatch();
   const toggleTab = (index) => {
     setToggleState(index);
@@ -62,7 +64,7 @@ const AddLesssion = ({ props }) => {
               <Grid item xs={12}>
                 <InputLabel style={{ marginBottom: "10px" }} required>Tên khóa học </InputLabel>
                 <TextField
-                  name="fullName"
+                  name="nameNewLession"
                   variant="outlined"
                   fullWidth
                   required
@@ -82,8 +84,13 @@ const AddLesssion = ({ props }) => {
                     value={majors}
                     onChange={(e) => onchangeMajor(e.target.value)}
                   >
-                    <MenuItem value="0">Bộ môn sư phạm kĩ thuật</MenuItem>
-                    <MenuItem value="1">Bộ môn Công nghệ giáo dục</MenuItem>
+                    {
+                      modules && modules.length && modules.map(item => (
+                        <MenuItem value={item.module_class_id}>{item.name_module_class}</MenuItem>
+                      ))
+                    }
+                    {/* <MenuItem value="0">Bộ môn sư phạm kĩ thuật</MenuItem>
+                    <MenuItem value="1">Bộ môn Công nghệ giáo dục</MenuItem> */}
                   </Select>
                 </FormControl>
               </Grid>

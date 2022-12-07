@@ -18,7 +18,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import './style.css'
+import './style.css';
+import heaphone from './image/headphone1.jpeg'
 const StyledMenu = styled((props) => (
  <Menu
   elevation={0}
@@ -63,6 +64,13 @@ function Lessions() {
  const [toggleStateAddClass, setToggleStateAddClass] = useState(1);
  const [openAction, setOpenAction] = useState(false);
  const [anchorEl, setAnchorEl] = useState(null);
+ const [_image, set_image] = useState("");
+ // set_image({
+ //  ..._image,
+ //  filePreview: URL.createObjectURL("headphone2.png")
+ // })
+ let a = "documents\\20221207\\PHAM DINH HAI.DOCX_07122022225056018CNbV9P9ZIN.DOCX";
+ console.log("a:", a.replaceAll("\\", "/"))
  const toggleTabAddClass = (index) => {
 
   setToggleStateAddClass(index);
@@ -157,7 +165,7 @@ function Lessions() {
      <div className='array_lesions_ìno'>
       <div className='infomation_lession'>
        <div className='image_class_info'>
-        <img style={{ backgroundImage: "unset('../../../resource/classes\\20221128\\MICROSOFTTEAMS-IMAGE.PNG_28112022233950029A3loMm1FKE.PNG')" }} alt="book" />
+        <img src={require('../../resource/classes/20221207/NEWS1.JPG_071220222257132267WLNG3AqQX.JPG')} alt="" />
        </div>
        <div className='detail_infomation'>
         <div className='name_class_info'>
