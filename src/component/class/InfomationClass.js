@@ -127,7 +127,7 @@ function InfomationClass() {
            <FeedIcon className='icon_document' />
           </div>
           <div className='name_document'>
-           <Link to="/PHAM DINH HAI.DOCX_07122022160645263s7PsgwU9rX.DOCX" target="_blank" download>Download</Link>
+           <Link to={require('../../resource/documents/20221207/PHAM DINH HAI.DOCX_07122022160645263s7PsgwU9rX.DOCX')} target="_blank" download>Download</Link>
           </div>
          </div>
          <div className='downt_document'>

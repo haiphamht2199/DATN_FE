@@ -8,6 +8,10 @@
   height: 40px;
 }
 
+.MuiPaper-root.MuiDialog-paper.makeStyles-dialogWrapper-5.MuiDialog-paperScrollPaper.MuiDialog-paperWidthMd.MuiPaper-elevation24.MuiPaper-rounded {
+  top: 2% !important;
+}
+
 .container {
   display: flex;
   width: 100%;
@@ -242,7 +246,7 @@ button {
   display: flex;
   justify-content: space-between;
   margin-top: 50px;
-  height: 70px;
+  height: auto;
   width: 100%;
   background-color: #F1F2F6;
   align-items: center;
@@ -727,7 +731,7 @@ button {
 
 .content_array_lessions {
   width: 100%;
-  height: 500px;
+  height: auto;
   border: 1px solid rgb(223, 218, 218);
   border-radius: 5px;
 }
@@ -835,6 +839,7 @@ button {
 .array_lesions_ìno .infomation_lession {
   display: flex;
   gap: 40px;
+  height: auto;
 }
 
 .infomation_base {
@@ -1391,6 +1396,7 @@ button {
 .image_class_preview {
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 
 .content_image {
@@ -1402,4 +1408,125 @@ button {
   .container {
     max-width: 100%;
   }
+}
+
+
+.file-card {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 3px dashed #cbd5e0;
+  background-color: #edf2f7;
+  min-width: 380px;
+  min-height: 230px;
+}
+
+.file-card .file-inputs {
+  position: relative;
+  margin-bottom: 1.5em;
+}
+
+.file-card .file-inputs input {
+  position: relative;
+  text-align: right;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
+  height: 46px;
+  max-width: 200px;
+}
+
+.file-card .file-inputs button {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  background-color: #f55e30;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  transition: background-color 0.4s;
+  box-shadow: 0px 8px 24px rgba(149, 157, 165, 0.5);
+}
+
+.file-card .file-inputs button i {
+  width: 1.5em;
+  height: 1.5em;
+  padding: 0.4em;
+  background-color: #fff;
+  color: #f55e30;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.8em;
+  font-size: 0.8em;
+}
+
+.file-card .file-inputs:hover button {
+  background-color: #f15120;
+}
+
+.main {
+  font-weight: bold;
+  margin-bottom: 0.4em;
+}
+
+.info {
+  font-size: 0.8rem;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1em;
+}
+
+li {
+  list-style: none;
+  margin: 1.2em 0;
+  background-color: #f55e3038;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 1.2em 1.5em;
+}
+
+li svg {
+  color: #f55321;
+}
+
+li svg:first-child {
+  font-size: 1.2em;
+  margin-right: 0.8em;
+}
+
+li p {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+li .actions {
+  justify-self: flex-end;
+  cursor: pointer;
+}
+
+li .actions .fa-spinner {
+  font-size: 1.2em;
+}
+
+.item_name_upload_file {
+  font-size: 16px;
+  padding-top: 10px;
+
 }

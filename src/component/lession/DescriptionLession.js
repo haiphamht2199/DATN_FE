@@ -5,8 +5,10 @@ import 'quill/dist/quill.snow.css';
 import { Grid, TextField, Card, FormControl, InputLabel, Select, MenuItem, Button, TextareaAutosize } from "@material-ui/core";
 import ImageIcon from '@mui/icons-material/Image';
 import { useDispatch, useSelector } from "react-redux";
+import FeedIcon from '@mui/icons-material/Feed';
 import axios from 'axios';
 import './test.css';
+import UploadDocument from '../uploadFile/UploadDocument';
 const formats = [
  "header",
  "font",
@@ -32,12 +34,12 @@ function DescriptionLession() {
  const dispatch = useDispatch();
  const lession = useSelector((state) => state.lession);
  const _class = useSelector((state) => state._class);
- const image = useSelector((state) => state._class.pathFileImage);
+ let image = useSelector((state) => state._class.pathFileImage);
  const [value, setValue] = useState("")
  let startDate = useSelector((state) => state._class.dateTimeStart);
  let endDate = _class.dateTimeEnd;
  const [description, setDescription] = useState(useSelector((state) => state._class.description));
-
+ console.log("image:", image)
  const changeStartDate = (value) => {
   startDate = value;
   dispatch({
@@ -80,7 +82,12 @@ function DescriptionLession() {
  }
 
  const AddNewClassBtn = useCallback(() => {
-  console.log("_class:", _class)
+  if (_class.nameClass) {
+   dispatch({
+    type: 'ADD_NEW_CLASS_REST',
+    payload: _class
+   })
+  }
  }, [_class])
  return (
   <>
@@ -90,7 +97,7 @@ function DescriptionLession() {
     <div className='image_class'>
      <div className='content_image'>
       {
-       image && <img src={value.filePreview} alt="updateimage" className='image_class_preview'></img>
+       image && <img src={require(`../../resource/${image}`)} alt="updateimage" className='image_class_preview'></img>
       }
 
      </div>
@@ -101,7 +108,7 @@ function DescriptionLession() {
        <p style={{ fontWeight: "500", marginBottom: "10px" }}>Tải hình ảnh lớp học</p>
        <Button variant="contained" component="label" >
         Chọn thư mục
-        <input onChange={handleImage} hidden multiple type="file" />
+        <input onChange={handleImage} hidden accept="image/*" multiple type="file" />
        </Button>
 
       </div>
@@ -149,14 +156,30 @@ function DescriptionLession() {
      </div>
 
     </div>
-    <div className='tai-lieu-mon-hoc'>
+    {
+     <UploadDocument />
+    }
+    {/* <div className='tai-lieu-mon-hoc'>
      <div style={{ marginLeft: "20px" }}>
       <p>Tài liệu môn học</p>
      </div>
-     <div>
-      <Button style={{ marginRight: "20px" }} variant="contained">{"+" + " " + "Thêm tài liệu lớp học"}</Button>
+     <div style={{ padding: "20px 20px" }}>
+      <Button style={{ marginRight: "20px" }} variant="contained" component="label" >
+       Thêm tài liệu lớp học
+       <input hidden multiple type="file" />
+      </Button>
      </div>
     </div>
+    <div className='study_document'>
+     <div className='iconAndName_study_document'>
+      <div className='icon_Stydy_document'>
+       <FeedIcon className='icon_document' />
+      </div>
+      <div className='name_document'>
+       Học liệu tăng cường.zip
+      </div>
+     </div>
+    </div> */}
     <div className='next_button'>
      <Button variant="contained" onClick={AddNewClassBtn}>Tạo lớp học</Button>
     </div>

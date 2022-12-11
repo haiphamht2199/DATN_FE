@@ -1,5 +1,5 @@
 /* eslint-disable no-octal-escape */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { styled, alpha } from '@mui/material/styles';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
@@ -19,7 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './style.css';
-import heaphone from './image/headphone1.jpeg'
+import { useDispatch, useSelector } from "react-redux";
 const StyledMenu = styled((props) => (
  <Menu
   elevation={0}
@@ -61,10 +61,12 @@ const StyledMenu = styled((props) => (
  },
 }));
 function Lessions() {
+ const listClass = useSelector(state => state._class.listClass)
  const [toggleStateAddClass, setToggleStateAddClass] = useState(1);
  const [openAction, setOpenAction] = useState(false);
  const [anchorEl, setAnchorEl] = useState(null);
  const [_image, set_image] = useState("");
+ const dispatch = useDispatch();
  // set_image({
  //  ..._image,
  //  filePreview: URL.createObjectURL("headphone2.png")
@@ -82,7 +84,12 @@ function Lessions() {
  const handleClose = () => {
   setAnchorEl(null);
  };
+ useEffect(() => {
+  dispatch({
+   type: 'GET_ALL_CLASS_REST',
 
+  })
+ }, [])
  return (
   <div className='array_lessions'>
    <div className='url_lession_top'>
@@ -162,140 +169,92 @@ function Lessions() {
        Lớp học đã diễn ra (2)
       </div>
      </div>
-     <div className='array_lesions_ìno'>
-      <div className='infomation_lession'>
-       <div className='image_class_info'>
-        <img src={require('../../resource/classes/20221207/NEWS1.JPG_071220222257132267WLNG3AqQX.JPG')} alt="" />
-       </div>
-       <div className='detail_infomation'>
-        <div className='name_class_info'>
-         <div style={{ fontSize: "20px", fontWeight: "600" }}>Tên lớp học: </div>
-         <div style={{ fontSize: "20px", fontWeight: "600" }}>Lớp học số 1</div>
-        </div>
-        <div className='infomation_base'>
-         <div className='info_status'>
-          <div className='icon_status_class'>
-           <RemoveRedEyeIcon className='eye_icon' />
-          </div>
-          <div className='text_infor'>
-           Không công khai
-          </div>
+     {
+      listClass.length &&
+      listClass.map(item =>
+      (
+       <div className='array_lesions_ìno'>
+        <div className='infomation_lession'>
+         <div className='image_class_info'>
+          <img src={require(`../../resource/${item.path_file_image}`)} alt="book"></img>
          </div>
-         <div className='info_status'>
-          <div className='icon_status_class'>
-           <Diversity3Icon className='list_people_icon' />
+         <div className='detail_infomation'>
+          <div className='name_class_info'>
+           <div style={{ fontSize: "20px", fontWeight: "600" }}>Tên lớp học: </div>
+           <div style={{ fontSize: "20px", fontWeight: "600" }}>{item.name_class}</div>
           </div>
-          <div className='text_infor'>
-           Số lượng sinh viên:
-          </div>
-          <div className='text_infor'> 120 sinh viên </div>
-         </div>
-         <div className='info_status'>
-          <div className='icon_status_class check_done_public'>
-           <DoneIcon className='done_public' />
-          </div>
-          <div className='text_infor'>
-           Trạng thái:
-          </div>
-          <div className='text_infor'>
-           Hoạt động
-          </div>
-         </div>
-         <div className='info_status_Calendar'>
-          <div className='icon_status_class'>
-           <CalendarMonthIcon className='icon_calendar' />
-          </div>
-          <div className='Calendar_detail'>
-           <div className='label_calendar' >Thời gian diễn ra</div>
-           <div className='info_calendar'>29/10/2022 - 12/12/2022</div>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
-      <div className='action_lession_list'>
-       <MoreHorizIcon className='icon_dot' />
-      </div>
-     </div>
-     <div className='array_lesions_ìno'>
-      <div className='infomation_lession'>
-       <div className='image_class_info'>
-        <img src='https://eskipaper.com/images/beautiful-book-wallpaper-1.jpg' alt="book"></img>
-       </div>
-       <div className='detail_infomation'>
-        <div className='name_class_info'>
-         <div style={{ fontSize: "20px", fontWeight: "600" }}>Tên lớp học: </div>
-         <div style={{ fontSize: "20px", fontWeight: "600" }}>Lớp học số 1</div>
-        </div>
-        <div className='infomation_base'>
-         <div className='info_status'>
-          <div className='icon_status_class'>
-           <RemoveRedEyeIcon className='eye_icon' />
-          </div>
+          <div className='infomation_base'>
+           <div className='info_status'>
+            <div className='icon_status_class'>
+             <RemoveRedEyeIcon className='eye_icon' />
+            </div>
 
-          <div className='text_infor'>
-           Không công khai
-          </div>
-         </div>
-         <div className='info_status'>
-          <div className='icon_status_class'>
-           <Diversity3Icon className='list_people_icon' />
-          </div>
-          <div className='text_infor'>
-           Số lượng sinh viên:
-          </div>
-          <div className='text_infor'> 120 sinh viên </div>
-         </div>
-         <div className='info_status'>
-          <div className='icon_status_class check_done_public'>
-           <DoneIcon className='done_public' />
-          </div>
-          <div className='text_infor'>
-           Trạng thái:
-          </div>
-          <div className='text_infor'>
-           Hoạt động
-          </div>
-         </div>
-         <div className='info_status_Calendar'>
-          <div className='icon_status_class'>
-           <CalendarMonthIcon className='icon_calendar' />
-          </div>
-          <div className='Calendar_detail'>
-           <div className='label_calendar' >Thời gian diễn ra</div>
-           <div className='info_calendar'>29/10/2022 - 12/12/2022</div>
+            <div className='text_infor'>
+             {item.scope_class === 1 ? "Công khai" : "Không công khai"}
+            </div>
+           </div>
+           <div className='info_status'>
+            <div className='icon_status_class'>
+             <Diversity3Icon className='list_people_icon' />
+            </div>
+            <div className='text_infor'>
+             Số lượng sinh viên:
+            </div>
+            <div className='text_infor'> {item.total_students ? item.total_students : "0"} sinh viên </div>
+           </div>
+           <div className='info_status'>
+            <div className='icon_status_class check_done_public'>
+             <DoneIcon className='done_public' />
+            </div>
+            <div className='text_infor'>
+             Trạng thái:
+            </div>
+            <div className='text_infor'>
+             {item.status_class ? "Hoạt động" : "Không hoạt động"}
+            </div>
+           </div>
+           <div className='info_status_Calendar'>
+            <div className='icon_status_class'>
+             <CalendarMonthIcon className='icon_calendar' />
+            </div>
+            <div className='Calendar_detail'>
+             <div className='label_calendar' >Thời gian diễn ra</div>
+             <div className='info_calendar'>29/10/2022 - 12/12/2022</div>
+            </div>
+           </div>
           </div>
          </div>
         </div>
-       </div>
-      </div>
-      <div className='action_lession_list' onClick={handleClick}>
-       <MoreHorizIcon className='icon_dot' />
-       <div>
-        <StyledMenu
-         id="demo-customized-menu"
-         MenuListProps={{
-          'aria-labelledby': 'demo-customized-button',
-         }}
-         anchorEl={anchorEl}
-         open={openAction}
-         onClose={handleClose}
-        >
-         <Link to='chi-tiet-lop-hoc'>
-          <MenuItem onClick={handleClose} disableRipple>
-           <EditIcon />
-           Chỉnh sửa
-          </MenuItem>
-         </Link>
-         <MenuItem onClick={handleClose} disableRipple>
-          <DeleteIcon />
-          Xóa
-         </MenuItem>
+        <div className='action_lession_list' onClick={handleClick}>
+         <MoreHorizIcon className='icon_dot' />
+         <div>
+          <StyledMenu
+           id="demo-customized-menu"
+           MenuListProps={{
+            'aria-labelledby': 'demo-customized-button',
+           }}
+           anchorEl={anchorEl}
+           open={openAction}
+           onClose={handleClose}
+          >
+           <Link to='chi-tiet-lop-hoc'>
+            <MenuItem onClick={handleClose} disableRipple>
+             <EditIcon />
+             Chỉnh sửa
+            </MenuItem>
+           </Link>
+           <MenuItem onClick={handleClose} disableRipple>
+            <DeleteIcon />
+            Xóa
+           </MenuItem>
 
-        </StyledMenu>
+          </StyledMenu>
+         </div>
+        </div>
        </div>
-      </div>
-     </div>
+      ))
+
+     }
     </div>
    </div>
   </div>

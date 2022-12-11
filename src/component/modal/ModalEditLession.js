@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { Dialog, DialogTitle, DialogContent, makeStyles, Switch, FormGroup, Typography, Button, TextField, InputLabel, OutlinedInput, FormControl, InputAdornment, FormLabel, Radio, FormControlLabel, RadioGroup } from '@material-ui/core';
+import React, { useState, useEffect, useCallback } from 'react'
+import { Dialog, Select, MenuItem, DialogTitle, DialogContent, makeStyles, Switch, FormGroup, Typography, Button, TextField, InputLabel, OutlinedInput, FormControl, InputAdornment, FormLabel, Radio, FormControlLabel, RadioGroup } from '@material-ui/core';
 import CloseIcon from '@mui/icons-material/Close';
 import ImageIcon from '@mui/icons-material/Image';
 import { useQuill } from 'react-quilljs';
 import ReactQuill from "react-quill";
+import { useDispatch, useSelector } from "react-redux";
 import 'quill/dist/quill.snow.css';
 const formats = [
   "header",
@@ -43,11 +44,22 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 function ModalEditLession(props) {
-
+  const dispatch = useDispatch();
+  const edit = useSelector(state => state._class.editLesson)
   const { quill, quillRef } = useQuill();
   const [value, setValue] = useState();
   const [auth, setAuth] = useState(true);
-  const { name, openModal, SetModalOpen } = props;
+  let { name, openModal, SetModalOpen, indexPr, editNameActive, _key } = props;
+  console.log("name:", name);
+  console.log("edit:", edit)
+
+  const [nameLesson, setNameLesson] = useState("dfgdg");
+  const [descriptionLesson, setDescriptionLesson] = useState(edit.nameLesson);
+  const [imageLesson, setImageLesson] = useState("")
+  const [nameActive, setNameActive] = useState("");
+  const [typeLesson, setTypeLesson] = useState("");
+  const [timeDuration, setTimeDuration] = useState("");
+  let [scopeLesson, setScopeLesson] = useState("");
   const classes = useStyles();
   const [toggleState, setToggleState] = useState(1);
   const toggleTab = (index) => {
@@ -63,13 +75,22 @@ function ModalEditLession(props) {
         setValue(quillRef.current.firstChild.innerHTML)
       });
     }
-  }, [quill]);
+    setImageLesson(name.nameLesson);
+    setTypeLesson(name.nameTask);
+    setScopeLesson(name.scopeLesson)
+  }, [quill, name, setImageLesson, typeLesson, scopeLesson]);
   const [valueChoice, setValueChoice] = useState("1");
 
   const handleChange = (e) => {
     setValueChoice(e.target.value);
   };
+  const handleSaveProgram = useCallback(() => {
+    dispatch({
+      type: 'HANDLE_SAVE_EDIT_PROGRAM',
+      payload: { nameLesson, descriptionLesson, imageLesson, typeLesson, timeDuration, scopeLesson, indexPr, _key, editNameActive }
+    })
 
+  }, [nameLesson, descriptionLesson, imageLesson, typeLesson, timeDuration, scopeLesson, indexPr, _key, editNameActive])
   return (
     <Dialog open={openModal} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
       <DialogTitle className={classes.dialogTitle}>
@@ -86,7 +107,9 @@ function ModalEditLession(props) {
       </DialogTitle>
       <DialogContent dividers>
         {
-          props._key === "lession" ?
+          props._key === 0 ?
+
+            name.nameLesson &&
             <div className='edit_lession'>
               <div className="bloc-tabs">
                 <button
@@ -113,7 +136,9 @@ function ModalEditLession(props) {
                       <TextField
                         fullWidth
                         variant="outlined"
-                        value={name} />
+                        value={nameLesson}
+                        onChange={(e) => setNameLesson(e.target.value)}
+                      />
                     </div>
                     <div className='image_edit_lesstion'>
                       <div className='icon_image_upload'>
@@ -131,8 +156,8 @@ function ModalEditLession(props) {
                       <div style={{ width: "100%", height: '200px' }}>
                         <ReactQuill
                           theme="snow"
-                          value=""
-                          onChange={() => console.log()}
+                          value={descriptionLesson}
+                          onChange={() => setDescriptionLesson(value)}
                           placeholder={" Nhập mô tả nội dung bài học tại đây"}
                           // modules={modules('t1')}
                           formats={formats}
@@ -150,16 +175,24 @@ function ModalEditLession(props) {
                     <div className='top_setting'>
                       <div className='type_lession'>
                         <InputLabel style={{ marginBottom: "10px" }} required>Loại bài học </InputLabel>
-                        <TextField
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          name="bloodGroup"
                           fullWidth
-                          variant="outlined"
-                          value="" />
+                          value={name.typeLesson}
+                          onChange={(e) => setTypeLesson(e.target.value)}
+                        >
+                          <MenuItem value={name.typeLesson}>{typeLesson === 0 ? "Bài học lý thuyết" : "Bài học bài tập"}</MenuItem>
+                        </Select>
                       </div>
                       <div className='time_lession'>
                         <InputLabel style={{ marginBottom: "10px" }} required>Thời lượng </InputLabel>
                         <OutlinedInput
                           id="outlined-adornment-weight"
                           fullWidth
+                          value={timeDuration}
+                          onChange={(e) => setTimeDuration(e.target.value)}
                           endAdornment={<InputAdornment position="end">/giờ</InputAdornment>}
                           aria-describedby="outlined-weight-helper-text"
                           inputProps={{
@@ -174,8 +207,8 @@ function ModalEditLession(props) {
                         <RadioGroup
                           aria-labelledby="demo-controlled-radio-buttons-group"
                           name="controlled-radio-buttons-group"
-                          value={valueChoice}
-                          onChange={handleChange}
+                          value={name.scopeLesson.toString()}
+                          onChange={(e) => setScopeLesson(e.target.value)}
                         >
                           <FormControlLabel value="1" control={<Radio />} label="Công khai" />
                           <FormControlLabel value="0" control={<Radio />} label="Không công khai" />
@@ -193,7 +226,9 @@ function ModalEditLession(props) {
                   </div>
                 </div>
               </div>
-            </div> :
+            </div>
+
+            :
             <div className='content_edit'>
               <div className='edit_name_lession'>
                 <InputLabel style={{ marginBottom: "10px" }} required>Tên hoạt động </InputLabel>
@@ -202,7 +237,7 @@ function ModalEditLession(props) {
                 <TextField
                   fullWidth
                   variant="outlined"
-                  value={name} />
+                  value={name.nameTask} />
               </div>
               <div className='edit_name_lession'>
                 <InputLabel style={{ marginBottom: "10px" }} required>Kiểu  hoạt động </InputLabel>
@@ -214,7 +249,7 @@ function ModalEditLession(props) {
                   value="Tự động chia nhóm" />
               </div>
               <div className='edit_name_lession'>
-                <InputLabel style={{ marginBottom: "10px" }} required>Danh sách sinh viênviên </InputLabel>
+                <InputLabel style={{ marginBottom: "10px" }} required>Danh sách sinh viên </InputLabel>
               </div>
               <div>
                 <TextField
@@ -269,7 +304,7 @@ function ModalEditLession(props) {
                   <Button variant="outlined">Hủy</Button>
                 </div>
                 <div className='save_edit'>
-                  <Button variant="contained">Lưu</Button>
+                  <Button variant="contained" onClick={handleSaveProgram}>Lưu</Button>
                 </div>
               </div>
             </div>

@@ -34,23 +34,21 @@ const initialState = {
     examAndTest: []
   },
   _class: {
+    class_id: "",
     nameClass: "",
-    moduleClass: 0,
-    description: "sdfdsf",
+    moduleClassId: 1,
+    description: "",
     dateTimeStart: "",
     dateTimeEnd: "",
     pathFileImage: "",
     scope: 0,
-    documentList: [
-      {
-        nameDocumentClass: "",
-        pathFileDocument: ""
-      }
-    ],
+    documentList: [],
     exam: [],
     listStudent: [],
-    editStudent: ""
-
+    editStudent: "",
+    listClass: [],
+    arrayProgram: [],
+    editLesson: ""
   },
 
   modal: {
