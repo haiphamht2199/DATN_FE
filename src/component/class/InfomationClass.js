@@ -10,7 +10,8 @@ import Diversity3Icon from '@mui/icons-material/Diversity3';
 import LayersIcon from '@mui/icons-material/Layers';
 import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
 import { Link } from 'react-router-dom'
-function InfomationClass() {
+function InfomationClass(props) {
+ const { detailClass } = props
  const [toggleState, setToggleState] = useState(1);
  const toggleTab = (index) => {
   setToggleState(index);
@@ -30,13 +31,13 @@ function InfomationClass() {
        <div className='label_name_class'>
         Tên lớp học:
        </div>
-       <div className="name_class_info"> Lớp Học Thực Tại Tăng Cường</div>
+       <div className="name_class_info"> {detailClass.name_class}</div>
       </div>
       <div className="detail_top-right">
        <div className='label_status_class'>
         Trạng thái:
        </div>
-       <div className="status_class_info"> Công khai </div>
+       <div className="status_class_info">{detailClass.status_class === 1 ? "Công khai" : "Không công khai"} </div>
       </div>
      </div>
      <div className='detail_bottom'>

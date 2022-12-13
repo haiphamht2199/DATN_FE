@@ -48,7 +48,18 @@ const initialState = {
     editStudent: "",
     listClass: [],
     arrayProgram: [],
-    editLesson: ""
+    editLesson: "",
+    classDetail: {
+      class_id: "",
+      name_class: "",
+      tag_class: "",
+      scope_class: 0,
+      total_students: 0,
+      status_class: 1,
+      start_time: null,
+      end_time: null,
+      path_file_image: ""
+    }
   },
 
   modal: {

@@ -190,6 +190,22 @@ export default function Class(state = {}, action) {
       }
     case 'HANDLE_SAVE_EDIT_PROGRAM':
       console.log("actionEdit:", action)
+    case 'GET_CLASS_INFORMATION_BY_ID_SUCCESS':
+      return {
+        ...state,
+        classDetail: {
+          ...state.classDetail,
+          class_id: action.payload.class_id,
+          name_class: action.payload.name_class,
+          tag_class: action.payload.tag_class,
+          scope_class: action.payload.scope_class,
+          total_students: action.payload.total_students,
+          status_class: action.payload.status_class,
+          start_time: action.payload.start_time,
+          end_time: action.payload.end_time,
+          path_file_image: action.payload.path_file_image
+        }
+      }
     default:
       return state;
   }

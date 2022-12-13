@@ -89,7 +89,10 @@ function Lessions() {
    type: 'GET_ALL_CLASS_REST',
 
   })
- }, [])
+ }, []);
+ const handlePushClick = (class_id) => {
+  console.log("class_id:", class_id)
+ }
  return (
   <div className='array_lessions'>
    <div className='url_lession_top'>
@@ -237,12 +240,15 @@ function Lessions() {
            open={openAction}
            onClose={handleClose}
           >
-           <Link to={"chi-tiet-lop-hoc?class_id=" + item.class_id}>
-            <MenuItem disableRipple>
-             <EditIcon />
-             Chỉnh sửa
-            </MenuItem>
-           </Link>
+           {/* <Link to={"chi-tiet-lop-hoc?class_id=" + item.class_id}> */}
+           <MenuItem disableRipple
+            onClick={() => handlePushClick(item.class_id)}
+           >
+            <EditIcon />
+
+            {item.class_id}
+           </MenuItem>
+           {/* </Link> */}
            <MenuItem onClick={handleClose} disableRipple>
             <DeleteIcon />
             Xóa

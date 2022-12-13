@@ -119,11 +119,26 @@ function* createProgramByClass(action) {
 
  }
 }
+function* getClassDetailById(action) {
+ try {
+  let classRes = yield all([axios.get(`/teacher/sys/class_category/get_class_detail?class_id=${action.payload}`)]);
+  let classDetail = classRes[0].data;
+  if (classDetail.code === 200) {
+   yield put({
+    type: "GET_CLASS_INFORMATION_BY_ID_SUCCESS",
+    payload: classDetail.data
+   })
+  }
+ } catch (error) {
+
+ }
+}
 export default function* lession() {
  yield takeLatest('GET_LESSIONS', getLession);
  yield takeLatest('UPLOAD_IMAGE_CLASS', uploadImageClass)
  yield takeLatest('GET_ALL_MODULE_CLASS', getAllModuleClass);
  yield takeLatest('ADD_NEW_CLASS_REST', addNewClass);
  yield takeLatest('GET_ALL_CLASS_REST', getAllClass);
- yield takeLatest('HANDLE_CREATE_PROGRAM_BY_CLASS', createProgramByClass)
+ yield takeLatest('HANDLE_CREATE_PROGRAM_BY_CLASS', createProgramByClass);
+ yield takeLatest('GET_DETAIL_INFORMATION_CLASS_BY_ID', getClassDetailById)
 }
