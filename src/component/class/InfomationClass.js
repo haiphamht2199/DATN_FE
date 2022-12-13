@@ -143,9 +143,9 @@ function InfomationClass() {
        toggleState === 2 &&
        <div className='listProgramStudy'>
         <div className='informationProgramStudy'>
-         <div className='titleProgramStudy'>
+         <Link to="/bai-hoc/chi-tiet-lop-hoc/chuong-trinh-hoc"> <div className='titleProgramStudy'>
           <span className='titleProgram'>Lession 1:</span> Introduction to MasterStudy AR-VR
-         </div>
+         </div></Link>
          <div className='listLessionAndActive'>
           <div className='inforLessionAndActive'>
            <div className='iconAndTitlelessionAndActive'>

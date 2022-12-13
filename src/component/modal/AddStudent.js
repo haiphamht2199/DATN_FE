@@ -58,7 +58,6 @@ function AddStudent(props) {
       setisLoading2(true);
 
     }
-    console.log({ studentId, studentName, studentEmail, studentStatus, isLoading1, isLoading2, validateEmail })
     if (studentId && studentName && validateEmail && studentEmail) {
       let id = Math.floor(Math.random() * 101);
       let editDateClass = "10:00,29/10/2022";

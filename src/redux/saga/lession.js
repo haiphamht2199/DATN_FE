@@ -102,10 +102,28 @@ function* getAllClass() {
  }
 
 }
+function* createProgramByClass(action) {
+ try {
+  let arrayProgram = action.payload.arrayProgram;
+  console.log("arrayProgram:", arrayProgram);
+  if (arrayProgram.length) {
+   arrayProgram.map(item => {
+    item.class_id = action.payload.class_id;
+    item.toggleStateAddClass.remove();
+   });
+
+   let programRes = yield all([axios.post('/teacher/program_category/create', arrayProgram)]);
+   console.log("program:", programRes)
+  }
+ } catch (error) {
+
+ }
+}
 export default function* lession() {
  yield takeLatest('GET_LESSIONS', getLession);
  yield takeLatest('UPLOAD_IMAGE_CLASS', uploadImageClass)
  yield takeLatest('GET_ALL_MODULE_CLASS', getAllModuleClass);
  yield takeLatest('ADD_NEW_CLASS_REST', addNewClass);
- yield takeLatest('GET_ALL_CLASS_REST', getAllClass)
+ yield takeLatest('GET_ALL_CLASS_REST', getAllClass);
+ yield takeLatest('HANDLE_CREATE_PROGRAM_BY_CLASS', createProgramByClass)
 }

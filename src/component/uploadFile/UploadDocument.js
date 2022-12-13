@@ -7,7 +7,6 @@ import UploadFile from './UploadFile';
 
 const UploadDocument = () => {
  const [files, setFiles] = useState([])
-
  const removeFile = (filename) => {
   setFiles(files.filter(file => file.name !== filename))
  }

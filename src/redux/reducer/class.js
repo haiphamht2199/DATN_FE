@@ -96,30 +96,10 @@ export default function Class(state = {}, action) {
       }
     case 'SETUP_PROGRAM_REST':
       let setupProgram = {
-        classId: '',
+        class_id: state.class_id ? state.class_id : "",
         toggleStateAddClass: 1,
         nameProgramCategory: '',
         index: 1,
-        createLesson: {
-          nameLesson: '',
-          pathLesson: '',
-          descriptionLesson: '',
-          typeLesson: '',
-          timeDuration: '',
-          scopeLesson: '',
-          indexLesson: 1,
-          errClass: false
-        },
-        createTask: {
-          nameTask: '',
-          typeTask: 1,
-          typeGroupStudent: 1,
-          descriptionTask: '',
-          timeDurationTask: '',
-          isRequireFinishTask: 0,
-          index: 1,
-          errActive: true
-        },
         createLessonRequestList: [],
         createTaskRequestList: []
       }
@@ -152,29 +132,10 @@ export default function Class(state = {}, action) {
       let newProgramTable3 = [...state.arrayProgram];
 
       newProgramTable3.push({
-        classId: '',
+        classId: state.class_id ? state.class_id : "",
         toggleStateAddClass: 1,
         nameProgramCategory: '',
         index: newProgramTable3[newProgramTable3.length - 1].index + 1,
-        createLesson: {
-          nameLesson: '',
-          pathLesson: '',
-          descriptionLesson: '',
-          typeLesson: '',
-          timeDuration: '',
-          scopeLesson: '',
-          indexLesson: 1
-
-        },
-        createTask: {
-          nameTask: '',
-          typeTask: 1,
-          typeGroupStudent: 1,
-          descriptionTask: '',
-          timeDurationTask: '',
-          isRequireFinishTask: 0,
-          index: 1
-        },
         createLessonRequestList: [],
         createTaskRequestList: []
       });
@@ -196,9 +157,9 @@ export default function Class(state = {}, action) {
           nameLesson: action.nameLession,
           pathLesson: '',
           descriptionLesson: '',
-          typeLesson: 0,
+          typeLesson: "0",
           timeDuration: '',
-          scopeLesson: 0,
+          scopeLesson: "0",
           indexLesson: newProgramTable5[action.index - 1].createLessonRequestList.length + 1
         }
         newProgramTable5[action.index - 1].createLessonRequestList.push(_data);
@@ -208,11 +169,11 @@ export default function Class(state = {}, action) {
       if (action.nameActive) {
         let createTask = {
           nameTask: action.nameActive,
-          typeTask: 1,
+          typeTask: "1",
           typeGroupStudent: 1,
           descriptionTask: '',
-          timeDurationTask: '',
-          isRequireFinishTask: 0,
+          timeDurationTask: 0,
+          isRequireFinishTask: "0",
           index: newProgramTable5[action.index - 1].createTaskRequestList.length + 1
         }
         // newProgramTable5[action.index - 1].createTask.errActive = false;

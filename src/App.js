@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DetailClass from './pages/teacher/DetailClass';
 import Login from './pages/autho/Login';
 import Signup from './pages/autho/Signup';
+import ProgramDetail from './pages/teacher/ProgramDetail';
 
 
 function App() {
@@ -54,6 +55,9 @@ function App() {
               </Routes>
               <Routes>
                 <Route path="/bai-hoc/chi-tiet-lop-hoc" element={<DetailClass />} />
+              </Routes>
+              <Routes>
+                <Route path="/bai-hoc/chi-tiet-lop-hoc/chuong-trinh-hoc" element={<ProgramDetail />} />
               </Routes>
             </div>
           </div>

@@ -23,6 +23,7 @@ function ProgramLession(props) {
   const [key, setKey] = useState("");
   const [errClass, setErrorClass] = useState(false);
   const [errActive, setErroActive] = useState(false);
+  const [indexPr, setIndexPr] = useState(1);
   const toggleTabAddClass = useCallback((index, indexProgram) => {
     dispatch({
       type: 'TOGGLE_TAB_ADD_CLASS',
@@ -71,15 +72,16 @@ function ProgramLession(props) {
       programs
     })
   }, []);
-  const EditLession = useCallback((item) => {
+  const EditLession = useCallback((item, index) => {
     dispatch({
       type: 'GET_EIDT_LESSON',
       payload: item
-    })
+    });
     setEditNameLession(item);
     SetModalOpen(true);
-    setKey(0)
-  }, [editNameLession]);
+    setKey(0);
+    setIndexPr(index)
+  }, [editNameLession, indexPr, key]);
   const EditActive = useCallback((item) => {
     setEditNameActive(item);
     SetModalOpen(true);
@@ -97,8 +99,22 @@ function ProgramLession(props) {
       index: index
     })
   }, [arrayLesstion]);
+  const handleSubmitCreateProgram = useCallback(() => {
+    if (_class.class_id) {
+      dispatch({
+        type: 'HANDLE_CREATE_PROGRAM_BY_CLASS',
+        payload: _class
+      })
+    } else {
+      alert("Bạn cần phải tạo lớp học đã!")
+    }
+  }, [_class])
   return (
     <>
+      <div>
+
+        <ModalEditLession lessonData={editNameLession} editNameActive={editNameActive} openModal={modalOpen} SetModalOpen={SetModalOpen} quill={props.quill} quillRef={props.quillRef} _key={key} indexPr={indexPr} />
+      </div>
       <div
         className="content  active-content"
       >
@@ -124,10 +140,6 @@ function ProgramLession(props) {
                 {
                   arrayLesstion && arrayLesstion.length && arrayLesstion.map(item => (
                     <Card className='card_ctd'>
-                      <div>
-
-                        <ModalEditLession name={editNameLession} editNameActive={editNameActive} openModal={modalOpen} SetModalOpen={SetModalOpen} quill={props.quill} quillRef={props.quillRef} _key={key} indexPr={item.index} />
-                      </div>
                       <div className='content_card_new'>
                         <div className='top_ctd'>
                           <div className='ten_ctd'>Chương trình #{item.index}</div>
@@ -161,7 +173,7 @@ function ProgramLession(props) {
                                     </div>
                                   </div>
                                   <div className='action_new_lession'>
-                                    <EditIcon className='edit_new_lesstion' onClick={() => EditLession(lession)} />
+                                    <EditIcon className='edit_new_lesstion' onClick={() => EditLession(lession, item.index)} />
                                     <DeleteIcon onClick={() => DeleteNewLession(lession.id, programs)} className='delete_new_lesstion' />
                                   </div>
                                 </div>
@@ -273,7 +285,7 @@ function ProgramLession(props) {
               <Button variant="contained">Quay lại</Button>
             </div>
             <div className='btn_next'>
-              <Button variant="contained">Tiếp tục</Button>
+              <Button variant="contained" disabled={arrayLesstion.length ? false : true} onClick={handleSubmitCreateProgram}>Tiếp tục</Button>
             </div>
           </div>
         </div>

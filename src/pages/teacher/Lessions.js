@@ -237,8 +237,8 @@ function Lessions() {
            open={openAction}
            onClose={handleClose}
           >
-           <Link to='chi-tiet-lop-hoc'>
-            <MenuItem onClick={handleClose} disableRipple>
+           <Link to={"chi-tiet-lop-hoc?class_id=" + item.class_id}>
+            <MenuItem disableRipple>
              <EditIcon />
              Chỉnh sửa
             </MenuItem>

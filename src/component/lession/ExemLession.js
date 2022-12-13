@@ -24,7 +24,6 @@ function ExemLession() {
  const [errContent, setErrContent] = useState(false);
  const [checkSave, setCheckSave] = useState(true);
  const [idEditQues, setIdEditQues] = useState("");
- console.log("arrayQuestions:", arrayQuestions)
  const ChangePoint = (point) => {
   if (point < 0) {
    point = 0;

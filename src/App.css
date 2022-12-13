@@ -1530,3 +1530,100 @@ li .actions .fa-spinner {
   padding-top: 10px;
 
 }
+
+.infomation_detail_program_content {
+  padding: 20px 20px;
+  display: flex;
+  gap: 5%;
+  margin-top: 10px;
+  width: 100%;
+  height: auto;
+  border: 1px solid #D9D9D9;
+  border-radius: 9px;
+}
+
+.infomation_detail_program_content .list_lesson_left {
+  width: 30%;
+  background: #f0f4fa;
+  height: 100%;
+}
+
+.infomation_detail_program_content .detail_lesson_right {
+  width: 65%;
+}
+
+.content_lesson_lest {
+  padding: 20px 20px;
+}
+
+.infomation_detail_program_content .list_lesson_left .list_lesson_left-top {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.infomation_detail_program_content .list_lesson_left .list_lession_content-left {
+  justify-content: center;
+  align-items: center;
+  /* text-align: center; */
+}
+
+.header_lesson_name_class_top {
+  height: 50px;
+  width: 100%;
+  background: #385cce;
+  display: flex;
+  /* align-items: center; */
+  gap: 5%;
+  padding-left: 10px;
+  padding-top: 4px;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.header_lesson_name_class_top .name_lession {
+  width: 70%;
+}
+
+.header_lesson_name_class_top .icon_arround_lessson {
+  width: 25%;
+}
+
+.content_list_lesson_class_left {
+  padding-left: 20px;
+  padding-top: 15px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.content_list_lesson_class_left .iconAndLabel_name_class {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon_paper_custom {
+  font-size: 20px !important;
+  color: #385cce;
+}
+
+.index_name_lesson {
+  color: #c1c9dc;
+}
+
+.iconAndLabel_name_class {
+  width: 30%;
+}
+
+.list_content_custom {
+  width: 100%;
+  height: auto;
+  background: #fff;
+}
