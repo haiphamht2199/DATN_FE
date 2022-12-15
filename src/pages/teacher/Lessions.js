@@ -179,13 +179,15 @@ function Lessions() {
        <div className='array_lesions_ìno'>
         <div className='infomation_lession'>
          <div className='image_class_info'>
-          <img src={require(`../../resource/${item.path_file_image}`)} alt="book"></img>
+          <img src={require(`../../resource/${item.path_file_image.replaceAll('\\', '/')}`)} alt="book"></img>
          </div>
          <div className='detail_infomation'>
-          <div className='name_class_info'>
-           <div style={{ fontSize: "20px", fontWeight: "600" }}>Tên lớp học: </div>
-           <div style={{ fontSize: "20px", fontWeight: "600" }}>{item.name_class}</div>
-          </div>
+          <Link to={"chi-tiet-lop-hoc?class_id=" + item.class_id}>
+           <div className='name_class_info'>
+            <div style={{ fontSize: "20px", fontWeight: "600" }}>Tên lớp học: </div>
+            <div style={{ fontSize: "20px", fontWeight: "600" }}>{item.name_class}</div>
+           </div>
+          </Link>
           <div className='infomation_base'>
            <div className='info_status'>
             <div className='icon_status_class'>

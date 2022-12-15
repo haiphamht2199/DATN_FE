@@ -119,7 +119,7 @@ function ModalEditLession(props) {
   }, [lessonData]);
   const handletimeDurationTask = useCallback((value) => {
     editNameActive.timeDurationTask = value;
-    setTimeDuration(value)
+    setTimeDurationActive(value)
   }, [lessonData]);
   const handleChangeScopeLesson = useCallback((value) => {
     lessonData.scopeLesson = value;

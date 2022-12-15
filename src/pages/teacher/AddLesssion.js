@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DescriptionLession from '../../component/lession/DescriptionLession';
 import ProgramLession from '../../component/lession/ProgramLession';
 import ExemLession from '../../component/lession/ExemLession';
+import { Link } from "react-router-dom";
 const AddLesssion = ({ props }) => {
   const lession = useSelector((state) => state.lession);
   const [toggleState, setToggleState] = useState(1);
@@ -101,13 +102,17 @@ const AddLesssion = ({ props }) => {
                   className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(1)}
                 >
+
                   Mô tả môn học
+
                 </button>
                 <button
                   className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
                   onClick={() => toggleTab(2)}
                 >
+                  {/* <Link to="/tao-bai-giang/tao-chuong-trinh-day"> */}
                   Chương trình giảng dạy
+                  {/* </Link> */}
                 </button>
                 <button
                   className={toggleState === 3 ? "tabs active-tabs" : "tabs"}

@@ -1240,6 +1240,7 @@ button {
 
 .titleProgramStudy {
   font-size: 18px;
+  margin-top: 20px;
 }
 
 .listLessionAndActive {
@@ -1626,4 +1627,13 @@ li .actions .fa-spinner {
   width: 100%;
   height: auto;
   background: #fff;
+}
+
+.detail_lesson_right img {
+  width: 100%;
+  height: 100%;
+}
+
+.ListProgramStudyContent .MuiTableContainer-root.css-rorn0c-MuiTableContainer-root {
+  padding-left: 20px;
 }

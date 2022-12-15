@@ -96,7 +96,7 @@ export default function Class(state = {}, action) {
       }
     case 'SETUP_PROGRAM_REST':
       let setupProgram = {
-        class_id: state.class_id ? state.class_id : "",
+        classId: state.class_id ? state.class_id : "",
         toggleStateAddClass: 1,
         nameProgramCategory: '',
         index: 1,
@@ -193,6 +193,7 @@ export default function Class(state = {}, action) {
     case 'GET_CLASS_INFORMATION_BY_ID_SUCCESS':
       return {
         ...state,
+        class_id: action.payload.class_id,
         classDetail: {
           ...state.classDetail,
           class_id: action.payload.class_id,
@@ -204,6 +205,35 @@ export default function Class(state = {}, action) {
           start_time: action.payload.start_time,
           end_time: action.payload.end_time,
           path_file_image: action.payload.path_file_image
+        }
+      }
+    case
+      'GET_CLASS_DOCUMENT_BY_ID_SUCCESS':
+      return {
+        ...state, classDetail: {
+          ...state.classDetail,
+          documentList: action.payload.documents_response,
+          description: action.payload.description
+        }
+
+      }
+    case 'GET_CLASS_PROGRAM_BY_ID_SUCCESS':
+      console.log("actionPr:", action)
+      return {
+        ...state,
+        classDetail: {
+          ...state.classDetail,
+          arrayProgram: action.payload
+        }
+
+      }
+    case 'GET_ALL_CATEGORY_PROGRAM_BY_ID_SUCCESS':
+      console.log('action:', action)
+      return {
+        ...state,
+        classDetail: {
+          ...state.classDetail,
+          allCategoryProgram: action.payload
         }
       }
     default:

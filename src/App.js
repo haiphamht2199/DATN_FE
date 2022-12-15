@@ -12,6 +12,8 @@ import DetailClass from './pages/teacher/DetailClass';
 import Login from './pages/autho/Login';
 import Signup from './pages/autho/Signup';
 import ProgramDetail from './pages/teacher/ProgramDetail';
+import ProgramLession from './component/lession/ProgramLession';
+import DetailProgramCaregory from './pages/teacher/DetailProgramCaregory';
 
 
 function App() {
@@ -53,11 +55,18 @@ function App() {
               <Routes>
                 <Route path="/tao-bai-giang" element={<AddLesssion />} />
               </Routes>
+              {/* <Route
+                path="/tao-bai-giang/tao-chuong-trinh-day"
+                render={(props) => <ProgramLession {...props} />}
+              /> */}
               <Routes>
                 <Route path="/bai-hoc/chi-tiet-lop-hoc" element={<DetailClass />} />
               </Routes>
               <Routes>
                 <Route path="/bai-hoc/chi-tiet-lop-hoc/chuong-trinh-hoc" element={<ProgramDetail />} />
+              </Routes>
+              <Routes>
+                <Route path="/bai-hoc/chi-tiet-lop-hoc/chi-tiet-chuong-trinh-hoc" element={<DetailProgramCaregory />} />
               </Routes>
             </div>
           </div>

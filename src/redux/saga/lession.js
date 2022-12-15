@@ -69,6 +69,7 @@ function* addNewClass(action) {
    documentList: documentList
 
   }
+  console.log("newClass:", newClass)
   const newClassRes = yield all([axios.post('/teacher/classes/create_class', newClass)]);
   let dataNewClass = newClassRes[0].data;
   if (dataNewClass.code === 200) {
@@ -105,13 +106,8 @@ function* getAllClass() {
 function* createProgramByClass(action) {
  try {
   let arrayProgram = action.payload.arrayProgram;
-  console.log("arrayProgram:", arrayProgram);
+  console.log("arrayProgram:", arrayProgram)
   if (arrayProgram.length) {
-   arrayProgram.map(item => {
-    item.class_id = action.payload.class_id;
-    item.toggleStateAddClass.remove();
-   });
-
    let programRes = yield all([axios.post('/teacher/program_category/create', arrayProgram)]);
    console.log("program:", programRes)
   }
@@ -133,6 +129,50 @@ function* getClassDetailById(action) {
 
  }
 }
+function* getdocumentClassById(action) {
+ try {
+  let documentRes = yield all([axios.get(`/teacher/sys/class_category/get_information_detail_class?class_id=${action.payload}`)]);
+  let classDetail = documentRes[0].data;
+  if (classDetail.code === 200) {
+   yield put({
+    type: "GET_CLASS_DOCUMENT_BY_ID_SUCCESS",
+    payload: classDetail.data
+   })
+  }
+ } catch (error) {
+
+ }
+}
+function* getAllProgramByClassId(action) {
+ try {
+  let ProgramRes = yield all([axios.get(`/teacher/sys/class_category/get_information_detail_program_categories?class_id=${action.payload}`)]);
+  let ProData = ProgramRes[0].data;
+  console.log("ProData:", ProData)
+  if (ProData.code === 200) {
+   yield put({
+    type: "GET_CLASS_PROGRAM_BY_ID_SUCCESS",
+    payload: ProData.data
+   })
+  }
+ } catch (error) {
+
+ }
+}
+function* getAllcategoryProgramByClassId(action) {
+ try {
+  let AllProgramCatrgoryRes = yield all([axios.get(`/teacher/sys/program_category/find_all_program_categories?page=0&size=100&classId=${action.payload}`)]);
+  let AllCategory = AllProgramCatrgoryRes[0].data;
+  console.log("AllCategory:", AllCategory)
+  if (AllCategory.code === 200) {
+   yield put({
+    type: "GET_ALL_CATEGORY_PROGRAM_BY_ID_SUCCESS",
+    payload: AllCategory.data.results
+   })
+  }
+ } catch (error) {
+
+ }
+}
 export default function* lession() {
  yield takeLatest('GET_LESSIONS', getLession);
  yield takeLatest('UPLOAD_IMAGE_CLASS', uploadImageClass)
@@ -140,5 +180,8 @@ export default function* lession() {
  yield takeLatest('ADD_NEW_CLASS_REST', addNewClass);
  yield takeLatest('GET_ALL_CLASS_REST', getAllClass);
  yield takeLatest('HANDLE_CREATE_PROGRAM_BY_CLASS', createProgramByClass);
- yield takeLatest('GET_DETAIL_INFORMATION_CLASS_BY_ID', getClassDetailById)
+ yield takeLatest('GET_DETAIL_INFORMATION_CLASS_BY_ID', getClassDetailById);
+ yield takeLatest('GET_DETAIL_INFORMATION_AND_DOCUMENT_CLASS_BY_ID', getdocumentClassById);
+ yield takeLatest('GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID', getAllProgramByClassId);
+ yield takeLatest('GET_ALL_PROGRAM_CATEGERY_CLASS_BY_ID', getAllcategoryProgramByClassId)
 }

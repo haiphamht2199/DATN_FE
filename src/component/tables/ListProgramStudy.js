@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
 import { Link } from "react-router-dom";
@@ -11,21 +11,18 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
+import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const StyledMenu = styled((props) => (
   <Menu
     elevation={0}
@@ -141,7 +138,7 @@ const headCells = [
   },
 ];
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { order, orderBy, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -150,17 +147,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -195,52 +181,11 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
 
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : ""}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-}
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
 function ListProgramStudy(props) {
+  const dispatch = useDispatch();
+  const allCategoryProgram = useSelector(state => state._class.classDetail.allCategoryProgram);
+  console.log("allCategoryProgram:", allCategoryProgram)
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -249,12 +194,17 @@ function ListProgramStudy(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [openAction, setOpenAction] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleClickSetting = (event) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [programId, setProgramId] = useState("")
+  const navigate = useNavigate();
+  const handleClickSetting = useCallback((event, row) => {
+    console.log("program_category_id:", row.program_category_id)
     setAnchorEl(event.currentTarget);
     setOpenAction(!openAction);
-  }
-  const handleClose = (anchorEl) => {
+    setProgramId(row.program_category_id)
+  }, [setProgramId])
+  const handleClose = (anchorEl, programId) => {
+    console.log("programId:", programId)
     setAnchorEl(null);
     setOpenAction(false)
   };
@@ -272,26 +222,6 @@ function ListProgramStudy(props) {
       return;
     }
     setSelected([]);
-  };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -312,11 +242,21 @@ function ListProgramStudy(props) {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
+  const handleDetailProgram = (row) => {
+    navigate(`/bai-hoc/chi-tiet-lop-hoc/chi-tiet-chuong-trinh-hoc?class_id=${searchParams.get("class_id")}&program_category_id=${row.program_category_id}`);
+  }
+  useEffect(() => {
+    if (searchParams.get("class_id")) {
+      dispatch({
+        type: 'GET_ALL_PROGRAM_CATEGERY_CLASS_BY_ID',
+        payload: searchParams.get("class_id")
+      })
+    }
+  }, [])
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -329,12 +269,12 @@ function ListProgramStudy(props) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={allCategoryProgram.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.sort(getComparator(order, orderBy)).slice() */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(allCategoryProgram, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -344,35 +284,29 @@ function ListProgramStudy(props) {
                     <TableRow
                       hover
 
-                      role="checkbox"
+
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.id}
-                      selected={isItemSelected}
+
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                          onClick={(event) => handleClick(event, row.id)}
-                        />
-                      </TableCell>
+                      {/* <Link className='linkcustom' to={`chi-tiet-chuong-trinh-hoc?class_id=${searchParams.get("class_id")}&program_category_id=${row.program_category_id}`}> */}
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleDetailProgram(row)}
                       >
-                        {row.nameProgram}
+                        {row.name_program_category}
                       </TableCell>
-                      <TableCell align="right">{row.createUser}</TableCell>
-                      <TableCell align="right">{row.startDate}</TableCell>
-                      <TableCell align="right">{row.editDate}</TableCell>
-                      <TableCell align="right">{row.status}</TableCell>
-                      <TableCell align="right" onClick={handleClickSetting} style={{ cursor: "pointer", paddingRight: "30px" }}><SettingsIcon className="iconSetting" /></TableCell>
+                      {/* </Link> */}
+                      <TableCell align="right">{row.create_by ? row.create_by : "Phạm Đình Hải"}</TableCell>
+                      <TableCell align="right">{row.create_time}</TableCell>
+                      <TableCell align="right">{row.modified_time}</TableCell>
+                      <TableCell align="right">{row.status === 1 ? "Hoạt động" : "Không hoạt động"}</TableCell>
+                      <TableCell align="right" onClick={(e) => handleClickSetting(e, row)} style={{ cursor: "pointer", paddingRight: "30px" }}><SettingsIcon className="iconSetting" /></TableCell>
                       <div>
                         <StyledMenu
                           id="demo-customized-menu"
@@ -384,13 +318,18 @@ function ListProgramStudy(props) {
                           onClose={handleClose}
                         >
                           <Link to=''>
-                            <MenuItem onClick={handleClose} disableRipple>
+                            <MenuItem onClick={handleClose}
+                              disableRipple
+                            >
                               <EditIcon />
                               Chỉnh sửa
                             </MenuItem>
                           </Link>
 
-                          <MenuItem onClick={() => handleClose(anchorEl)} disableRipple>
+                          <MenuItem
+                            programId={programId}
+                            onClick={() => handleClose(anchorEl, programId)}
+                            disableRipple>
                             <DeleteIcon />
                             Xóa
                           </MenuItem>

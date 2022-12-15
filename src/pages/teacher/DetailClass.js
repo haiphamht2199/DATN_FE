@@ -21,6 +21,14 @@ function DetailClass() {
     type: 'GET_DETAIL_INFORMATION_CLASS_BY_ID',
     payload: searchParams.get("class_id")
    })
+   dispatch({
+    type: 'GET_DETAIL_INFORMATION_AND_DOCUMENT_CLASS_BY_ID',
+    payload: searchParams.get("class_id")
+   });
+   dispatch({
+    type: 'GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID',
+    payload: searchParams.get("class_id")
+   })
   }
  }, [])
  return (

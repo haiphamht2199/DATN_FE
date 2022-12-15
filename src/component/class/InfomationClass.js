@@ -104,37 +104,33 @@ function InfomationClass(props) {
        toggleState === 1 &&
        <div style={{ width: "100%", height: "auto" }}>
         <div className='image_class_info_detail'>
-         <img src='https://masterstudy.stylemixthemes.com/white-lms/wp-content/uploads/sites/7/2022/01/photo-1491897554428-130a60dd4757-scaled.jpeg?r=54' alt='image_class' />
+         <img src={require(`../../resource/${detailClass.path_file_image}`)} alt='image_class' />
         </div>
         <div className='content_br'>
 
         </div>
-        <div className='study_document'>
-         <div className='iconAndName_study_document'>
-          <div className='icon_Stydy_document'>
-           <FeedIcon className='icon_document' />
+        {
+         detailClass.documentList && detailClass.documentList.length && detailClass.documentList.map(item => (
+          <div className='study_document'>
+           <div className='iconAndName_study_document'>
+            <div className='icon_Stydy_document'>
+             <FeedIcon className='icon_document' />
+            </div>
+            <div className='name_document'>
+             <div className='name_document'>
+              {item.name_document}
+             </div>
+            </div>
+           </div>
+           <div className='downt_document'>
+            <Link to={require(`../../resource/${item.file_path_document.replaceAll('\\', '/')}`)} target="_blank" download>
+             <VerticalAlignBottomIcon className='down_load_icon' />
+            </Link>
+
+           </div>
           </div>
-          <div className='name_document'>
-           Học liệu tăng cường.zip
-          </div>
-         </div>
-         <div className='downt_document'>
-          <VerticalAlignBottomIcon className='down_load_icon' />
-         </div>
-        </div>
-        <div className='study_document'>
-         <div className='iconAndName_study_document'>
-          <div className='icon_Stydy_document'>
-           <FeedIcon className='icon_document' />
-          </div>
-          <div className='name_document'>
-           <Link to={require('../../resource/documents/20221207/PHAM DINH HAI.DOCX_07122022160645263s7PsgwU9rX.DOCX')} target="_blank" download>Download</Link>
-          </div>
-         </div>
-         <div className='downt_document'>
-          <VerticalAlignBottomIcon className='down_load_icon' />
-         </div>
-        </div>
+         ))
+        }
         <div className='descript_class_detail_info'>
 
         </div>
@@ -143,39 +139,52 @@ function InfomationClass(props) {
       {
        toggleState === 2 &&
        <div className='listProgramStudy'>
-        <div className='informationProgramStudy'>
-         <Link to="/bai-hoc/chi-tiet-lop-hoc/chuong-trinh-hoc"> <div className='titleProgramStudy'>
-          <span className='titleProgram'>Lession 1:</span> Introduction to MasterStudy AR-VR
-         </div></Link>
-         <div className='listLessionAndActive'>
-          <div className='inforLessionAndActive'>
-           <div className='iconAndTitlelessionAndActive'>
-            <div>
-             <FeedIcon className='icon_paper' />
-            </div>
-            <div className="Index_Lession">#1</div>
-            <div style={{ fontWeight: "600" }}>Introduction AR-VR</div>
-           </div>
-           <div className='amountDateLession'>
-            <AddAlarmIcon className='icon_oclock' />
-            <span>1 giờ</span>
+        {
+         detailClass.arrayProgram && detailClass.arrayProgram.length && detailClass.arrayProgram.map(pr => (
+          <div className='informationProgramStudy'>
+           <Link to={`/bai-hoc/chi-tiet-lop-hoc/chuong-trinh-hoc?class_id=${detailClass.class_id}&program_category_id=${pr.program_category_id}`}> <div className='titleProgramStudy'>
+            <span className='titleProgram'>Lession {pr.index_program}:</span>{pr.name_program_category}
+           </div></Link>
+           <div className='listLessionAndActive'>
+            {
+             pr.lessons && pr.lessons.length && pr.lessons[0].id_lesson && pr.lessons.map((less, indexLess) => (
+              <div className='inforLessionAndActive'>
+               <div className='iconAndTitlelessionAndActive'>
+                <div>
+                 <FeedIcon className='icon_paper' />
+                </div>
+                <div className="Index_Lession">#{indexLess + 1}</div>
+                <div style={{ fontWeight: "600" }}>{less.name_lesson}</div>
+               </div>
+               <div className='amountDateLession'>
+                <AddAlarmIcon className='icon_oclock' />
+                <span>{less.time_duration} giờ</span>
+               </div>
+              </div>
+             ))
+            }
+            {
+             pr.tasks && pr.tasks.length && pr.tasks[0].id_task && pr.tasks.map((task, indexTask) => (
+              <div className='inforLessionAndActive'>
+               <div className='iconAndTitlelessionAndActive'>
+                <div >
+                 <LayersIcon className='icon_active_student' />
+                </div>
+                <div className="Index_Lession">#{indexTask + 1}</div>
+                <div style={{ fontWeight: "600" }}>{task.name_task}</div>
+               </div>
+               <div className='amountDateLession'>
+                <AddAlarmIcon className='icon_oclock' />
+                <span>{task.time_duration_task} giờ</span>
+               </div>
+              </div>
+             ))
+            }
+
            </div>
           </div>
-          <div className='inforLessionAndActive'>
-           <div className='iconAndTitlelessionAndActive'>
-            <div >
-             <LayersIcon className='icon_active_student' />
-            </div>
-            <div className="Index_Lession">#2</div>
-            <div style={{ fontWeight: "600" }}>How to use tools glass VR-AR in game run strangers.</div>
-           </div>
-           <div className='amountDateLession'>
-            <AddAlarmIcon className='icon_oclock' />
-            <span>0.5 giờ</span>
-           </div>
-          </div>
-         </div>
-        </div>
+         ))
+        }
        </div>
       }
 

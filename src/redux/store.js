@@ -58,7 +58,9 @@ const initialState = {
       status_class: 1,
       start_time: null,
       end_time: null,
-      path_file_image: ""
+      path_file_image: "",
+      arrayProgram: [],
+      allCategoryProgram: []
     }
   },
 

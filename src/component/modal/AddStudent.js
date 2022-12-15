@@ -72,7 +72,7 @@ function AddStudent(props) {
 
       }
       dispatch({
-        type: "ADD_NEW_STUDENT_REST",
+        type: "ADD_NEW_STUDENT_ASYNC",
         data: data
       });
       setStudentId("");
