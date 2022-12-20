@@ -9,6 +9,8 @@ import FeedIcon from '@mui/icons-material/Feed';
 import axios from 'axios';
 import './test.css';
 import UploadDocument from '../uploadFile/UploadDocument';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const formats = [
  "header",
  "font",
@@ -39,6 +41,7 @@ function DescriptionLession() {
  let startDate = useSelector((state) => state._class.dateTimeStart);
  let endDate = _class.dateTimeEnd;
  const [description, setDescription] = useState(useSelector((state) => state._class.description));
+
  console.log("image:", image)
  const changeStartDate = (value) => {
   startDate = value;
@@ -56,11 +59,12 @@ function DescriptionLession() {
  }, [endDate])
 
  const handleChangeDecription = useCallback(value => {
-  setDescription(value)
+
   dispatch({
    type: 'CHANGE_DECRIPTION',
    description: value
   })
+  setDescription(value)
  }, [description])
  useEffect(() => {
   dispatch({
@@ -83,14 +87,49 @@ function DescriptionLession() {
 
  const AddNewClassBtn = useCallback(() => {
   if (_class.nameClass) {
+   if (!startDate) {
+    toast.warning("Ngày bắt đầu không được để trống!", {
+     position: toast.POSITION.TOP_CENTER
+    });
+    return
+   }
+   if (!endDate) {
+    toast.warning("Ngày kết thúc không được để trống!", {
+     position: toast.POSITION.TOP_CENTER
+    });
+    return
+   }
    dispatch({
     type: 'ADD_NEW_CLASS_REST',
     payload: _class
-   })
+   });
+
+  } else {
+   toast.warning("Tên lớp học không được để trống!", {
+    position: toast.POSITION.TOP_CENTER
+   });
+   return
   }
- }, [_class])
+
+ }, [_class]);
+ useEffect(() => {
+  if (_class.success) {
+   console.log("success:", _class.success)
+   toast.success("Tạo lớp học thành công!", {
+    position: toast.POSITION.TOP_CENTER
+   });
+   setTimeout(() => {
+    dispatch({
+     type: 'DELETE_SUCCESS_ADD_CLASS'
+    })
+   }, 100)
+
+  }
+ }, [_class.success])
+
  return (
   <>
+   <ToastContainer />
    <div
     className="content  active-content"
    >

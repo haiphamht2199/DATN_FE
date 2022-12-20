@@ -7,7 +7,14 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import EditIcon from '@mui/icons-material/Edit';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import ModalEditLession from '../modal/ModalEditLession';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function ProgramLession(props) {
   const dispatch = useDispatch();
   const programs = useSelector((state) => state.lession.program);
@@ -24,6 +31,27 @@ function ProgramLession(props) {
   const [errClass, setErrorClass] = useState(false);
   const [errActive, setErroActive] = useState(false);
   const [indexPr, setIndexPr] = useState(1);
+  const [open, setOpen] = React.useState(false);
+  const [programId, setProgramId] = useState("");
+  const handleClickOpen = useCallback((id) => {
+    setProgramId(id)
+    setOpen(true);
+
+  }, [setProgramId, programId]);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleDelete = useCallback(() => {
+    if (programId) {
+      dispatch({
+        type: 'HANDLE_DELETE_PROGRAM_CLASS',
+        id: programId
+      });
+      setOpen(false);
+    }
+  }, [programId])
+
   const toggleTabAddClass = useCallback((index, indexProgram) => {
     dispatch({
       type: 'TOGGLE_TAB_ADD_CLASS',
@@ -65,11 +93,18 @@ function ProgramLession(props) {
     setNewLession("");
     setNameActive("")
   }, [arrayLesstion, nameLession, nameActive]);
-  const DeleteNewLession = useCallback((id, programs) => {
+  const DeleteNewLession = useCallback((id, index) => {
     dispatch({
       type: 'DELETE_LESSISON_ACTIVE',
       id,
-      programs
+      index
+    })
+  }, []);
+  const DeleteNewTask = useCallback((id, index) => {
+    dispatch({
+      type: 'DELETE_LESSISON_TASK',
+      id,
+      index
     })
   }, []);
   const EditLession = useCallback((item, index) => {
@@ -106,11 +141,29 @@ function ProgramLession(props) {
         payload: _class
       })
     } else {
-      alert("Bạn cần phải tạo lớp học đã!")
+      toast.warn("Bạn cần phải tạo lớp học đã!", {
+        position: toast.POSITION.TOP_CENTER
+      });
     }
   }, [_class])
   return (
-    <>
+    <> <div>
+
+      <Dialog
+        open={open}
+
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Bạn có chắc chắn muốn xóa không"}</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={handleDelete}>Đồng ý</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+      <ToastContainer />
       <div>
 
         <ModalEditLession lessonData={editNameLession} editNameActive={editNameActive} openModal={modalOpen} SetModalOpen={SetModalOpen} quill={props.quill} quillRef={props.quillRef} _key={key} indexPr={indexPr} />
@@ -138,13 +191,13 @@ function ProgramLession(props) {
             </div> :
               <div className='content_ctd_new'>
                 {
-                  arrayLesstion && arrayLesstion.length && arrayLesstion.map(item => (
+                  arrayLesstion && arrayLesstion.length ? arrayLesstion.map(item => (
                     <Card className='card_ctd'>
                       <div className='content_card_new'>
                         <div className='top_ctd'>
                           <div className='ten_ctd'>Chương trình #{item.index}</div>
                           <div className='xoa_ctd'>
-                            <DeleteIcon />
+                            <DeleteIcon onClick={() => handleClickOpen(item.index)} />
                           </div>
                         </div>
                         <div className='ten_ctd_new'>
@@ -154,8 +207,8 @@ function ProgramLession(props) {
                             type='text'
                             fullWidth
                             placeholder='Nhập tên chương trình tại đây'
-                            value={item.nameProgramCategory}
-                            onChange={(e) => handleNameProgram(e.target.value, item.index)}
+                            value={item.nameProgramCategory ? item.nameProgramCategory : ""}
+                            onChange={(e) => handleNameProgram(e.target.value, item.index ? item.index : "")}
                           />
                         </div>
                         {
@@ -174,7 +227,7 @@ function ProgramLession(props) {
                                   </div>
                                   <div className='action_new_lession'>
                                     <EditIcon className='edit_new_lesstion' onClick={() => EditLession(lession, item.index)} />
-                                    <DeleteIcon onClick={() => DeleteNewLession(lession.id, programs)} className='delete_new_lesstion' />
+                                    <DeleteIcon onClick={() => DeleteNewLession(lession.indexLesson, item.index)} className='delete_new_lesstion' />
                                   </div>
                                 </div>
                               </div>
@@ -182,7 +235,7 @@ function ProgramLession(props) {
                           }) : ""
                         }
                         {
-                          item.createTaskRequestList.length > 0 && item.createTaskRequestList.map((lession, index) => {
+                          item.createTaskRequestList.length > 0 ? item.createTaskRequestList.map((lession, index) => {
                             return (
                               <div className='content_array_lession' key={index}>
                                 <div className='new_content_lession'>
@@ -197,12 +250,12 @@ function ProgramLession(props) {
                                   </div>
                                   <div className='action_new_lession'>
                                     <EditIcon className='edit_new_lesstion' onClick={() => EditActive(lession)} />
-                                    <DeleteIcon onClick={() => DeleteNewLession(lession.id, programs)} className='delete_new_lesstion' />
+                                    <DeleteIcon onClick={() => DeleteNewTask(lession.index, item.index)} className='delete_new_lesstion' />
                                   </div>
                                 </div>
                               </div>
                             )
-                          })
+                          }) : ""
                         }
 
                         <div className='ten_baihoc_hoatdong'>
@@ -274,7 +327,7 @@ function ProgramLession(props) {
                         </div>
                       </div>
                     </Card>
-                  ))
+                  )) : ""
                 }
 
               </div>

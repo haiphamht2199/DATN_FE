@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Paper, Button } from '@mui/material';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
@@ -9,14 +9,48 @@ import PersonIcon from '@mui/icons-material/Person';
 import ListStudents from '../tables/ListStudents';
 import AddStudent from '../modal/AddStudent';
 import EditStudent from '../modal/EditStudent';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 function ManagerStudent() {
+ const dispatch = useDispatch();
  const [modalOpen, SetModalOpen] = useState(false);
+ const _class = useSelector((state) => state._class);
+ const [searchParams, setSearchParams] = useSearchParams();
  const handleAddStudent = () => {
   SetModalOpen(!modalOpen);
  }
+ useEffect(() => {
+  if (_class.success) {
+   console.log("success:", _class.success)
+   toast.success("Edit class student succes!", {
+    position: toast.POSITION.TOP_CENTER
+   });
+   setTimeout(() => {
+    dispatch({
+     type: 'DELETE_SUCCESS_ADD_CLASS'
+    })
+   }, 100)
 
+  }
+ }, [_class.success]);
+ useEffect(() => {
+  if (_class.success1) {
+   toast.success("Create new student to class success!", {
+    position: toast.POSITION.TOP_CENTER
+   });
+   setTimeout(() => {
+    dispatch({
+     type: 'DELETE_SUCCESS_ADD_CLASS'
+    })
+   }, 100)
+
+  }
+ }, [_class.success1])
  return (
   <>
+   <ToastContainer />
    <div>
 
     <AddStudent openModal={modalOpen} SetModalOpen={SetModalOpen} />

@@ -3,9 +3,9 @@ import { Dialog, DialogTitle, DialogContent, makeStyles, Select, FormControl, Ty
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 import { useDispatch, useSelector } from "react-redux";
-import { useQuill } from 'react-quilljs';
 import ReactQuill from "react-quill";
 import 'quill/dist/quill.snow.css';
+import { useSearchParams } from "react-router-dom";
 const formats = [
   "header",
   "font",
@@ -51,12 +51,11 @@ function EditStudent(props) {
   const dispatch = useDispatch();
   let openEditStudent = useSelector(state => state.modal.editStudent);
   let EditStudent = useSelector(state => state._class.editStudent);
-  const { quill, quillRef } = useQuill();
-  const [value, setValue] = useState();
-  const [studentId, setStudentId] = useState(EditStudent.IdStudent);
-  const [studentName, setStudentName] = useState(EditStudent.nameStudent);
-  const [studentEmail, setStudenEmail] = useState(EditStudent.gmail);
-  const [studentStatus, setStudentStatus] = useState(EditStudent.statusClass);
+  console.log("hhh:", EditStudent)
+  const [studentId, setStudentId] = useState(EditStudent.code_student);
+  const [studentName, setStudentName] = useState(EditStudent.name_student);
+  const [studentEmail, setStudenEmail] = useState(EditStudent.email);
+  const [studentStatus, setStudentStatus] = useState(EditStudent.status);
   const [point, setPoint] = useState(EditStudent.point ? EditStudent.point : "");
   const [isLoading, setisLoading] = useState(false);
   const [evaluate, setEvaluate] = useState(EditStudent.evaluate ? EditStudent.evaluate : "");
@@ -64,6 +63,7 @@ function EditStudent(props) {
   const [isLoading2, setisLoading2] = useState(false);
   const [validateEmail, setValidateEmail] = useState(true);
   const classes = useStyles();
+  const [searchParams, setSearchParams] = useSearchParams();
   const handleCloseModal = (openEditStudent) => {
     openEditStudent = false
     dispatch({
@@ -100,19 +100,18 @@ function EditStudent(props) {
       let id = EditStudent.id;
       let editDateClass = "10:00,29/10/2022";
       let data = {
-        id: id,
-        IdStudent: studentId,
+        classStudentId: EditStudent.class_student_id,
+        codeStudent: studentId,
         nameStudent: studentName,
-        editDateClass: editDateClass,
-        gmail: studentEmail,
-        startClass: "29/10/2022-10:10",
-        statusClass: studentStatus,
-        point: point,
-        evaluate: evaluate
+        // editDateClass: editDateClass,
+        emailStudent: studentEmail,
+        status: studentStatus,
+        // point: point,
+        // evaluate: evaluate
       };
       setEvaluate("")
       dispatch({
-        type: "EDIT_SAVE_STUDENT_REST",
+        type: "EDIT_SAVE_STUDENT_BY_CLASS_ID_REST",
         data: data
       });
       dispatch({
@@ -130,10 +129,10 @@ function EditStudent(props) {
 
   useEffect(() => {
     if (openEditStudent) {
-      setStudentId(EditStudent.IdStudent);
-      setStudentName(EditStudent.nameStudent);
-      setStudenEmail(EditStudent.gmail);
-      setStudentStatus(EditStudent.statusClass);
+      setStudentId(EditStudent.code_student);
+      setStudentName(EditStudent.name_student);
+      setStudenEmail(EditStudent.email);
+      setStudentStatus(EditStudent.status);
       setPoint(EditStudent.point);
       setEvaluate(EditStudent.evaluate)
     }

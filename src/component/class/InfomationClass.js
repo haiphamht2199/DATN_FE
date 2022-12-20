@@ -9,69 +9,78 @@ import AddAlarmIcon from '@mui/icons-material/AddAlarm';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import LayersIcon from '@mui/icons-material/Layers';
 import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+
 function InfomationClass(props) {
  const { detailClass } = props
  const [toggleState, setToggleState] = useState(1);
+ const student = useSelector(state => state.user.student)
  const toggleTab = (index) => {
   setToggleState(index);
  };
  return (
   <div className='detail_info_class'>
-   <div className='infomation_overview_class'>
-    <div className='text_label'>
-     <div className='icon_info_div'>
-      <InfoIcon className='icon_info' />
+   {
+    !student && <div className='infomation_overview_class'>
+     <div className='text_label'>
+      <div className='icon_info_div'>
+       <InfoIcon className='icon_info' />
+      </div>
+      <div className='label'>Thông tin chung lớp học</div>
      </div>
-     <div className='label'>Thông tin chung lớp học</div>
+     <div className='detail_info_over'>
+      <div className='detail_top'>
+       <div className="detail_top-left">
+        <div className='label_name_class'>
+         Tên lớp học:
+        </div>
+        <div className="name_class_info"> {detailClass.name_class}</div>
+       </div>
+       <div className="detail_top-right">
+        <div className='label_status_class'>
+         Trạng thái:
+        </div>
+        <div className="status_class_info">{detailClass.status_class === 1 ? "Công khai" : "Không công khai"} </div>
+       </div>
+      </div>
+      <div className='detail_bottom'>
+       <div className="detail_bottom-left">
+        <div className='label_date_class'>
+         Thời gian hoạt động:
+        </div>
+        <div className="date_class_info"> 29/10/2022- 20/12/2022</div>
+       </div>
+       <div className="detail_bottom-right">
+        <div className='level_status_class'>
+         Trình độ:
+        </div>
+        <div className="level_class_info"> Cơ bản </div>
+       </div>
+      </div>
+     </div>
     </div>
-    <div className='detail_info_over'>
-     <div className='detail_top'>
-      <div className="detail_top-left">
-       <div className='label_name_class'>
-        Tên lớp học:
-       </div>
-       <div className="name_class_info"> {detailClass.name_class}</div>
-      </div>
-      <div className="detail_top-right">
-       <div className='label_status_class'>
-        Trạng thái:
-       </div>
-       <div className="status_class_info">{detailClass.status_class === 1 ? "Công khai" : "Không công khai"} </div>
-      </div>
-     </div>
-     <div className='detail_bottom'>
-      <div className="detail_bottom-left">
-       <div className='label_date_class'>
-        Thời gian hoạt động:
-       </div>
-       <div className="date_class_info"> 29/10/2022- 20/12/2022</div>
-      </div>
-      <div className="detail_bottom-right">
-       <div className='level_status_class'>
-        Trình độ:
-       </div>
-       <div className="level_class_info"> Cơ bản </div>
-      </div>
-     </div>
-    </div>
-   </div>
+   }
+
    <div className='infomation_detail_class_content'>
-    <div className='infomation_detail_class_header'>
-     <div className='infomation_detail_class_header-left'>
-      <div >
-       <FormatListBulletedIcon className='icon_header_left' />
+    {
+     !student && <div className='infomation_detail_class_header'>
+      <div className='infomation_detail_class_header-left'>
+       <div >
+        <FormatListBulletedIcon className='icon_header_left' />
+       </div>
+       <div className='text_header_left'>
+        Thông tin chi tiết lớp học
+       </div>
       </div>
-      <div className='text_header_left'>
-       Thông tin chi tiết lớp học
+      <div className='infomation_detail_class_header-right'>
+       <Button variant="outlined" endIcon={<ArrowDropDownIcon />}>
+        Thao tác
+       </Button>
       </div>
      </div>
-     <div className='infomation_detail_class_header-right'>
-      <Button variant="outlined" endIcon={<ArrowDropDownIcon />}>
-       Thao tác
-      </Button>
-     </div>
-    </div>
+    }
+
     <div className='infomation_detail_class_content-main'>
      <div className='infomation_detail_class_content-main-left'>
       <div className="bloc-tabs">

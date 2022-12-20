@@ -109,7 +109,11 @@ function* createProgramByClass(action) {
   console.log("arrayProgram:", arrayProgram)
   if (arrayProgram.length) {
    let programRes = yield all([axios.post('/teacher/program_category/create', arrayProgram)]);
-   console.log("program:", programRes)
+   if (programRes.code === 200) {
+    yield put({
+     type: "CREATE_PROGRAM_BY_ID_SUCCESS",
+    })
+   }
   }
  } catch (error) {
 
@@ -173,6 +177,49 @@ function* getAllcategoryProgramByClassId(action) {
 
  }
 }
+function* getAllStudentByClassId(action) {
+ try {
+  let listStudentRes = yield all([axios.get(`/teacher/manager_student?page=0&size=10&classId=${action.payload}`)]);
+  console.log("listStudentRes:", listStudentRes);
+  let AllStudent = listStudentRes[0].data;
+  if (AllStudent.code === 200) {
+   yield put({
+    type: "GET_ALL_STUDENT_BY_ID_SUCCESS",
+    payload: AllStudent.data.results
+   })
+  }
+ } catch (error) {
+
+ }
+}
+function* saveEditStudentByClassId(action) {
+ try {
+  console.log("action.data", action.data)
+  let StudentRes = yield all([axios.put('/teacher/manager_student/edit_class_student', action.data)]);
+  let AllStudent = StudentRes[0].data;
+  if (AllStudent.code === 200) {
+   yield put({
+    type: "EDIT_STUDENT_BY_ID_SUCCESS",
+   })
+  }
+ } catch (error) {
+
+ }
+}
+function* addNewStudentClassId(action) {
+ try {
+  let NewStudentRes = yield all([axios.post('/teacher/manager_student/create_new_student', action.data)]);
+  console.log("NewStudentRes:", NewStudentRes)
+  let AllStudent = NewStudentRes[0].data;
+  if (AllStudent.code === 200) {
+   yield put({
+    type: "ADD_NEW_STUDENT_BY_ID_SUCCESS",
+   })
+  }
+ } catch (error) {
+
+ }
+}
 export default function* lession() {
  yield takeLatest('GET_LESSIONS', getLession);
  yield takeLatest('UPLOAD_IMAGE_CLASS', uploadImageClass)
@@ -183,5 +230,8 @@ export default function* lession() {
  yield takeLatest('GET_DETAIL_INFORMATION_CLASS_BY_ID', getClassDetailById);
  yield takeLatest('GET_DETAIL_INFORMATION_AND_DOCUMENT_CLASS_BY_ID', getdocumentClassById);
  yield takeLatest('GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID', getAllProgramByClassId);
- yield takeLatest('GET_ALL_PROGRAM_CATEGERY_CLASS_BY_ID', getAllcategoryProgramByClassId)
+ yield takeLatest('GET_ALL_PROGRAM_CATEGERY_CLASS_BY_ID', getAllcategoryProgramByClassId);
+ yield takeLatest('GET_ALL_LIST_STUDENT_CLASS_BY_ID', getAllStudentByClassId);
+ yield takeLatest('EDIT_SAVE_STUDENT_BY_CLASS_ID_REST', saveEditStudentByClassId);
+ yield takeLatest('ADD_NEW_STUDENT_CLASS_ID_ASYNC', addNewStudentClassId)
 }

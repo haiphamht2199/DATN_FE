@@ -3,6 +3,7 @@ import { Dialog, DialogTitle, DialogContent, makeStyles, Select, FormControl, Ty
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from "react-redux";
 import Alert from '@mui/material/Alert';
+import { useSearchParams } from "react-router-dom";
 const useStyles = makeStyles(theme => ({
   dialogWrapper: {
     // padding: theme.spacing(2),
@@ -24,6 +25,7 @@ function ValidateEmail(email) {
 }
 function AddStudent(props) {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { name, openModal, SetModalOpen } = props;
   const classes = useStyles();
   const [studentId, setStudentId] = useState("");
@@ -59,20 +61,17 @@ function AddStudent(props) {
 
     }
     if (studentId && studentName && validateEmail && studentEmail) {
-      let id = Math.floor(Math.random() * 101);
-      let editDateClass = "10:00,29/10/2022";
       let data = {
-        id: id,
-        IdStudent: studentId,
+        codeStudent: studentId,
         nameStudent: studentName,
-        editDateClass: editDateClass,
-        gmail: studentEmail,
-        startClass: "29/10/2022-10:10",
-        statusClass: studentStatus,
+        status: studentStatus,
+        classId: searchParams.get("class_id"),
+        // startClass: "29/10/2022-10:10",
+        // statusClass: studentStatus,
 
       }
       dispatch({
-        type: "ADD_NEW_STUDENT_ASYNC",
+        type: "ADD_NEW_STUDENT_CLASS_ID_ASYNC",
         data: data
       });
       setStudentId("");
@@ -80,7 +79,10 @@ function AddStudent(props) {
       setStudentName("");
       setStudentStatus("1");
       setValidateEmail(true);
-      SetModalOpen(false)
+      setTimeout(() => {
+        SetModalOpen(false)
+      }, 100)
+
     }
   }, [studentId, studentName, studentEmail, studentStatus, isLoading1, isLoading2, validateEmail])
   return (

@@ -16,7 +16,8 @@ const initialState = {
     updateSuccess: false,
     error: false,
     messageUpdate: "",
-    isTeacher: ""
+    isTeacher: "",
+    student: false
   },
   lessions: [],
   menu: {
@@ -42,6 +43,8 @@ const initialState = {
     dateTimeEnd: "",
     pathFileImage: "",
     scope: 0,
+    success: false,
+    success1: false,
     documentList: [],
     exam: [],
     listStudent: [],
@@ -69,6 +72,9 @@ const initialState = {
   },
   moduleClass: {
     modules: {}
+  },
+  student: {
+    courses: []
   }
 }
 const store = () => {

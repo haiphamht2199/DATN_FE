@@ -1015,11 +1015,25 @@ button {
 
 }
 
+.detail_info_over {
+  padding-top: 10px !important;
+  padding-left: 15px !important;
+
+}
+
 .detail_info_over .detail_top {
   display: flex;
   justify-content: space-between;
   margin-right: 80px;
   margin-bottom: 40px;
+}
+
+.detail_info_over .detail_top_task {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 10px !important;
+  margin-bottom: 40px;
+  height: 0px !important;
 }
 
 .detail_info_over .detail_top .detail_top-left {
@@ -1046,6 +1060,11 @@ button {
   justify-content: space-between;
   margin-right: 110px;
   margin-bottom: 40px;
+}
+
+.detail_info_over .detail_bottom_task {
+  margin-right: 10px !important;
+  margin-bottom: 0px !important;
 }
 
 .detail_info_over .detail_bottom .detail_bottom-left {
@@ -1553,6 +1572,31 @@ li .actions .fa-spinner {
   width: 65%;
 }
 
+.name_content_task {
+  font-weight: 600;
+  font-size: 18px;
+  border-bottom: 1px solid gray;
+  width: 100%;
+}
+
+.list_student_class_by_group {
+  margin-top: 30px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.descript_task_lesson {
+  margin-top: 40px;
+  font-size: 16px;
+  font-weight: 500;
+  height: auto;
+}
+
+.infomation_detail_program_content .detail_task_right {
+  width: 65%;
+}
+
+
 .content_lesson_lest {
   padding: 20px 20px;
 }
@@ -1636,4 +1680,225 @@ li .actions .fa-spinner {
 
 .ListProgramStudyContent .MuiTableContainer-root.css-rorn0c-MuiTableContainer-root {
   padding-left: 20px;
+}
+
+.content_program_category_detail {
+  width: 100%;
+  height: auto;
+  border: 1px solid gray;
+  border-radius: 5px;
+  background-color: rgb(217 217 217);
+}
+
+.information_program_category_detail_top {
+
+  margin: 15px 15px 15px 15px;
+  height: 150px;
+  border: 1px solid rgb(41, 39, 39);
+  border-radius: 5px;
+}
+
+.card_ctd_detail {
+  margin: 10px 10px 10px 10px;
+  height: auto;
+
+
+}
+
+.label_name_program_category {
+  font-size: 14px !important;
+}
+
+.array_lesson_program_category {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.content_array_lesson_program_category {
+  margin-top: 10px;
+  border: 1px solid rgb(35, 33, 33);
+  margin-bottom: 10px;
+  height: auto;
+  border-radius: 5px;
+}
+
+.index_new_lession {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.new_content_lession_rogram_category {
+  height: 50px;
+  background: rgb(236 240 246);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  margin: 10px 10px 10px 10px;
+}
+
+.new_content_lession_rogram_category .left_new_lession {
+  display: flex;
+  gap: 20px;
+  padding-left: 20px;
+}
+
+.descript_lession_program {
+  height: auto;
+  width: auto;
+  margin-left: 15px;
+}
+
+.Battery_new_lession {
+  font-size: 22px !important;
+  cursor: pointer;
+  color: red;
+}
+
+.detail_bottom-right_task {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.descipt_task {
+  display: flex;
+  margin-top: 10px;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.array_list_team_task {
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.search_task {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.list_course_student_home {
+  margin-top: 40px;
+  padding-left: 10%;
+  height: auto;
+}
+
+.title_list_course {
+  font-size: 24px;
+  font-weight: bolder;
+}
+
+
+.search_course {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+}
+
+.search_task_inut {
+  width: 600px !important;
+  height: 35px;
+}
+
+.name_course {
+  margin-top: 10px;
+  font-size: 14x;
+  font-weight: bolder;
+}
+.title_list_student_class_by_group{
+  margin-bottom: 20px
+}
+.number_student_course {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.number_student {
+  font-weight: 500;
+}
+
+.icon_numer_student {
+  color: red !important;
+}
+
+.content_list_course {
+  margin-top: 20px;
+  width: 100%;
+  height: auto;
+  display: flex;
+  gap: 20px;
+
+}
+
+.card_course {
+  width: 250px;
+  height: 300px;
+}
+
+.cont_descipt_task {
+  height: auto;
+  width: 80%;
+}
+
+.image_course {
+  width: 100%;
+  height: 250px;
+}
+
+.image_course img {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.submit_search_task {
+  height: 35px !important;
+  display: flex;
+  gap: 10px;
+}
+
+.action_task_program_class {
+  margin-top: 30px;
+  display: flex;
+  gap: 10px;
+}
+
+.form_control_status {
+  width: 300px !important;
+}
+
+.action_divide_group {
+
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.action_divide_group_input {
+  width: 200px !important;
+  height: 35px;
+}
+
+.action_divide_group .MuiOutlinedInput-input {
+  height: 5px !important;
+}
+
+.submit_search_task {
+  height: 37px !important;
+  margin-top: 5px !important;
+}
+
+.list_group_task {
+  margin-top: 10px;
 }

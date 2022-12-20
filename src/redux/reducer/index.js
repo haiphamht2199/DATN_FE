@@ -5,11 +5,13 @@ import user from './user';
 import modal from './modal';
 import _class from './class';
 import moduleClass from './moduleClass';
+import student from './student';
 export default combineReducers({
  lession: lession,
  menu: menu,
  user: user,
  modal: modal,
  _class: _class,
- moduleClass: moduleClass
+ moduleClass: moduleClass,
+ student: student
 })

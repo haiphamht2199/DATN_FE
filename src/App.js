@@ -12,7 +12,7 @@ import DetailClass from './pages/teacher/DetailClass';
 import Login from './pages/autho/Login';
 import Signup from './pages/autho/Signup';
 import ProgramDetail from './pages/teacher/ProgramDetail';
-import ProgramLession from './component/lession/ProgramLession';
+import Home from './pages/student/Home';
 import DetailProgramCaregory from './pages/teacher/DetailProgramCaregory';
 
 
@@ -24,7 +24,8 @@ function App() {
     if (localStorage.getItem('token')) {
       dispatch({
         type: 'AUTO_LOGIN',
-        payload: localStorage.getItem('token')
+        payload: localStorage.getItem('token'),
+        student: localStorage.getItem('student') ? localStorage.getItem('student') : ""
       });
     }
 
@@ -45,7 +46,11 @@ function App() {
           <div className='container'>
             <Sidebar />
             <div style={{ width: isOpen ? "85%" : "95%" }} className="content_container">
+
               <Header />
+              <Routes>
+                <Route path="student/home" element={<Home />} />
+              </Routes>
               <Routes>
                 <Route path="/home" element={<Overview />} />
               </Routes>

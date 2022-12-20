@@ -8,7 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 function DetailClass() {
  const dispatch = useDispatch();
  const detailClass = useSelector(state => state._class.classDetail);
- console.log("classDetail:", detailClass)
+ const student = useSelector(state => state.user.student);
+ console.log("classDetail:", detailClass);
+ console.log("student:", student)
  const [toggleStateAddClass, setToggleStateAddClass] = useState(1);
  const [searchParams, setSearchParams] = useSearchParams();
  const toggleTabAddClass = (index) => {
@@ -16,20 +18,32 @@ function DetailClass() {
   setToggleStateAddClass(index);
  }
  useEffect(() => {
-  if (searchParams.get("class_id")) {
+  if (student) {
    dispatch({
-    type: 'GET_DETAIL_INFORMATION_CLASS_BY_ID',
-    payload: searchParams.get("class_id")
+    type: 'GET_DETAIL_INFORMATION_CLASS_STUDENT_BY_ID',
+    payload: searchParams.get("tag_class")
    })
    dispatch({
-    type: 'GET_DETAIL_INFORMATION_AND_DOCUMENT_CLASS_BY_ID',
-    payload: searchParams.get("class_id")
-   });
-   dispatch({
-    type: 'GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID',
+    type: 'GET_DETAIL_INFORMATION_PROGRAM_STUDENT_CLASS_BY_ID',
     payload: searchParams.get("class_id")
    })
+  } else {
+   if (searchParams.get("class_id")) {
+    dispatch({
+     type: 'GET_DETAIL_INFORMATION_CLASS_BY_ID',
+     payload: searchParams.get("class_id")
+    })
+    dispatch({
+     type: 'GET_DETAIL_INFORMATION_AND_DOCUMENT_CLASS_BY_ID',
+     payload: searchParams.get("class_id")
+    });
+    dispatch({
+     type: 'GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID',
+     payload: searchParams.get("class_id")
+    })
+   }
   }
+
  }, [])
  return (
   <>
@@ -44,38 +58,41 @@ function DetailClass() {
       </div>
      </div>
      <div className='content_detail_class'>
-      <div className="bloc-tabs_detail_class">
+      {
+       !student && <div className="bloc-tabs_detail_class">
 
-       <div
-        className={toggleStateAddClass === 1 ? "tabs_detail_class active_tabs_detail_class" : "tabs_detail_class"}
-        onClick={() => toggleTabAddClass(1)}
-       >
-        Thông tin chung
-       </div>
+        <div
+         className={toggleStateAddClass === 1 ? "tabs_detail_class active_tabs_detail_class" : "tabs_detail_class"}
+         onClick={() => toggleTabAddClass(1)}
+        >
+         Thông tin chung
+        </div>
 
-       <div
-        className={toggleStateAddClass === 2 ? "tabs_detail_class active_tabs_detail_class" : "tabs_detail_class"}
-        onClick={() => toggleTabAddClass(2)}
-       >
-        Chương trình dạy
+        <div
+         className={toggleStateAddClass === 2 ? "tabs_detail_class active_tabs_detail_class" : "tabs_detail_class"}
+         onClick={() => toggleTabAddClass(2)}
+        >
+         Chương trình dạy
+        </div>
+        <div
+         className={toggleStateAddClass === 3 ? "tabs_detail_class active_tabs_detail_class" : "tabs_detail_class"}
+         onClick={() => toggleTabAddClass(3)}
+        >
+         Quản lý sinh viên
+        </div>
        </div>
-       <div
-        className={toggleStateAddClass === 3 ? "tabs_detail_class active_tabs_detail_class" : "tabs_detail_class"}
-        onClick={() => toggleTabAddClass(3)}
-       >
-        Quản lý sinh viên
-       </div>
-      </div>
+      }
+
       {
        toggleStateAddClass === 1 &&
        <InfomationClass detailClass={detailClass} />
       }
       {
-       toggleStateAddClass === 2 &&
+       !student && toggleStateAddClass === 2 &&
        <InformationListProgramStudy />
       }
       {
-       toggleStateAddClass === 3 &&
+       !student && toggleStateAddClass === 3 &&
        <ManagerStudent />
       }
      </div>

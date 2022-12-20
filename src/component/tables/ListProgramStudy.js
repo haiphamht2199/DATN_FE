@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
 import { Link } from "react-router-dom";
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -23,6 +24,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import axios from '../../helper/axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const StyledMenu = styled((props) => (
   <Menu
     elevation={0}
@@ -197,6 +204,39 @@ function ListProgramStudy(props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [programId, setProgramId] = useState("")
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = useCallback(() => {
+    setOpen(true);
+
+  }, []);
+
+  const handleClose1 = () => {
+    setOpen(false);
+  };
+  const handleDeleteLesson = useCallback(async () => {
+    if (programId) {
+      try {
+        let successRes = await axios.delete(`/teacher/program_category/delete?program_id=${programId}`);
+        console.log("successRes:", successRes)
+        if (successRes.data.code === 200) {
+          toast.success("Delete program success!!", {
+            position: toast.POSITION.TOP_CENTER
+          });
+          dispatch({
+            type: 'GET_ALL_PROGRAM_CATEGERY_CLASS_BY_ID',
+            payload: searchParams.get("class_id")
+          })
+        }
+        setOpen(false);
+      } catch (error) {
+        toast.error("could not delete program ", {
+          position: toast.POSITION.TOP_CENTER
+        });
+        setOpen(false);
+      }
+
+    }
+  }, [programId])
   const handleClickSetting = useCallback((event, row) => {
     console.log("program_category_id:", row.program_category_id)
     setAnchorEl(event.currentTarget);
@@ -204,7 +244,11 @@ function ListProgramStudy(props) {
     setProgramId(row.program_category_id)
   }, [setProgramId])
   const handleClose = (anchorEl, programId) => {
-    console.log("programId:", programId)
+    setOpen(true);
+    setAnchorEl(null);
+    setOpenAction(false)
+  };
+  const handleClose2 = (anchorEl, programId) => {
     setAnchorEl(null);
     setOpenAction(false)
   };
@@ -254,118 +298,134 @@ function ListProgramStudy(props) {
     }
   }, [])
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+    <>
+      <ToastContainer />
+      <Dialog
+        open={open}
 
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={allCategoryProgram.length}
-            />
-            <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+        keepMounted
+        onClose={handleClose1}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Bạn có chắc chắn muốn xóa không"}</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose1}>Hủy</Button>
+          <Button onClick={handleDeleteLesson}>Đồng ý</Button>
+        </DialogActions>
+      </Dialog>
+      <Box sx={{ width: '100%' }}>
+        <Paper sx={{ width: '100%', mb: 2 }}>
+
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={dense ? 'small' : 'medium'}
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={allCategoryProgram.length}
+              />
+              <TableBody>
+                {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.sort(getComparator(order, orderBy)).slice() */}
-              {stableSort(allCategoryProgram, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                {stableSort(allCategoryProgram, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
+                    return (
+                      <TableRow
+                        hover
 
 
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
 
-                    >
-                      {/* <Link className='linkcustom' to={`chi-tiet-chuong-trinh-hoc?class_id=${searchParams.get("class_id")}&program_category_id=${row.program_category_id}`}> */}
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => handleDetailProgram(row)}
                       >
-                        {row.name_program_category}
-                      </TableCell>
-                      {/* </Link> */}
-                      <TableCell align="right">{row.create_by ? row.create_by : "Phạm Đình Hải"}</TableCell>
-                      <TableCell align="right">{row.create_time}</TableCell>
-                      <TableCell align="right">{row.modified_time}</TableCell>
-                      <TableCell align="right">{row.status === 1 ? "Hoạt động" : "Không hoạt động"}</TableCell>
-                      <TableCell align="right" onClick={(e) => handleClickSetting(e, row)} style={{ cursor: "pointer", paddingRight: "30px" }}><SettingsIcon className="iconSetting" /></TableCell>
-                      <div>
-                        <StyledMenu
-                          id="demo-customized-menu"
-                          MenuListProps={{
-                            'aria-labelledby': 'demo-customized-button',
-                          }}
-                          anchorEl={anchorEl}
-                          open={openAction}
-                          onClose={handleClose}
+                        {/* <Link className='linkcustom' to={`chi-tiet-chuong-trinh-hoc?class_id=${searchParams.get("class_id")}&program_category_id=${row.program_category_id}`}> */}
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleDetailProgram(row)}
                         >
-                          <Link to=''>
-                            <MenuItem onClick={handleClose}
-                              disableRipple
-                            >
-                              <EditIcon />
-                              Chỉnh sửa
+                          {row.name_program_category}
+                        </TableCell>
+                        {/* </Link> */}
+                        <TableCell align="right">{row.create_by ? row.create_by : "Phạm Đình Hải"}</TableCell>
+                        <TableCell align="right">{row.create_time}</TableCell>
+                        <TableCell align="right">{row.modified_time}</TableCell>
+                        <TableCell align="right">{row.status === 1 ? "Hoạt động" : "Không hoạt động"}</TableCell>
+                        <TableCell align="right" onClick={(e) => handleClickSetting(e, row)} style={{ cursor: "pointer", paddingRight: "30px" }}><SettingsIcon className="iconSetting" /></TableCell>
+                        <div>
+                          <StyledMenu
+                            id="demo-customized-menu"
+                            MenuListProps={{
+                              'aria-labelledby': 'demo-customized-button',
+                            }}
+                            anchorEl={anchorEl}
+                            open={openAction}
+                            onClose={handleClose2}
+                          >
+                            <Link to=''>
+                              <MenuItem onClick={handleClose2}
+                                disableRipple
+                              >
+                                <EditIcon />
+                                Chỉnh sửa
+                              </MenuItem>
+                            </Link>
+
+                            <MenuItem
+                              programId={programId}
+                              onClick={() => handleClose(anchorEl, programId)}
+                              disableRipple>
+                              <DeleteIcon />
+                              Xóa
                             </MenuItem>
-                          </Link>
 
-                          <MenuItem
-                            programId={programId}
-                            onClick={() => handleClose(anchorEl, programId)}
-                            disableRipple>
-                            <DeleteIcon />
-                            Xóa
-                          </MenuItem>
-
-                        </StyledMenu>
-                      </div>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+                          </StyledMenu>
+                        </div>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+        <FormControlLabel
+          control={<Switch checked={dense} onChange={handleChangeDense} />}
+          label="Dense padding"
         />
-      </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
-    </Box>
+      </Box>
+    </>
   );
 }
 

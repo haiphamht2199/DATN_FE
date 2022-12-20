@@ -8,6 +8,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector(state => state.user.token);
+  const student = useSelector(state => state.user.student);
   const [password, setpassword] = useState("");
   const [email, setEmail] = useState("");
   const paperStyle = { padding: 20, height: '70vh', width: 280, margin: "20px auto" }
@@ -25,7 +26,12 @@ const Login = () => {
   }, [email, password, token]);
   useEffect(() => {
     if (token) {
-      return navigate("/home");
+      if (student) {
+        return navigate("/student/home");
+      } else {
+        return navigate("/home");
+      }
+
     }
   }, [token])
   return (

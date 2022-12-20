@@ -26,6 +26,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
+import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 const StyledMenu = styled((props) => (
   <Menu
@@ -259,12 +260,15 @@ function ListStudents(props) {
   const [openAction, setOpenAction] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   let listStudent = useSelector(state => state._class.listStudent);
-  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const _class = useSelector((state) => state._class);
+  console.log("_class:", _class)
   const handleClickSetting = useCallback((event, id) => {
     setAnchorEl(event.currentTarget);
     setOpenAction(!openAction);
-    setId(id)
-  }, [id]);
+    setEmail(id)
+  }, [email]);
   const handleClose = (anchorEl, modalOpenEditStudent) => {
 
     setAnchorEl(null);
@@ -273,7 +277,7 @@ function ListStudents(props) {
   const handleOpenModal = useCallback((id) => {
     dispatch({
       type: "GET_STUDENT_CLASS",
-      id: id
+      email: id
     })
     dispatch({
       type: "CHANGE_MODAL_EDIT_STUDENT",
@@ -313,12 +317,43 @@ function ListStudents(props) {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  // useEffect(() => {
+  //   dispatch({
+  //     type: "GET_ALL_LIST_STUDENT_CLASS",
+  //     payload: rows
+  //   })
+  // }, [rows, listStudent]);
   useEffect(() => {
-    dispatch({
-      type: "GET_ALL_LIST_STUDENT_CLASS",
-      payload: rows
-    })
-  }, [rows, listStudent])
+    if (searchParams.get("class_id")) {
+      dispatch({
+        type: 'GET_ALL_LIST_STUDENT_CLASS_BY_ID',
+        payload: searchParams.get("class_id")
+      })
+    }
+  }, []);
+  useEffect(() => {
+    if (_class.success1) {
+      dispatch({
+        type: 'GET_ALL_LIST_STUDENT_CLASS_BY_ID',
+        payload: searchParams.get("class_id")
+      })
+      setTimeout(() => {
+        dispatch({
+          type: 'DELETE_SUCCESS_ADD_CLASS'
+        })
+      }, 100)
+
+    }
+  }, [_class.success1]);
+  useEffect(() => {
+    if (_class.success) {
+      dispatch({
+        type: 'GET_ALL_LIST_STUDENT_CLASS_BY_ID',
+        payload: searchParams.get("class_id")
+      })
+
+    }
+  }, [_class.success]);
   return (
     listStudent.length && <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -363,14 +398,14 @@ function ListStudents(props) {
                         scope="row"
                         padding="none"
                       >
-                        {row.nameStudent}
+                        {row.name_student}
                       </TableCell>
-                      <TableCell align="right">{row.IdStudent}</TableCell>
-                      <TableCell align="right">{row.gmail}</TableCell>
-                      <TableCell align="right">{row.startClass}</TableCell>
-                      <TableCell align="right">{row.editDateClass}</TableCell>
-                      <TableCell align="right">{row.statusClass === "1" ? "Đang học" : "Không học"}</TableCell>
-                      <TableCell align="right" style={{ paddingRight: "30px" }}><SettingsIcon style={{ cursor: "pointer" }} onClick={(e) => handleClickSetting(e, row.id)} className="iconSetting" /></TableCell>
+                      <TableCell align="right">{row.code_student}</TableCell>
+                      <TableCell align="right">{row.email}</TableCell>
+                      <TableCell align="right">29/10/2022-10:10</TableCell>
+                      <TableCell align="right">10:00,29/10/2022</TableCell>
+                      <TableCell align="right">{row.status === 1 ? "Đang học" : "Không học"}</TableCell>
+                      <TableCell align="right" style={{ paddingRight: "30px" }}><SettingsIcon style={{ cursor: "pointer" }} onClick={(e) => handleClickSetting(e, row.email)} className="iconSetting" /></TableCell>
                       <div>
                         <StyledMenu
                           id="demo-customized-menu"
@@ -382,7 +417,7 @@ function ListStudents(props) {
                           onClose={handleClose}
                         >
 
-                          <MenuItem onClick={() => handleOpenModal(id)} disableRipple>
+                          <MenuItem onClick={() => handleOpenModal(email)} disableRipple>
                             <EditIcon />
                             Chỉnh sửa
                           </MenuItem>

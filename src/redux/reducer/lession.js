@@ -34,11 +34,7 @@ export default function Lession(state = {}, action) {
         ...state,
         program: programs1
       }
-    case 'DELETE_LESSISON_ACTIVE':
-      return {
-        ...state,
-        program: action.programs.filter(pr => pr.id !== action.id)
-      }
+
     default:
       return state;
   }

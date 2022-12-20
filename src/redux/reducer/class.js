@@ -6,11 +6,11 @@ export default function Class(state = {}, action) {
     case HYDRATE:
       let nextState = action.payload._class; // apply delta from hydration
       return nextState
-    case 'GET_ALL_LIST_STUDENT_CLASS':
-      return {
-        ...state,
-        listStudent: action.payload
-      }
+    // case 'GET_ALL_LIST_STUDENT_CLASS':
+    //   return {
+    //     ...state,
+    //     listStudent: action.payload
+    //   }
     case 'ADD_NEW_STUDENT_REST':
       return {
         ...state,
@@ -18,29 +18,30 @@ export default function Class(state = {}, action) {
       }
     case "GET_STUDENT_CLASS":
 
-      let studentEdit = state.listStudent.filter(student => student.id === action.id);
+      let studentEdit = state.listStudent.filter(student => student.email === action.email);
       if (studentEdit.length) {
+        console.log("studentEdit:", studentEdit)
         return {
           ...state,
           editStudent: studentEdit[0]
         }
       }
     // eslint-disable-next-line no-fallthrough
-    case 'EDIT_SAVE_STUDENT_REST':
-      let data = state.listStudent;
+    // case 'EDIT_SAVE_STUDENT_REST':
+    //   let data = state.listStudent;
 
-      if (data.length) {
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].id === action.data.id) {
-            data[i] = action.data;
-            break;
-          }
-        }
-        return {
-          ...state,
-          editStudent: data
-        }
-      }
+    //   if (data.length) {
+    //     for (let i = 0; i < data.length; i++) {
+    //       if (data[i].email === action.data.email) {
+    //         data[i] = action.data;
+    //         break;
+    //       }
+    //     }
+    //     return {
+    //       ...state,
+    //       editStudent: data
+    //     }
+    //   }
     // eslint-disable-next-line no-fallthrough
     case 'DELETE_EDIT_STUDENT':
       return {
@@ -92,7 +93,26 @@ export default function Class(state = {}, action) {
     case 'ADD_NEW_CLASS_SUCCESS':
       return {
         ...state,
-        class_id: action.payload.class_id
+        class_id: action.payload.class_id,
+        success: true
+      }
+    case 'DELETE_SUCCESS_ADD_CLASS':
+      return {
+        ...state,
+        success: false,
+        success1: false
+      }
+    case 'ADD_NEW_STUDENT_BY_ID_SUCCESS':
+      console.log("seccess");
+      return {
+
+        ...state,
+        success1: true
+      }
+    case 'EDIT_STUDENT_BY_ID_SUCCESS':
+      return {
+        ...state,
+        success: true
       }
     case 'SETUP_PROGRAM_REST':
       let setupProgram = {
@@ -188,8 +208,46 @@ export default function Class(state = {}, action) {
         ...state,
         editLesson: action.payload
       }
+    case 'DELETE_LESSISON_ACTIVE':
+      let arrayLesstion = state.arrayProgram;
+      if (arrayLesstion.length) {
+        for (let i = 0; i < arrayLesstion[action.index - 1].createLessonRequestList.length; i++) {
+          if (arrayLesstion[action.index - 1].createLessonRequestList[i].indexLesson === action.id) {
+            arrayLesstion[action.index - 1].createLessonRequestList.splice(i, 1)
+            break;
+          }
+        }
+        return {
+          ...state,
+          arrayProgram: arrayLesstion
+        }
+      }
+    // eslint-disable-next-line no-fallthrough
+    case 'DELETE_LESSISON_TASK':
+      let arrayProgram2 = state.arrayProgram;
+      if (arrayProgram2.length) {
+        for (let i = 0; i < arrayProgram2[action.index - 1].createTaskRequestList.length; i++) {
+          if (arrayProgram2[action.index - 1].createTaskRequestList[i].index === action.id) {
+            arrayProgram2[action.index - 1].createTaskRequestList.splice(i, 1)
+            break;
+          }
+        }
+
+        return {
+          ...state,
+          arrayProgram: arrayProgram2
+        }
+      }
+    case 'HANDLE_DELETE_PROGRAM_CLASS':
+      return {
+        ...state,
+        arrayProgram: state.arrayProgram.filter(item => item.index !== action.id)
+      }
     case 'HANDLE_SAVE_EDIT_PROGRAM':
-      console.log("actionEdit:", action)
+      console.log("actionEdit:", action);
+      return {
+        ...state
+      }
     case 'GET_CLASS_INFORMATION_BY_ID_SUCCESS':
       return {
         ...state,
@@ -204,7 +262,19 @@ export default function Class(state = {}, action) {
           status_class: action.payload.status_class,
           start_time: action.payload.start_time,
           end_time: action.payload.end_time,
-          path_file_image: action.payload.path_file_image
+          path_file_image: action.payload.path_image
+        }
+      }
+    case 'GET_CLASS_INFORMATION_BY_ID_STUDENT_SUCCESS':
+      return {
+        ...state,
+        class_id: action.payload.class_id,
+        classDetail: {
+          ...state.classDetail,
+          class_id: action.payload.class_id,
+          tag_class: action.payload.tag_class,
+          path_file_image: action.payload.path_image,
+          documentList: action.payload.documents
         }
       }
     case
@@ -215,6 +285,11 @@ export default function Class(state = {}, action) {
           documentList: action.payload.documents_response,
           description: action.payload.description
         }
+
+      }
+    case 'CREATE_PROGRAM_BY_ID_SUCCESS':
+      return {
+        ...state,
 
       }
     case 'GET_CLASS_PROGRAM_BY_ID_SUCCESS':
@@ -235,6 +310,11 @@ export default function Class(state = {}, action) {
           ...state.classDetail,
           allCategoryProgram: action.payload
         }
+      }
+    case 'GET_ALL_STUDENT_BY_ID_SUCCESS':
+      return {
+        ...state,
+        listStudent: action.payload
       }
     default:
       return state;

@@ -135,7 +135,7 @@ const AddLesssion = ({ props }) => {
                 }
                 {
                   toggleState === 2 &&
-                  <ProgramLession quill={quill} quillRef={quillRef} />
+                  <ProgramLession />
                 }
                 {
                   toggleState === 3 &&
