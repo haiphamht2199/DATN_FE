@@ -8,13 +8,16 @@ import { useDispatch, useSelector } from "react-redux";
 import DescriptionLession from '../../component/lession/DescriptionLession';
 import ProgramLession from '../../component/lession/ProgramLession';
 import ExemLession from '../../component/lession/ExemLession';
+import { useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 const AddLesssion = ({ props }) => {
-  const lession = useSelector((state) => state.lession);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const _class = useSelector((state) => state._class);
   const [toggleState, setToggleState] = useState(1);
   const { quill, quillRef } = useQuill();
-  const [nameLession, setNameLession] = useState(lession.nameLession);
-  const [majors, setMajors] = useState(1);
+  const [nameLession, setNameLession] = useState(_class.nameClass);
+  const [majors, setMajors] = useState(useSelector((state) => state._class.moduleClassId));
+
   const modules = useSelector((state) => state.moduleClass.modules);
   console.log("module:", modules)
   const dispatch = useDispatch();
@@ -50,6 +53,40 @@ const AddLesssion = ({ props }) => {
       value
     })
   }
+  useEffect(() => {
+    dispatch({
+      type: 'GET_DETAIL_INFORMATION_CLASS_BY_ID',
+      payload: searchParams.get("class_id")
+    })
+    dispatch({
+      type: 'GET_DETAIL_INFORMATION_AND_DOCUMENT_CLASS_BY_ID',
+      payload: searchParams.get("class_id")
+    });
+    dispatch({
+      type: 'GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID',
+      payload: searchParams.get("class_id")
+    })
+  }, [searchParams.get("class_id")]);
+  useEffect(() => {
+    if (_class.classDetail.class_id && _class.classDetail.documentList) {
+      dispatch({
+        type: 'GET_ALL_INFORMATION_CLASS_BY_ID',
+        payload: _class.classDetail
+      })
+    }
+  }, [_class.classDetail]);
+  useEffect(() => {
+    if (_class.classDetail.arrayProgram) {
+      dispatch({
+        type: 'GET_ALL_PROGRAM_CLASS_BY_ID',
+        payload: _class.classDetail.arrayProgram
+      })
+    }
+  }, [_class.classDetail]);
+  useEffect(() => {
+    setNameLession(_class.nameClass);
+    setMajors(_class.moduleClassId)
+  }, [_class])
   return (
     <>
       <div className='addLesstion_container'>

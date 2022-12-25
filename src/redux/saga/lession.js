@@ -52,8 +52,8 @@ function* addNewClass(action) {
   if (data.documentList.length) {
    data.documentList.map(item => {
     let newData = {
-     nameDocumentClass: item.nameDocumentClass,
-     pathFileDocument: item.pathFileDocument
+     nameDocumentClass: item.file_path_document,
+     pathFileDocument: item.name_document
     }
     documentList.push(newData)
    })
@@ -179,7 +179,7 @@ function* getAllcategoryProgramByClassId(action) {
 }
 function* getAllStudentByClassId(action) {
  try {
-  let listStudentRes = yield all([axios.get(`/teacher/manager_student?page=0&size=10&classId=${action.payload}`)]);
+  let listStudentRes = yield all([axios.get(`/teacher/manager_student?page=0&size=100&classId=${action.payload}`)]);
   console.log("listStudentRes:", listStudentRes);
   let AllStudent = listStudentRes[0].data;
   if (AllStudent.code === 200) {

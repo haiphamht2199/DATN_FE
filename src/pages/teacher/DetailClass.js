@@ -18,7 +18,7 @@ function DetailClass() {
   setToggleStateAddClass(index);
  }
  useEffect(() => {
-  if (student) {
+  if (student === "STUDENT") {
    dispatch({
     type: 'GET_DETAIL_INFORMATION_CLASS_STUDENT_BY_ID',
     payload: searchParams.get("tag_class")
@@ -54,12 +54,12 @@ function DetailClass() {
        <AddToPhotosIcon className='icon_lession' />
       </div>
       <div className='url_lession_detail'>
-       <div className='content_url'>Danh sách lớp / lớp học số 1</div>
+       <div className='content_url'>Danh sách lớp / {detailClass.name_class}</div>
       </div>
      </div>
      <div className='content_detail_class'>
       {
-       !student && <div className="bloc-tabs_detail_class">
+       student === "ADMIN" && <div className="bloc-tabs_detail_class">
 
         <div
          className={toggleStateAddClass === 1 ? "tabs_detail_class active_tabs_detail_class" : "tabs_detail_class"}
@@ -88,11 +88,11 @@ function DetailClass() {
        <InfomationClass detailClass={detailClass} />
       }
       {
-       !student && toggleStateAddClass === 2 &&
+       student === "ADMIN" && toggleStateAddClass === 2 &&
        <InformationListProgramStudy />
       }
       {
-       !student && toggleStateAddClass === 3 &&
+       student === "ADMIN" && toggleStateAddClass === 3 &&
        <ManagerStudent />
       }
      </div>

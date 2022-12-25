@@ -1,9 +1,32 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Dialog, DialogTitle, DialogContent, makeStyles, Select, FormControl, Typography, Button, TextField, InputLabel, MenuItem, Grid } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, makeStyles, Select, FormControl, Typography, Button, TextField, InputLabel, MenuItem, Grid, OutlinedInput } from '@material-ui/core';
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from "react-redux";
 import Alert from '@mui/material/Alert';
 import { useSearchParams } from "react-router-dom";
+import { useTheme } from '@mui/material/styles';
+import axios from '../../helper/axios'
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
 const useStyles = makeStyles(theme => ({
   dialogWrapper: {
     // padding: theme.spacing(2),
@@ -28,6 +51,9 @@ function AddStudent(props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { name, openModal, SetModalOpen } = props;
   const classes = useStyles();
+  const [listStudent, setListStudent] = useState([]);
+  const theme = useTheme();
+  const [personName, setPersonName] = useState("");
   const [studentId, setStudentId] = useState("");
   const [studentName, setStudentName] = useState("");
   const [studentEmail, setStudenEmail] = useState("");
@@ -36,6 +62,21 @@ function AddStudent(props) {
   const [isLoading1, setisLoading1] = useState(false);
   const [isLoading2, setisLoading2] = useState(false);
   const [validateEmail, setValidateEmail] = useState(true);
+  console.log("listStudent:", listStudent)
+  const handleChange = useCallback(event => {
+    const value = event.target.value;
+    setPersonName(
+      value
+    );
+    if (listStudent.length) {
+      let student = listStudent.find(item => item.code_student === value);
+      if (student) {
+        setStudentId(student.code_student);
+        setStudenEmail(student.email_student);
+        setStudentName(student.name_student);
+      }
+    }
+  }, [listStudent]);
   const addNewStudent = useCallback(() => {
     if (studentId) {
       setisLoading(false);
@@ -84,7 +125,29 @@ function AddStudent(props) {
       }, 100)
 
     }
-  }, [studentId, studentName, studentEmail, studentStatus, isLoading1, isLoading2, validateEmail])
+  }, [studentId, studentName, studentEmail, studentStatus, isLoading1, isLoading2, validateEmail]);
+  useEffect(() => {
+    if (searchParams.get("class_id")) {
+
+      async function fetchData(program_id) {
+        if (program_id) {
+          let data = {
+            keyword: 75,
+            classId: program_id
+          }
+          let programCategoryDetailRes = await axios.get(`/teacher/manager_student/get_all_student_in_system`, data);
+
+          if (programCategoryDetailRes.data.code === 200) {
+            setListStudent(programCategoryDetailRes.data.data);
+          }
+        }
+        // ...
+      }
+
+      fetchData(searchParams.get("class_id"));
+
+    }
+  }, [searchParams.get("class_id")])
   return (
     <Dialog open={openModal} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
       <DialogTitle className={classes.dialogTitle}>
@@ -101,6 +164,29 @@ function AddStudent(props) {
       </DialogTitle>
       <DialogContent dividers>
         <div className='content_edit'>
+          <div>
+            <FormControl style={{ width: "100%" }}>
+
+              <Select
+                labelId="demo-multiple-name-label"
+                id="demo-multiple-name"
+                value={personName}
+                onChange={handleChange}
+                input={<OutlinedInput placeholder="Tìm kiếm sinh viên" />}
+                MenuProps={MenuProps}
+              >
+                {listStudent.map((name) => (
+                  <MenuItem
+                    key={name.id_sys_user}
+                    value={name.code_student}
+                    style={getStyles(name, personName, theme)}
+                  >
+                    {name.name_student + "-" + name.code_student}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
           <div className='edit_name_lession'>
             <InputLabel style={{ marginBottom: "10px" }} required>Mã số sinh viên</InputLabel>
           </div>

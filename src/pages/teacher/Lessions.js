@@ -1,5 +1,5 @@
 /* eslint-disable no-octal-escape */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from "react-router-dom";
 import { styled, alpha } from '@mui/material/styles';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
@@ -20,6 +20,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './style.css';
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Moment from 'moment';
 const StyledMenu = styled((props) => (
  <Menu
   elevation={0}
@@ -65,22 +67,18 @@ function Lessions() {
  const [toggleStateAddClass, setToggleStateAddClass] = useState(1);
  const [openAction, setOpenAction] = useState(false);
  const [anchorEl, setAnchorEl] = useState(null);
- const [_image, set_image] = useState("");
+ const [classId, setClassId] = useState("");
  const dispatch = useDispatch();
- // set_image({
- //  ..._image,
- //  filePreview: URL.createObjectURL("headphone2.png")
- // })
- let a = "documents\\20221207\\PHAM DINH HAI.DOCX_07122022225056018CNbV9P9ZIN.DOCX";
- console.log("a:", a.replaceAll("\\", "/"))
+ const navigate = useNavigate();
  const toggleTabAddClass = (index) => {
 
   setToggleStateAddClass(index);
  }
- const handleClick = (event) => {
+ const handleClick = useCallback((event, class_id) => {
   setAnchorEl(event.currentTarget);
   setOpenAction(!openAction);
- };
+  setClassId(class_id);
+ }, [setClassId]);
  const handleClose = () => {
   setAnchorEl(null);
  };
@@ -91,7 +89,9 @@ function Lessions() {
   })
  }, []);
  const handlePushClick = (class_id) => {
-  console.log("class_id:", class_id)
+  if (class_id) {
+   return navigate(`/tao-bai-giang?class_id=${class_id}`);
+  }
  }
  return (
   <div className='array_lessions'>
@@ -224,13 +224,13 @@ function Lessions() {
             </div>
             <div className='Calendar_detail'>
              <div className='label_calendar' >Thời gian diễn ra</div>
-             <div className='info_calendar'>29/10/2022 - 12/12/2022</div>
+             <div className='info_calendar'>{item.start_time && item.start_time.split(" ")[0] + "-" + item.end_time && item.end_time.split(" ")[0]} </div>
             </div>
            </div>
           </div>
          </div>
         </div>
-        <div className='action_lession_list' onClick={handleClick}>
+        <div className='action_lession_list' onClick={(e) => handleClick(e, item.class_id)}>
          <MoreHorizIcon className='icon_dot' />
          <div>
           <StyledMenu
@@ -244,11 +244,11 @@ function Lessions() {
           >
            {/* <Link to={"chi-tiet-lop-hoc?class_id=" + item.class_id}> */}
            <MenuItem disableRipple
-            onClick={() => handlePushClick(item.class_id)}
+            onClick={() => handlePushClick(classId)}
            >
             <EditIcon />
 
-            {item.class_id}
+            Chỉnh sửa
            </MenuItem>
            {/* </Link> */}
            <MenuItem onClick={handleClose} disableRipple>

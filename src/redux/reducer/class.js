@@ -54,6 +54,12 @@ export default function Class(state = {}, action) {
         ...state,
         pathFileImage: action.payload.replaceAll("\\", "/")
       }
+    case 'REMOVE_IMAGE_CLASS':
+      console.log("remove")
+      return {
+        ...state,
+        pathFileImage: ""
+      }
     case "CHANGE_NAME_LESSION":
       return {
         ...state,
@@ -83,7 +89,7 @@ export default function Class(state = {}, action) {
     case 'UPLOAD_DOCUMENT_SUCCESS':
       return {
         ...state,
-        documentList: [...state.documentList, action.payload]
+        documentList: [...state.documentList, action.payload],
       }
     case 'GET_ALL_CLASS_SUCCESS':
       return {
@@ -113,6 +119,13 @@ export default function Class(state = {}, action) {
       return {
         ...state,
         success: true
+      }
+    case 'DELETE_DOCUMENT_FILE':
+      console.log("action:", action.payload)
+      return {
+        ...state,
+        documentList: state.documentList.filter(file => file.file_path_document !== action.payload),
+        listIdRemoveDocument: [...state.listIdRemoveDocument, action.id]
       }
     case 'SETUP_PROGRAM_REST':
       let setupProgram = {
@@ -249,6 +262,7 @@ export default function Class(state = {}, action) {
         ...state
       }
     case 'GET_CLASS_INFORMATION_BY_ID_SUCCESS':
+      console.log("action:", action.payload)
       return {
         ...state,
         class_id: action.payload.class_id,
@@ -262,7 +276,7 @@ export default function Class(state = {}, action) {
           status_class: action.payload.status_class,
           start_time: action.payload.start_time,
           end_time: action.payload.end_time,
-          path_file_image: action.payload.path_image
+          path_file_image: action.payload.path_file_image
         }
       }
     case 'GET_CLASS_INFORMATION_BY_ID_STUDENT_SUCCESS':
@@ -283,14 +297,18 @@ export default function Class(state = {}, action) {
         ...state, classDetail: {
           ...state.classDetail,
           documentList: action.payload.documents_response,
-          description: action.payload.description
+          description: action.payload.description,
+          module_class_id: action.payload.module_class_id,
+          start_time: action.payload.start_date,
+          end_time: action.payload.end_date,
+
         }
 
       }
     case 'CREATE_PROGRAM_BY_ID_SUCCESS':
       return {
         ...state,
-
+        success: true
       }
     case 'GET_CLASS_PROGRAM_BY_ID_SUCCESS':
       console.log("actionPr:", action)
@@ -316,6 +334,66 @@ export default function Class(state = {}, action) {
         ...state,
         listStudent: action.payload
       }
+    case 'GET_ALL_INFORMATION_CLASS_BY_ID':
+      return {
+        ...state,
+        nameClass: action.payload.name_class,
+        moduleClassId: action.payload.module_class_id,
+        description: action.payload.description,
+        dateTimeStart: action.payload.start_time,
+        dateTimeEnd: action.payload.end_time,
+        documentList: action.payload.documentList,
+        pathFileImage: action.payload.path_file_image,
+      }
+    case 'GET_ALL_PROGRAM_CLASS_BY_ID':
+      let payloadData = action.payload;
+      let DataArayProgram = [];
+      if (payloadData.length) {
+        payloadData.forEach((item, index) => {
+          let data = {
+            classId: item.class_id,
+            toggleStateAddClass: 1,
+            nameProgramCategory: item.name_program_category,
+            index: index + 1,
+          }
+          let createLessonRequestList = [];
+          let createTaskRequestList = [];
+          if (item.lessons.length) {
+
+            item.lessons.forEach((ele, index1) => {
+              createLessonRequestList.push({
+                nameLesson: ele.name_lesson,
+                pathLesson: ele.path_lesson.replaceAll("\\", "/"),
+                typeLesson: ele.type_lesson,
+                timeDuration: ele.time_duration,
+                scopeLesson: ele.scope_lesson,
+                indexLesson: index1 + 1
+              })
+            })
+          }
+          if (item.tasks.length) {
+
+            item.tasks.forEach((ele, index1) => {
+              createTaskRequestList.push({
+                nameTask: ele.name_task,
+                typeTask: ele.type_task,
+                descriptionTask: ele.description_task,
+                timeDurationTask: ele.time_duration_task,
+                isRequireFinishTask: ele.is_require_finish_task,
+                index: index1 + 1
+              })
+            })
+          }
+          data.createLessonRequestList = createLessonRequestList;
+          data.createTaskRequestList = createTaskRequestList;
+          DataArayProgram.push(data);
+        });
+      }
+      return {
+        ...state,
+        arrayProgram: DataArayProgram
+      }
+
     default:
       return state;
   }

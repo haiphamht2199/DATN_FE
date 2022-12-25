@@ -26,7 +26,7 @@ const Login = () => {
   }, [email, password, token]);
   useEffect(() => {
     if (token) {
-      if (student) {
+      if (student === "STUDENT") {
         return navigate("/student/home");
       } else {
         return navigate("/home");

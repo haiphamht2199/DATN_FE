@@ -30,6 +30,55 @@ import 'react-toastify/dist/ReactToastify.css';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
+import Menu from '@mui/material/Menu';
+import { alpha, styled } from '@mui/material/styles';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import EditInfomationGroup from '../../component/modal/EditInfomationGroup';
+import EvaluateForGroup from '../../component/modal/EvaluateForGroup';
+import EditStudentForGroup from '../../component/modal/EditStudentForGroup';
+import EditLessonAndTask from '../../component/modal/EditLessonAndTask';
+import AddStudentForGrou from '../../component/modal/AddStudentForGrou';
+const StyledMenu = styled((props) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color:
+      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity,
+        ),
+      },
+    },
+  },
+}));
 function DetailProgramCaregory() {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -40,6 +89,9 @@ function DetailProgramCaregory() {
   const [numberGroup, setNumberGroup] = useState(new Map());
   const [open, setOpen] = React.useState(false);
   const [programId, setProgramId] = useState("");
+  const [openModalLessonAndTask, setOpenModalLessonAndTask] = useState(false);
+  const [editNameActive, setEditNameActive] = useState("");
+  const nameClass = useSelector(state => state._class.classDetail.name_class)
   const handleClickOpen = useCallback((id) => {
     setProgramId(id)
     setOpen(true);
@@ -104,7 +156,7 @@ function DetailProgramCaregory() {
 
   }, [detaiProgram, exspand, hello]);
   const handleMoreDescriptTask = useCallback(async (index, task) => {
-    let listGroupTaskRes = await axios.get(`teacher/tasks/list_task_groups?page=0&size=10&taskId=${task.taskId}`);
+    let listGroupTaskRes = await axios.get(`/teacher/tasks/list_task_groups?page=0&size=10&taskId=${task.taskId}`);
     if (listGroupTaskRes.data.code === 200) {
       detaiProgram.task_list[index].listGroup = listGroupTaskRes.data.data.results
       setDetailProgram(detaiProgram)
@@ -137,7 +189,7 @@ function DetailProgramCaregory() {
   const hancleDivideGroup = useCallback(async (task, index) => {
     const classId = parseInt(searchParams.get("class_id"));
     let numberGroupId = parseInt(numberGroup.get(index));
-    let type = task.typeGroupStudent;
+    let type = task.typeGroupStudent ? task.typeGroupStudent : "1";
     let taskId = task.taskId;
     if (classId && numberGroupId && type && taskId) {
       let data = {
@@ -155,25 +207,184 @@ function DetailProgramCaregory() {
 
     }
   }, [numberGroup, hello]);
+  const handleEditLessAndTask = useCallback((lession) => {
+    setOpenModalLessonAndTask(true);
+    setEditNameActive(lession)
+  }, [setOpenModalLessonAndTask, setEditNameActive])
   function Row(props) {
     const [row, setRow] = useState(props.row);
+    console.log("row:", row)
     const [open, setOpen] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [openChange, setOpenChange] = useState(false);
+    const [openAction, setOpenAction] = useState(false);
+    const [anchorEl1, setAnchorEl1] = useState(null);
+    const [openAction1, setOpenAction1] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [modalOpen, SetModalOpen] = useState(false);
+    const [modalEvaluateOpen, SetModalEvaluateOpen] = useState(false);
+    const [modalEvaluateStudentOpen, SetModalEvaluateStudentOpen] = useState(false);
+    const [taskGroup, setTaskGroup] = useState("");
+    const [studentId, setStudentId] = useState("");
+    const [openModalAddStudent, SetModalOpenAddStudent] = useState(false)
+    const [data, setData] = useState("");
+    const handleAddStudent = useCallback(() => {
+      SetModalOpen(!modalOpen);
+      setAnchorEl(null);
+      setOpenAction(false);
+      setData(taskGroup)
+    }, [taskGroup, setData]);
+    const handleAddStudentGroup = useCallback(() => {
+      SetModalOpenAddStudent(true)
+      setAnchorEl(null);
+      setOpenAction(false);
+      setData(taskGroup)
+    }, [taskGroup, setData])
+    const handleOenModelEvaluate = useCallback(() => {
+      SetModalEvaluateOpen(!modalOpen);
+      setAnchorEl(null);
+      setOpenAction(false);
+      setData(taskGroup)
+    })
+    const handleEditStudent = useCallback(() => {
+      SetModalEvaluateStudentOpen(!modalEvaluateStudentOpen);
+      setAnchorEl1(null);
+      setOpenAction1(false);
+      setData(taskGroup);
+    }, [taskGroup, setData, modalEvaluateStudentOpen, SetModalEvaluateStudentOpen])
+    const handleClick1 = useCallback((event, row) => {
+      setOpenAction1(!openAction);
+      setAnchorEl1(event.currentTarget);
+      setStudentId(row.task_student_detail_id)
+    }, [setStudentId]);
+    const handleClick = useCallback((event, row) => {
+      setOpenAction(!openAction);
+      setAnchorEl(event.currentTarget);
+      setTaskGroup(row)
+    }, [setTaskGroup]);
+    const handleClose = (anchorEl, modalOpenEditStudent) => {
+
+      setAnchorEl(null);
+      setOpenAction(false)
+    };
+    const handleClose2 = (anchorEl, modalOpenEditStudent) => {
+
+      setAnchorEl1(null);
+      setOpenAction1(false)
+    };
     const handlehetListStudentForGroup = useCallback(async id => {
       let listStudentRes = await axios.get(`/teacher/tasks/get_students_details?task_group_id=${id}`);
       if (listStudentRes.data.code === 200) {
         row.listStudent = listStudentRes.data.data;
-        setRow(row)
+        setRow(row);
+        setOpen(!open)
       }
 
-    }, [row, setRow])
+    }, [row, setRow, setOpen, open]);
+    useEffect(() => {
+
+      if (document.querySelector(`.content_task_student${row.task_group_id}`)) {
+
+        document.querySelector(`.content_task_student${row.task_group_id}`).innerHTML = row.content
+      }
+    }, [row])
+    const handleClose1 = () => {
+      setOpenDelete(false);
+    };
+    const handleClose3 = () => {
+      setOpenChange(false);
+    };
+    const handleOenModalDelete = () => {
+      setOpenDelete(true);
+      setAnchorEl(null);
+      setOpenAction(false)
+    };
+    const handleOenModalChange = () => {
+      setOpenChange(true);
+      setAnchorEl(null);
+      setOpenAction(false)
+    };
+
+    const handleDeleteTask = useCallback(async () => {
+      if (taskGroup) {
+        try {
+          console.log("ajsd:", taskGroup)
+          let successRes = await axios.delete(`/teacher/tasks?/delete_task=${taskGroup.task_group_id}`);
+          console.log("successRes:", successRes)
+          if (successRes.data.code === 200) {
+            toast.success("Delete task detail success", {
+              position: toast.POSITION.TOP_CENTER
+            });
+          }
+          setOpenDelete(false);
+        } catch (error) {
+          toast.error("could not delete task detail ", {
+            position: toast.POSITION.TOP_CENTER
+          });
+          setOpenDelete(false);
+        }
+
+      }
+    }, [taskGroup])
+    const handleChangeTask = useCallback(async () => {
+      if (taskGroup) {
+        try {
+
+          let successRes = await axios.put(`/teacher/tasks/change_status_task_group?task_group_id=${taskGroup.task_group_id}`);
+          console.log("successRes:", successRes)
+          if (successRes.data.code === 200) {
+            toast.success("Change status task group success!", {
+              position: toast.POSITION.TOP_CENTER
+            });
+          }
+          setOpenChange(false);
+        } catch (error) {
+          toast.error("could not change status task group ", {
+            position: toast.POSITION.TOP_CENTER
+          });
+          setOpenChange(false);
+        }
+
+      }
+    }, [taskGroup])
     return (
       <React.Fragment>
+        <Dialog
+          open={openDelete}
+
+          keepMounted
+          onClose={handleClose1}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{"Bạn có chắc chắn muốn xóa không"}</DialogTitle>
+          <DialogActions>
+            <Button onClick={handleClose1}>Hủy</Button>
+            <Button onClick={handleDeleteTask}>Đồng ý</Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={openChange}
+
+          keepMounted
+          onClose={handleClose3}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{"Bạn có chắc chắn muốn thay đổi trạng thái không"}</DialogTitle>
+          <DialogActions>
+            <Button onClick={handleClose2}>Hủy</Button>
+            <Button onClick={handleChangeTask}>Đồng ý</Button>
+          </DialogActions>
+        </Dialog>
+        <EditInfomationGroup openModal={modalOpen} SetModalOpen={SetModalOpen} row={data} setRow={setData} />
+        <EvaluateForGroup openModal={modalEvaluateOpen} SetModalOpen={SetModalEvaluateOpen} row={data} setRow={setData} />
+        <EditStudentForGroup openModal={modalEvaluateStudentOpen} SetModalOpen={SetModalEvaluateStudentOpen} row={data} studentId={studentId} setRow={setData} />
+        <AddStudentForGrou openModalAddStudent={openModalAddStudent} SetModalOpenAddStudent={SetModalOpenAddStudent} row={data} />
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
           <TableCell>
             <IconButton
               aria-label="expand row"
               size="small"
-              onClick={() => { handlehetListStudentForGroup(row.task_group_id); setOpen(!open) }}
+              onClick={() => { handlehetListStudentForGroup(row.task_group_id); }}
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
@@ -181,10 +392,45 @@ function DetailProgramCaregory() {
           <TableCell component="th" align="center" scope="row">
             {row.name_task_group}
           </TableCell>
-          <TableCell align="center">{row.content ? row.content : "-"}</TableCell>
+          <TableCell align="center" className={"content_task_student" + row.task_group_id} >{row.content}</TableCell>
           <TableCell align="center">{row.status ? "Họat động" : "Không hoạt động"}</TableCell>
           <TableCell align="center">{row.level ? row.level : "-"}</TableCell>
-          <TableCell align="center"><SettingsIcon style={{ cursor: "pointer" }} className="iconSetting" /></TableCell>
+          <TableCell align="center"><SettingsIcon style={{ cursor: "pointer" }} className="iconSetting" onClick={(e) => handleClick(e, row)} /></TableCell>
+          <div>
+            <StyledMenu
+              id="demo-customized-menu"
+              MenuListProps={{
+                'aria-labelledby': 'demo-customized-button',
+              }}
+              anchorEl={anchorEl}
+              open={openAction}
+              onClose={handleClose}
+            >
+
+              <MenuItem disableRipple onClick={handleAddStudent}>
+                <EditIcon />
+                Chỉnh sửa
+              </MenuItem>
+              <MenuItem disableRipple onClick={handleOenModalChange}>
+                <AutorenewIcon />
+                Đổi trạng thái
+              </MenuItem>
+              <MenuItem disableRipple onClick={handleAddStudentGroup}>
+                <ControlPointIcon />
+                Thêm sinh viên
+              </MenuItem>
+
+              <MenuItem onClick={handleOenModalDelete} disableRipple>
+                <DeleteIcon />
+                Xóa thông tin
+              </MenuItem>
+
+              <MenuItem disableRipple onClick={handleOenModelEvaluate}>
+                <EditIcon />
+                Đánh giá nhóm
+              </MenuItem>
+            </StyledMenu>
+          </div>
         </TableRow>
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -206,7 +452,7 @@ function DetailProgramCaregory() {
                   </TableHead>
                   <TableBody>
                     {row.listStudent && row.listStudent.length && row.listStudent.map((student, index) => (
-                      <TableRow >
+                      <TableRow className={student.is_captain === 1 ? "is_captain" : ""}>
                         <TableCell component="th" scope="row">
                           {index + 1}
                         </TableCell>
@@ -219,7 +465,28 @@ function DetailProgramCaregory() {
                         <TableCell align="center">{student.status_assign > 0 ? "Đúng hạn" : "Chưa nộp "}</TableCell>
                         <TableCell align="center">{student.status ? "Hoạt động" : "Không hoạt động"}</TableCell>
                         <TableCell align="center">{student.point}</TableCell>
-                        <TableCell align="center"><SettingsIcon style={{ cursor: "pointer" }} className="iconSetting" /></TableCell>
+                        <TableCell align="center"><SettingsIcon style={{ cursor: "pointer" }} className="iconSetting" onClick={(e) => handleClick1(e, student)} /></TableCell>
+                        <div>
+                          <StyledMenu
+                            id="demo-customized-menu"
+                            MenuListProps={{
+                              'aria-labelledby': 'demo-customized-button',
+                            }}
+                            anchorEl={anchorEl1}
+                            open={openAction1}
+                            onClose={handleClose2}
+                          >
+
+                            <MenuItem disableRipple onClick={handleEditStudent}>
+                              <EditIcon />
+                              Chỉnh sửa
+                            </MenuItem>
+                            <MenuItem disableRipple>
+                              <AutorenewIcon />
+                              Đổi trạng thái
+                            </MenuItem>
+                          </StyledMenu>
+                        </div>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -231,6 +498,7 @@ function DetailProgramCaregory() {
       </React.Fragment>
     )
   }
+
   return (
     <>
       <Dialog
@@ -246,6 +514,7 @@ function DetailProgramCaregory() {
           <Button onClick={handleDeleteLesson}>Đồng ý</Button>
         </DialogActions>
       </Dialog>
+      <EditLessonAndTask openModalLessonAndTask={openModalLessonAndTask} setOpenModalLessonAndTask={setOpenModalLessonAndTask} editNameActive={editNameActive} />
       <ToastContainer />
       {
         detaiProgram.program_category_id && exspand && <div className='detail_class'>
@@ -254,7 +523,7 @@ function DetailProgramCaregory() {
               <AddToPhotosIcon className='icon_lession' />
             </div>
             <div className='url_lession_detail'>
-              <div className='content_url'>Danh sách lớp / lớp học số 1/Chi tiết lớp học/Chương trình giảng day</div>
+              <div className='content_url'>Danh sách lớp / {nameClass}/Chi tiết lớp học/Chương trình giảng day</div>
             </div>
           </div>
           <div className='content_program_category_detail'>
@@ -295,10 +564,6 @@ function DetailProgramCaregory() {
                       <p>Bài học</p>
                     </div>
                   </div>
-                  <div className='action_new_lession'>
-                    <EditIcon className='edit_new_lesstion' />
-                    <DeleteIcon className='delete_new_lesstion' onClick={() => handleClickOpen(detaiProgram.program_category_id)} />
-                  </div>
                 </div>
                 <div className='content_array_lesson_program_category'>
                   {
@@ -306,6 +571,9 @@ function DetailProgramCaregory() {
                       <div>
                         <div className='new_content_lession_rogram_category'>
                           <div className='left_new_lession'>
+                            <div className='action_expand' onClick={() => handleMoreDescript(index)}>
+                              {exspand.get(index) ? <ExpandLessIcon className='edit_new_lesstion' /> : <ExpandMoreIcon className='edit_new_lesstion' />}
+                            </div>
                             <div className='index_new_lession'>
                               #{lesson.indexInProgram}
                             </div>
@@ -313,10 +581,11 @@ function DetailProgramCaregory() {
                               <p>{lesson.nameLesson}</p>
                             </div>
                           </div>
-
-                          <div className='action_new_lession' onClick={() => handleMoreDescript(index)}>
-                            {exspand.get(index) ? <ExpandLessIcon className='edit_new_lesstion' /> : <ExpandMoreIcon className='edit_new_lesstion' />}
+                          <div className='action_new_lession'>
+                            <EditIcon className='edit_new_lesstion' onClick={() => handleEditLessAndTask(lesson)} />
+                            <DeleteIcon className='delete_new_lesstion' onClick={() => handleClickOpen(detaiProgram.program_category_id)} />
                           </div>
+
 
 
                         </div>
@@ -337,10 +606,6 @@ function DetailProgramCaregory() {
                       <p>Hoạt động</p>
                     </div>
                   </div>
-                  <div className='action_new_lession'>
-                    <EditIcon className='edit_new_lesstion' />
-                    <DeleteIcon className='delete_new_lesstion' />
-                  </div>
                 </div>
                 <div className='content_array_lesson_program_category'>
                   {
@@ -348,6 +613,9 @@ function DetailProgramCaregory() {
                       <div>
                         <div className='new_content_lession_rogram_category'>
                           <div className='left_new_lession'>
+                            <div className='action_new_lession' onClick={() => handleMoreDescriptTask(index, task)}>
+                              {exspandTask.get(index) ? <ExpandLessIcon className='edit_new_lesstion' /> : <ExpandMoreIcon className='edit_new_lesstion' />}
+                            </div>
                             <div className='index_new_lession'>
                               #{index + 1}
                             </div>
@@ -355,9 +623,9 @@ function DetailProgramCaregory() {
                               <p>{task.nameTask}</p>
                             </div>
                           </div>
-
-                          <div className='action_new_lession' onClick={() => handleMoreDescriptTask(index, task)}>
-                            {exspandTask.get(index) ? <ExpandLessIcon className='edit_new_lesstion' /> : <ExpandMoreIcon className='edit_new_lesstion' />}
+                          <div className='action_new_lession'>
+                            <EditIcon className='edit_new_lesstion' />
+                            <DeleteIcon className='delete_new_lesstion' />
                           </div>
 
                         </div>
@@ -424,7 +692,8 @@ function DetailProgramCaregory() {
                                         id="demo-simple-select"
                                         name="bloodGroup"
                                         fullWidth
-                                        value={task.typeGroupStudent.toString()}
+                                        value={task.typeGroupStudent ? task.typeGroupStudent.toString() : "1"}
+
 
                                       >
                                         <MenuItem value="1">Tự động chia nhóm </MenuItem>
@@ -472,7 +741,7 @@ function DetailProgramCaregory() {
                                           </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                          {task.listGroup.map((group) => (
+                                          {task.listGroup.map((group, index) => (
                                             // <TableRow
                                             //   key={row.name}
                                             //   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -484,7 +753,7 @@ function DetailProgramCaregory() {
                                             //   <TableCell align="center">{row.level ? row.level : "-"}</TableCell>
                                             //   <TableCell align="center" style={{ paddingRight: "30px" }}><SettingsIcon style={{ cursor: "pointer" }} className="iconSetting" /></TableCell>
                                             // </TableRow>
-                                            <Row key={group.task_group_id} row={group} />
+                                            <Row key={group.task_group_id} row={group} index={index} />
                                           ))}
                                         </TableBody>
                                       </Table>

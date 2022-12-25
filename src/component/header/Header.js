@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import './header.css';
 import { useDispatch, useSelector } from "react-redux";
 function Header() {
-
+ const user = useSelector(state => state.user);
  return (
   <>
    <div className='header_teacher'>
@@ -19,11 +19,14 @@ function Header() {
      </Link>
     </div>
     <div className='right_header'>
-     <Link to="/tao-bai-giang" className="link">
-      <div className='add_lesson_btn'>
-       <Button variant="contained">{"+" + " " + "tạo bài giảng"}</Button>
-      </div>
-     </Link>
+     {
+      user.student === "ADMIN" && <Link to="/tao-bai-giang" className="link">
+       <div className='add_lesson_btn'>
+        <Button variant="contained">{"+" + " " + "tạo bài giảng"}</Button>
+       </div>
+      </Link>
+     }
+
      <div className='icon_header'>
       <div className='seacrh_header'>
        <SearchIcon className='icon_search' />

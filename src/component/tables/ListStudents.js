@@ -355,7 +355,7 @@ function ListStudents(props) {
     }
   }, [_class.success]);
   return (
-    listStudent.length && <Box sx={{ width: '100%' }}>
+    listStudent.length > 0 && <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <TableContainer>
           <Table
@@ -402,8 +402,8 @@ function ListStudents(props) {
                       </TableCell>
                       <TableCell align="right">{row.code_student}</TableCell>
                       <TableCell align="right">{row.email}</TableCell>
-                      <TableCell align="right">29/10/2022-10:10</TableCell>
-                      <TableCell align="right">10:00,29/10/2022</TableCell>
+                      <TableCell align="right" className='modified_date'>{row.create_date}</TableCell>
+                      <TableCell align="right" >{row.modified_date}</TableCell>
                       <TableCell align="right">{row.status === 1 ? "Đang học" : "Không học"}</TableCell>
                       <TableCell align="right" style={{ paddingRight: "30px" }}><SettingsIcon style={{ cursor: "pointer" }} onClick={(e) => handleClickSetting(e, row.email)} className="iconSetting" /></TableCell>
                       <div>

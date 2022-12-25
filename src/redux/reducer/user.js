@@ -7,14 +7,11 @@ export default function user(state = {}, action) {
       return nextState
     case 'SIGNIN_SUCCESS':
       let student = false
-      if (action.email === "student02@gmail.com") {
-        student = true
-      }
       return {
         ...state,
         token: action.token,
         message: action.message,
-        student: student
+        student: action.payload.role_name
       }
     case 'AUTO_LOGIN':
       return {

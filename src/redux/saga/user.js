@@ -18,15 +18,26 @@ function* handleLogin(action) {
   let userRes = user[0].data;
   if (userRes.code === 200) {
    localStorage.setItem('token', userRes.data.access_token);
-   if (action.payload.email === 'student02@gmail.com') {
-    localStorage.setItem('student', true);
+   if (localStorage.getItem('token')) {
+    let dataRes = yield all([axios.get('http://localhost:8080/api/auth/current', {
+     headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': "Bearer " + userRes.data.access_token,
+      'Content-Type': 'application/json',
+      'accept': 'application/json'
+     }
+    })]);
+    if (dataRes[0].data.code === 200) {
+     localStorage.setItem('student', dataRes[0].data.data.role_name);
+     yield put({
+      type: "SIGNIN_SUCCESS",
+      token: userRes.data.access_token,
+      payload: dataRes[0].data.data
+     })
+    }
+
    }
-   yield put({
-    type: "SIGNIN_SUCCESS",
-    token: userRes.data.access_token,
-    message: userRes.message,
-    email: action.payload.email
-   })
+
   }
  } catch (error) {
 

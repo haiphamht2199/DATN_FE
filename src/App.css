@@ -174,10 +174,10 @@ button {
   margin-bottom: 5px;
 }
 
-.content p {
+/* .content p {
   width: 100%;
   height: 100%;
-}
+} */
 
 .active-content {
   display: block;
@@ -582,6 +582,16 @@ button {
   color: blue;
 }
 
+.action_expand .edit_new_lesstion {
+  font-size: 22px !important;
+  cursor: pointer;
+  color: blue;
+}
+
+.action_expand {
+  cursor: pointer;
+}
+
 .action_new_lession .delete_new_lesstion {
   font-size: 22px !important;
   cursor: pointer;
@@ -741,7 +751,15 @@ button {
   gap: 60px;
   padding: 30px 30px;
   align-items: center;
-  justify-content: space-between;
+}
+
+.modified_date {
+  width: 16% !important;
+}
+
+.is_captain th,
+.is_captain td {
+  color: red !important;
 }
 
 .search {
@@ -754,7 +772,7 @@ button {
 
 .btn_search_reset {
   display: flex;
-  padding-left: 15%;
+  padding-left: 3%;
   gap: 30px;
 }
 
@@ -1510,6 +1528,7 @@ button {
   font-weight: bold;
   font-size: 1.2rem;
   margin-bottom: 1em;
+  margin-top: 30px;
 }
 
 li {
@@ -1519,7 +1538,7 @@ li {
   border-radius: 5px;
   display: flex;
   align-items: center;
-  padding: 1.2em 1.5em;
+  padding: 5px 15px;
 }
 
 li svg {
@@ -1645,6 +1664,7 @@ li .actions .fa-spinner {
   font-size: 14px;
   margin-bottom: 15px;
   cursor: pointer;
+  padding-bottom: 15px;
 }
 
 .content_list_lesson_class_left .iconAndLabel_name_class {
@@ -1814,9 +1834,11 @@ li .actions .fa-spinner {
   font-size: 14x;
   font-weight: bolder;
 }
-.title_list_student_class_by_group{
+
+.title_list_student_class_by_group {
   margin-bottom: 20px
 }
+
 .number_student_course {
   margin-top: 10px;
   display: flex;
@@ -1901,4 +1923,163 @@ li .actions .fa-spinner {
 
 .list_group_task {
   margin-top: 10px;
+}
+
+.customize {
+  background: #1b92cb !important;
+}
+
+.is_time_complete_task_require {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.status_assign_task {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.doneTask {
+  color: red;
+}
+
+.notDoneTask {
+  color: rgb(23, 229, 16);
+}
+
+.name_content_task {
+  display: flex;
+  justify-content: space-between;
+}
+
+.remove_image_class {
+  cursor: pointer;
+}
+
+.react-datepicker {
+  font-size: 1rem;
+  border-color: #e1e4e6;
+  border-bottom: 1px solid #e1e4e6;
+}
+
+.react-datepicker__header {
+  background-color: white;
+}
+
+.react-datepicker__header {
+  border-bottom: 1px solid #e1e4e6;
+}
+
+.react-datepicker-popper {
+  z-index: 100 !important;
+}
+
+.react-datepicker-popper[data-placement^="top"] {
+  margin-bottom: 3px;
+}
+
+.react-datepicker-popper[data-placement^="bottom"] {
+  margin-top: 3px;
+}
+
+.react-datepicker__triangle {
+  display: none;
+}
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container input {
+  width: 100%;
+}
+
+.react-datepicker button,
+.react-datepicker-wrapper button {
+  outline: 0;
+}
+
+.react-datepicker__input-container input {
+  line-height: 1.3rem;
+  text-transform: initial;
+  letter-spacing: initial;
+  min-width: 0px;
+  min-height: 1rem;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  -webkit-appearance: none;
+  margin: 0px;
+  padding: 0.5rem 1.2rem;
+  background: none;
+  border-width: 0.1rem;
+  border-style: solid;
+  border-color: #e1e4e6;
+  border-image: initial;
+}
+
+.react-datepicker__input-container input:focus {
+  border-color: #00848e;
+}
+
+.react-datepicker__month-container {
+  min-width: 500px;
+}
+
+.react-datepicker__time-container {
+  width: 300px;
+  border-left: 1px solid #e1e4e6;
+}
+
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
+  width: 100% !important;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  width: 4.0rem !important;
+  font-size: 0.8rem !important;
+  /*line-height: 2.9rem;*/
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header {
+  font-size: 0.8rem !important;
+}
+
+.react-datepicker__month {
+  padding: 1.0rem;
+}
+
+.react-datepicker__header--time {
+  padding-bottom: 32px;
+}
+
+react-datepicker__time-list {
+  height: unset;
+}
+
+.react-datepicker__time-list-item {
+  font-size: 0.8rem !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected {
+  background-color: #4959bd;
+}
+
+button.react-datepicker__close-icon::after {
+  background-color: #4959bd;
+}
+
+.react-datepicker__navigation--next--with-time:not(.react-datepicker__navigation--next--with-today-button) {
+  right: 132px;
+}
+
+.isRequireFinishTask {
+  margin-top: 20px;
 }

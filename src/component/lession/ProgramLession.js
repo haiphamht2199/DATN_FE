@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Grid, TextField, Card, FormControl, InputLabel, Select, MenuItem, TextareaAutosize, Typography, Box, Button } from "@material-ui/core";
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,8 +9,6 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import ModalEditLession from '../modal/ModalEditLession';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
@@ -144,6 +142,18 @@ function ProgramLession(props) {
       toast.warn("Bạn cần phải tạo lớp học đã!", {
         position: toast.POSITION.TOP_CENTER
       });
+    }
+  }, [_class]);
+  useEffect(() => {
+    if (_class.success) {
+      toast.success("Bạn cần tạo lớp học thành công", {
+        position: toast.POSITION.TOP_CENTER
+      });
+      setTimeout(() => {
+        dispatch({
+          type: 'DELETE_SUCCESS_ADD_CLASS'
+        })
+      }, [])
     }
   }, [_class])
   return (

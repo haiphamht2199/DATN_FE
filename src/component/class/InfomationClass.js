@@ -13,7 +13,8 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
 function InfomationClass(props) {
- const { detailClass } = props
+ const { detailClass } = props;
+ console.log("detailClass:", detailClass)
  const [toggleState, setToggleState] = useState(1);
  const student = useSelector(state => state.user.student)
  const toggleTab = (index) => {
@@ -22,7 +23,7 @@ function InfomationClass(props) {
  return (
   <div className='detail_info_class'>
    {
-    !student && <div className='infomation_overview_class'>
+    student === "ADMIN" && <div className='infomation_overview_class'>
      <div className='text_label'>
       <div className='icon_info_div'>
        <InfoIcon className='icon_info' />
@@ -64,7 +65,7 @@ function InfomationClass(props) {
 
    <div className='infomation_detail_class_content'>
     {
-     !student && <div className='infomation_detail_class_header'>
+     student === "ADMIN" && <div className='infomation_detail_class_header'>
       <div className='infomation_detail_class_header-left'>
        <div >
         <FormatListBulletedIcon className='icon_header_left' />
@@ -113,7 +114,11 @@ function InfomationClass(props) {
        toggleState === 1 &&
        <div style={{ width: "100%", height: "auto" }}>
         <div className='image_class_info_detail'>
-         <img src={require(`../../resource/${detailClass.path_file_image}`)} alt='image_class' />
+         {window.location.pathname.includes("chi-tiet-lop-hoc") ?
+          <img src={require(`../../resource/${detailClass.path_file_image}`)} alt='image_class' />
+          : <img src={require(`../../resource/${detailClass.pathFileImage}`)} alt='image_class' />
+         }
+
         </div>
         <div className='content_br'>
 
@@ -127,14 +132,22 @@ function InfomationClass(props) {
             </div>
             <div className='name_document'>
              <div className='name_document'>
-              {item.name_document}
+              {window.location.pathname.includes('chi-tiet-lop-hoc') ? item.name_document : item.file_path_document}
              </div>
             </div>
            </div>
            <div className='downt_document'>
-            <Link to={require(`../../resource/${item.file_path_document.replaceAll('\\', '/')}`)} target="_blank" download>
-             <VerticalAlignBottomIcon className='down_load_icon' />
-            </Link>
+            {
+             window.location.pathname.includes('chi-tiet-lop-hoc') ?
+              <Link to={require(`../../resource/${item.file_path_document.includes("documents") ? item.file_path_document.replaceAll('\\', '/') : item.name_document.replaceAll('\\', '/')}`)} target="_blank" download>
+               <VerticalAlignBottomIcon className='down_load_icon' />
+              </Link>
+              : <Link to={require(`../../resource/${item.name_document.replaceAll('\\', '/')}`)} target="_blank" download>
+               <VerticalAlignBottomIcon className='down_load_icon' />
+              </Link>
+
+            }
+
 
            </div>
           </div>

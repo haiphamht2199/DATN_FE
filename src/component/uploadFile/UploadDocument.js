@@ -7,16 +7,16 @@ import UploadFile from './UploadFile';
 
 const UploadDocument = () => {
  const [files, setFiles] = useState([])
- const removeFile = (filename) => {
-  setFiles(files.filter(file => file.name !== filename))
- }
+ // const removeFile = (filename) => {
+ //  setFiles(files.filter(file => file.nameDocumentClass !== filename))
+ // }
 
  return (
   <div className="App">
    <div className="title">Upload file</div>
    <UploadFile files={files} setFiles={setFiles}
-    removeFile={removeFile} />
-   <FileList files={files} removeFile={removeFile} />
+   />
+   <FileList files={files} />
   </div>
  )
 }

@@ -204,7 +204,7 @@ function EditStudent(props) {
 
           </div>
           {
-            studentStatus &&
+            studentStatus !== null &&
             <div className='edit_student_status_point'>
               <Grid item xs={12}>
                 <div className='edit_student_group_status'>

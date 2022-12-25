@@ -7,7 +7,9 @@ import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
 import axios from '../../helper/axiosImage'
 import 'quill/dist/quill.snow.css';
-import lession from '../../redux/saga/lession';
+import DatePicker from "react-datepicker";
+import Moment from 'moment';
+import "react-datepicker/dist/react-datepicker.css";
 const formats = [
   "header",
   "font",
@@ -51,7 +53,7 @@ function ModalEditLession(props) {
   const [value, setValue] = useState();
   const [auth, setAuth] = useState(true);
   const { lessonData, openModal, SetModalOpen, indexPr, editNameActive, _key } = props;
-
+  const [endDate, setEndDate] = useState("");
   const [nameLesson, setNameLesson] = useState("");
   const [descriptionLesson, setDescriptionLesson] = useState("");
   const [imageLesson, setImageLesson] = useState("")
@@ -87,7 +89,7 @@ function ModalEditLession(props) {
   const handleChangeNameTask = useCallback((value) => {
     editNameActive.nameTask = value;
     setNameActive(value)
-  }, [lessonData, nameTask])
+  }, [editNameActive, nameTask])
   const handleImage = async (e) => {
     let file = e.target.files[0];
     let imageData = new FormData();
@@ -112,7 +114,7 @@ function ModalEditLession(props) {
   const handleChangeTypeTask = useCallback((value) => {
     editNameActive.typeTask = value;
     setTypeLesson(value);
-  }, [lessonData, typeActive]);
+  }, [editNameActive, typeActive]);
   const handleChangeTimeDuration = useCallback((value) => {
     lessonData.timeDuration = value;
     setTimeDuration(value)
@@ -120,7 +122,7 @@ function ModalEditLession(props) {
   const handletimeDurationTask = useCallback((value) => {
     editNameActive.timeDurationTask = value;
     setTimeDurationActive(value)
-  }, [lessonData]);
+  }, [editNameActive]);
   const handleChangeScopeLesson = useCallback((value) => {
     lessonData.scopeLesson = value;
     setScopeLesson(value)
@@ -131,7 +133,15 @@ function ModalEditLession(props) {
       payload: { nameLesson, descriptionLesson, imageLesson, typeLesson, timeDuration, scopeLesson, indexPr, _key, editNameActive }
     })
 
-  }, [])
+  }, []);
+  const handleEndDateChange = useCallback((value) => {
+    setEndDate(value);
+    let _value = Moment(value).format('DD/MM/YYYY') + " " + Moment(value).format('HH:mm:ss')
+    dispatch({
+      type: 'CHANGE_END_DATE',
+      value: _value
+    })
+  }, [endDate]);
   return (
     <Dialog open={openModal} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
       <DialogTitle className={classes.dialogTitle}>
@@ -350,21 +360,39 @@ function ModalEditLession(props) {
                 />
 
               </div>
-              <div>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        defaultChecked
-                        checked={editNameActive.isRequireFinishTask}
-                        onChange={handleChangeActive}
-                        aria-label="login switch"
-                      />
-                    }
-                    label={"Yêu cầu hoàn thành"}
-                  />
-                </FormGroup>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div className='isRequireFinishTask'>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          defaultChecked
+                          checked={editNameActive.isRequireFinishTask}
+                          onChange={handleChangeActive}
+                          aria-label="login switch"
+                        />
+                      }
+                      label={"Yêu cầu hoàn thành"}
+                    />
+                  </FormGroup>
+                </div>
+                {
+                  isRequireFinishTask === true && <div className='end_time'>
+                    <InputLabel required >Thời gian hoàn thành</InputLabel>
+                    <DatePicker
+                      id={"bss_pl_from_date"}
+                      selected={endDate}
+                      onChange={handleEndDateChange}
+                      selectsEnd
+                      showTimeSelect
+                      dateFormat={"MMMM d, yyyy h:mm aa"}
+                      isClearable={endDate != ''}
+                    />
+                  </div>
+                }
+
               </div>
+
               <div className='Save_cancel_edit'>
                 <div className='cancel_edit'>
                   <Button variant="outlined" onClick={() => { SetModalOpen(false) }}>Hủy</Button>

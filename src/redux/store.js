@@ -45,6 +45,7 @@ const initialState = {
     scope: 0,
     success: false,
     success1: false,
+    upload: false,
     documentList: [],
     exam: [],
     listStudent: [],
@@ -52,6 +53,10 @@ const initialState = {
     listClass: [],
     arrayProgram: [],
     editLesson: "",
+    listIdRemoveDocument: [],
+    programCategoryIdsToRemove: [],
+    idsLessonToRemove: [],
+    idsTaskToRemove: [],
     classDetail: {
       class_id: "",
       name_class: "",
@@ -63,7 +68,9 @@ const initialState = {
       end_time: null,
       path_file_image: "",
       arrayProgram: [],
-      allCategoryProgram: []
+      allCategoryProgram: [],
+      module_class_id: 1,
+
     }
   },
 
