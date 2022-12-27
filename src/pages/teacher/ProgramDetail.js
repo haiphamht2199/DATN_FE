@@ -132,7 +132,6 @@ function ProgramDetail() {
    contentTask.students.forEach(student => {
     if (document.querySelector(`.evaluate${student.code_student}`)) {
      document.querySelector(`.evaluate${student.code_student}`).innerHTML = student.evaluate
-
     }
    })
   }
@@ -222,7 +221,9 @@ function ProgramDetail() {
 
          </div>
          <div className='descript_task_lesson' style={{ display: "flex" }}>
-          <span>Miêu tả hoạt động :</span>
+          <span style={{
+           width: "40%"
+          }}>Miêu tả hoạt động :</span>
           <p className='descript_task_master'></p>
          </div>
          {

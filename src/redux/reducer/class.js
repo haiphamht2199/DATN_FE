@@ -226,21 +226,25 @@ export default function Class(state = {}, action) {
       if (arrayLesstion.length) {
         for (let i = 0; i < arrayLesstion[action.index - 1].createLessonRequestList.length; i++) {
           if (arrayLesstion[action.index - 1].createLessonRequestList[i].indexLesson === action.id) {
-            arrayLesstion[action.index - 1].createLessonRequestList.splice(i, 1)
+            arrayLesstion[action.index - 1].createLessonRequestList.splice(i, 1);
+            arrayLesstion[action.index - 1].idsLessonToRemove.push(action.lessonId)
             break;
           }
         }
         return {
           ...state,
-          arrayProgram: arrayLesstion
+          arrayProgram: arrayLesstion,
+          idsLessonToRemove: [...state.idsLessonToRemove, action.lessonId]
         }
       }
     // eslint-disable-next-line no-fallthrough
     case 'DELETE_LESSISON_TASK':
       let arrayProgram2 = state.arrayProgram;
+
       if (arrayProgram2.length) {
         for (let i = 0; i < arrayProgram2[action.index - 1].createTaskRequestList.length; i++) {
           if (arrayProgram2[action.index - 1].createTaskRequestList[i].index === action.id) {
+            arrayProgram2[action.index - 1].idsTaskToRemove.push(action.taskId)
             arrayProgram2[action.index - 1].createTaskRequestList.splice(i, 1)
             break;
           }
@@ -248,13 +252,15 @@ export default function Class(state = {}, action) {
 
         return {
           ...state,
-          arrayProgram: arrayProgram2
+          arrayProgram: arrayProgram2,
+          idsTaskToRemove: [...state.idsTaskToRemove, action.taskId]
         }
       }
     case 'HANDLE_DELETE_PROGRAM_CLASS':
       return {
         ...state,
-        arrayProgram: state.arrayProgram.filter(item => item.index !== action.id)
+        arrayProgram: state.arrayProgram.filter(item => item.program_category_id !== action.id),
+        programCategoryIdsToRemove: [...state.programCategoryIdsToRemove, action.id]
       }
     case 'HANDLE_SAVE_EDIT_PROGRAM':
       console.log("actionEdit:", action);
@@ -355,6 +361,7 @@ export default function Class(state = {}, action) {
             toggleStateAddClass: 1,
             nameProgramCategory: item.name_program_category,
             index: index + 1,
+            program_category_id: item.program_category_id
           }
           let createLessonRequestList = [];
           let createTaskRequestList = [];
@@ -367,7 +374,9 @@ export default function Class(state = {}, action) {
                 typeLesson: ele.type_lesson,
                 timeDuration: ele.time_duration,
                 scopeLesson: ele.scope_lesson,
-                indexLesson: index1 + 1
+                indexLesson: index1 + 1,
+                lessonId: ele.id_lesson,
+                descriptionLesson: ele.description
               })
             })
           }
@@ -380,12 +389,16 @@ export default function Class(state = {}, action) {
                 descriptionTask: ele.description_task,
                 timeDurationTask: ele.time_duration_task,
                 isRequireFinishTask: ele.is_require_finish_task,
-                index: index1 + 1
+                index: index1 + 1,
+                taskId: ele.id_task,
+                typeGroupStudent: ele.typeGroupStudent
               })
             })
           }
           data.createLessonRequestList = createLessonRequestList;
           data.createTaskRequestList = createTaskRequestList;
+          data.idsTaskToRemove = [];
+          data.idsLessonToRemove = [];
           DataArayProgram.push(data);
         });
       }

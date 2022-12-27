@@ -12,8 +12,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
+import { useSearchParams } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
+import axios from '../../helper/axios';
 function ProgramLession(props) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   const programs = useSelector((state) => state.lession.program);
   const _class = useSelector((state) => state._class);
@@ -31,6 +34,9 @@ function ProgramLession(props) {
   const [indexPr, setIndexPr] = useState(1);
   const [open, setOpen] = React.useState(false);
   const [programId, setProgramId] = useState("");
+  console.log("programCategoryIdsToRemove:", _class.programCategoryIdsToRemove);
+  console.log("idsLessonToRemove:", _class.idsLessonToRemove);
+  console.log("idsTaskToRemove:", _class.idsTaskToRemove)
   const handleClickOpen = useCallback((id) => {
     setProgramId(id)
     setOpen(true);
@@ -42,6 +48,7 @@ function ProgramLession(props) {
   };
   const handleDelete = useCallback(() => {
     if (programId) {
+      console.log("programId:", programId)
       dispatch({
         type: 'HANDLE_DELETE_PROGRAM_CLASS',
         id: programId
@@ -91,18 +98,21 @@ function ProgramLession(props) {
     setNewLession("");
     setNameActive("")
   }, [arrayLesstion, nameLession, nameActive]);
-  const DeleteNewLession = useCallback((id, index) => {
+  const DeleteNewLession = useCallback((id, index, lessonId) => {
+    console.log("id_lesson:", lessonId)
     dispatch({
       type: 'DELETE_LESSISON_ACTIVE',
       id,
-      index
+      index,
+      lessonId
     })
   }, []);
-  const DeleteNewTask = useCallback((id, index) => {
+  const DeleteNewTask = useCallback((id, index, taskId) => {
     dispatch({
       type: 'DELETE_LESSISON_TASK',
       id,
-      index
+      index,
+      taskId
     })
   }, []);
   const EditLession = useCallback((item, index) => {
@@ -132,18 +142,56 @@ function ProgramLession(props) {
       index: index
     })
   }, [arrayLesstion]);
-  const handleSubmitCreateProgram = useCallback(() => {
+  const handleSubmitCreateProgram = useCallback(async () => {
     if (_class.class_id) {
-      dispatch({
-        type: 'HANDLE_CREATE_PROGRAM_BY_CLASS',
-        payload: _class
-      })
+      if (searchParams.get("class_id")) {
+        console.log("array:", arrayLesstion)
+        let data = {};
+        let arrayData = [];
+        data.classId = searchParams.get("class_id");
+        data.programCategoryIdsToRemove = _class.programCategoryIdsToRemove;
+        if (arrayLesstion.length) {
+          arrayLesstion.forEach((element, index) => {
+            let item = {};
+            item.idProgramCategory = element.index;
+            item.nameProgramCategory = element.nameProgramCategory;
+            item.index = index + 1;
+            item.editLessonRequestList = element.createLessonRequestList;
+            item.idsLessonToRemove = element.idsLessonToRemove;
+            item.editTaskRequestList = element.createTaskRequestList;
+            item.idsTaskToRemove = element.idsTaskToRemove
+            arrayData.push(item)
+          });
+        }
+        data.inforProgramToEditRequests = arrayData;
+        try {
+          let dataEditRes = await axios.put('/teacher/program_category/edit', data);
+          console.log("dataEditRes:", dataEditRes);
+          if (dataEditRes.data.code === 200) {
+            toast.success("edit program success", {
+              position: toast.POSITION.TOP_CENTER
+            });
+          }
+        } catch (error) {
+          toast.warn("edit program faild !", {
+            position: toast.POSITION.TOP_CENTER
+          });
+        }
+
+
+      } else {
+        dispatch({
+          type: 'HANDLE_CREATE_PROGRAM_BY_CLASS',
+          payload: _class
+        })
+      }
+
     } else {
       toast.warn("Bạn cần phải tạo lớp học đã!", {
         position: toast.POSITION.TOP_CENTER
       });
     }
-  }, [_class]);
+  }, [_class, arrayLesstion]);
   useEffect(() => {
     if (_class.success) {
       toast.success("Bạn cần tạo lớp học thành công", {
@@ -207,7 +255,7 @@ function ProgramLession(props) {
                         <div className='top_ctd'>
                           <div className='ten_ctd'>Chương trình #{item.index}</div>
                           <div className='xoa_ctd'>
-                            <DeleteIcon onClick={() => handleClickOpen(item.index)} />
+                            <DeleteIcon onClick={() => handleClickOpen(item.program_category_id)} />
                           </div>
                         </div>
                         <div className='ten_ctd_new'>
@@ -237,7 +285,7 @@ function ProgramLession(props) {
                                   </div>
                                   <div className='action_new_lession'>
                                     <EditIcon className='edit_new_lesstion' onClick={() => EditLession(lession, item.index)} />
-                                    <DeleteIcon onClick={() => DeleteNewLession(lession.indexLesson, item.index)} className='delete_new_lesstion' />
+                                    <DeleteIcon onClick={() => DeleteNewLession(lession.indexLesson, item.index, lession.lessonId)} className='delete_new_lesstion' />
                                   </div>
                                 </div>
                               </div>
@@ -260,7 +308,7 @@ function ProgramLession(props) {
                                   </div>
                                   <div className='action_new_lession'>
                                     <EditIcon className='edit_new_lesstion' onClick={() => EditActive(lession)} />
-                                    <DeleteIcon onClick={() => DeleteNewTask(lession.index, item.index)} className='delete_new_lesstion' />
+                                    <DeleteIcon onClick={() => DeleteNewTask(lession.index, item.index, lession.taskId)} className='delete_new_lesstion' />
                                   </div>
                                 </div>
                               </div>
@@ -348,7 +396,7 @@ function ProgramLession(props) {
               <Button variant="contained">Quay lại</Button>
             </div>
             <div className='btn_next'>
-              <Button variant="contained" disabled={arrayLesstion.length ? false : true} onClick={handleSubmitCreateProgram}>Tiếp tục</Button>
+              <Button variant="contained" disabled={arrayLesstion.length || searchParams.get("class_id") ? false : true} onClick={handleSubmitCreateProgram}>Tiếp tục</Button>
             </div>
           </div>
         </div>

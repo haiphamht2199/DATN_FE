@@ -70,7 +70,7 @@ function Sidebar() {
  return (
   <>
    <div style={{ width: isOpen ? "15%" : "4%" }} className='sidebar'>
-    <div className='bars' style={{ paddingRight: isOpen ? "3%" : "49%" }} onClick={toggle}>
+    <div className='bars' style={{ paddingRight: isOpen ? "3%" : "42%" }} onClick={toggle}>
      <DehazeIcon />
     </div>
     <div className='comtenSidebar'>

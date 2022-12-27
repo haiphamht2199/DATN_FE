@@ -753,6 +753,14 @@ button {
   align-items: center;
 }
 
+.conyent_ghi_chu ul li {
+  background-color: #fff !important;
+}
+
+.descript_task_master {
+  width: 80%;
+}
+
 .modified_date {
   width: 16% !important;
 }
