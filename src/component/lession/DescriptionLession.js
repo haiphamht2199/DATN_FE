@@ -35,7 +35,7 @@ const formats = [
   "color",
   "code-block"
 ];
-function DescriptionLession() {
+function DescriptionLession({ setToggleState }) {
   const initialState = {
     id: 0,
     name: '',
@@ -168,6 +168,13 @@ function DescriptionLession() {
             toast.success("Cập nhật lớp học thành công!", {
               position: toast.POSITION.TOP_CENTER
             });
+            setTimeout(() => {
+              setToggleState(2)
+              dispatch({
+                type: 'NEXT_PAGE_ADD_CLASS'
+              })
+            }, 1000)
+
             dispatch({
               type: 'GET_DETAIL_INFORMATION_CLASS_BY_ID',
               payload: _class.class_id
@@ -200,13 +207,14 @@ function DescriptionLession() {
       return
     }
 
-  }, [_class]);
+  }, [_class,]);
   useEffect(() => {
     if (_class.success) {
       console.log("success:", _class.success)
       toast.success("Tạo lớp học thành công!", {
         position: toast.POSITION.TOP_CENTER
       });
+      setToggleState(2)
       setTimeout(() => {
         dispatch({
           type: 'DELETE_SUCCESS_ADD_CLASS'
@@ -216,10 +224,11 @@ function DescriptionLession() {
     }
   }, [_class.success])
   const handleRemoveImage = useCallback(() => {
+    setValue("")
     dispatch({
       type: 'REMOVE_IMAGE_CLASS'
     })
-  }, [_class]);
+  }, [_class, value]);
   const handleStartDateChange = useCallback((value) => {
 
     setIsFieldDateErr(false);

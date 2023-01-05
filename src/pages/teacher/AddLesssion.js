@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 const AddLesssion = ({ props }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const _class = useSelector((state) => state._class);
-  const [toggleState, setToggleState] = useState(1);
+  const [toggleState, setToggleState] = useState(useSelector(state => state._class.toggleState));
   const { quill, quillRef } = useQuill();
   const [nameLession, setNameLession] = useState(_class.nameClass);
   const [majors, setMajors] = useState(useSelector((state) => state._class.moduleClassId));
@@ -168,11 +168,11 @@ const AddLesssion = ({ props }) => {
               <div className="content-tabs">
                 {
                   toggleState === 1 &&
-                  <DescriptionLession />
+                  <DescriptionLession setToggleState={setToggleState} />
                 }
                 {
                   toggleState === 2 &&
-                  <ProgramLession />
+                  <ProgramLession setToggleState={setToggleState} />
                 }
                 {
                   toggleState === 3 &&

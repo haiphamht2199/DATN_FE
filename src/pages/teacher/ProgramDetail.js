@@ -1,8 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
-
+import PropTypes from 'prop-types';
 import FeedIcon from '@mui/icons-material/Feed';
 import Button from '@mui/material/Button';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import IconButton from '@mui/material/IconButton';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import SpeedIcon from '@mui/icons-material/Speed';
+import TableContainer from '@mui/material/TableContainer';
+import TableFooter from '@mui/material/TableFooter';
+import TablePagination from '@mui/material/TablePagination';
+import TableHead from '@mui/material/TableHead';
 import LayersIcon from '@mui/icons-material/Layers';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -11,8 +22,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from '../../helper/axios'
@@ -20,6 +29,10 @@ import axiosImage from '../../helper/axiosImage';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import user from '../../redux/reducer/user';
+import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
+import { Link } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 function ProgramDetail() {
  const dispatch = useDispatch();
  const [searchParams, setSearchParams] = useSearchParams();
@@ -135,7 +148,79 @@ function ProgramDetail() {
     }
    })
   }
- }, [contentTask])
+ }, [contentTask]);
+ function TablePaginationActions(props) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
+
+  const handleFirstPageButtonClick = (event) => {
+   onPageChange(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+   onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+   onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+   onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+   <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <IconButton
+     onClick={handleFirstPageButtonClick}
+     disabled={page === 0}
+     aria-label="first page"
+    >
+     {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+    </IconButton>
+    <IconButton
+     onClick={handleBackButtonClick}
+     disabled={page === 0}
+     aria-label="previous page"
+    >
+     {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+    </IconButton>
+    <IconButton
+     onClick={handleNextButtonClick}
+     disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+     aria-label="next page"
+    >
+     {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+    </IconButton>
+    <IconButton
+     onClick={handleLastPageButtonClick}
+     disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+     aria-label="last page"
+    >
+     {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+    </IconButton>
+   </Box>
+  );
+ }
+ TablePaginationActions.propTypes = {
+  count: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+ };
+ const [rowsPerPage, setRowsPerPage] = React.useState(5);
+ const [page, setPage] = React.useState(0);
+ const handleChangePage = (event, newPage) => {
+  setPage(newPage);
+ };
+
+ const handleChangeRowsPerPage = (event) => {
+  setRowsPerPage(parseInt(event.target.value, 10));
+  setPage(0);
+ };
+ const emptyRows =
+  page > 0 ? Math.max(0, (1 + page) * rowsPerPage - contentTask.students.length) : 0;
+
  return (
   <>
    <ToastContainer />
@@ -209,9 +294,10 @@ function ProgramDetail() {
        {
         contentTask && isTask && <div className='detail_Task_right' >
          <div className='name_content_task'>
-          <h2>{contentTask.name_task}</h2>
+          <h2>Active 1:{contentTask.name_task ? contentTask.name_task : ""}</h2>
           {
-           student && contentTask.id_task_student_groups && <div className='submit_task_student'>
+           student === "STUDENT" && contentTask.student_groups && contentTask.student_groups.status_assign !== -1
+           && <div className='submit_task_student'>
             <Button variant="contained" component="label" endIcon={<SendIcon />} >
              Send
              <input hidden multiple type="file" onChange={(e) => uploadHandler(e, contentTask.id_task_student_groups)} />
@@ -222,65 +308,158 @@ function ProgramDetail() {
          </div>
          <div className='descript_task_lesson' style={{ display: "flex" }}>
           <span style={{
-           width: "40%"
+           width: "22%"
           }}>Miêu tả hoạt động :</span>
           <p className='descript_task_master'></p>
          </div>
          {
-          student && contentTask.id_task_student_groups && <div className='is_time_complete_task_require'>
-           <div>
-            <span className='is_complete_task_require'>Yêu cầu hoàn thành:</span>
-            <span>{contentTask.is_require === 0 ? "không bắt buộc" : "Bắt buộc"}</span>
-           </div>
-           <div className="time_complete_task_require">
-            <span className='is_complete_task_require'>Thời gian hoàn thành:</span>
-            <span>20h30,08/11/2022</span>
+          student === "STUDENT" &&
+          <div className='header_lesson_name_class_top' style={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px", marginTop: "30px" }}>
+           <div className='name_lession_task'>Thông tin hoạt động nhóm</div>
+           <div className='icon_arround_lessson'>
+
            </div>
           </div>
          }
          {
-          student && contentTask.id_task_student_groups && <div className='status_assign_task'>
-           <span className='is_complete_task_require'>Tình trạng hoạt động:</span>
-           <span className={contentTask.status_assign === 1 ? "doneTask" : "notDoneTask"}>{contentTask.status_assign === 1 ? "Đã nộp bài" : "Chưa nộp bài"}</span>
+          student === "STUDENT" &&
+          <div className='list_content_custom_task'>
+           <div>
+            <span className='is_complete_task_require'>Tên nhóm:</span>
+            <span>{contentTask.student_groups && contentTask.student_groups.name_student_groups && contentTask.student_groups.name_student_groups}</span>
+           </div>
+           <div className='descript_task_lesson_task' style={{ display: "flex" }}>
+            <span style={{
+             width: "27%"
+            }}>Miêu tả hoạt động :</span>
+            <p className='descript_task_master'>{contentTask.student_groups && contentTask.student_groups.content}</p>
+           </div>
+           <div className='is_time_complete_task_require'>
+            <div>
+             <span className='is_complete_task_require'>Yêu cầu hoàn thành:</span>
+             <span>{contentTask.is_require === 0 ? "không bắt buộc" : "Bắt buộc"}</span>
+            </div>
+            <div className="time_complete_task_require">
+             <span className='is_complete_task_require'>Thời hạn hoàn thành:</span>
+             <span>{contentTask.date_time_finished_task}</span>
+            </div>
+           </div>
+           {
+            contentTask.student_groups && <div className='is_time_complete_task_require'>
+             <div>
+              <span className='is_complete_task_require'>Tình trạng hoạt động:</span>
+              <span className={contentTask.student_groups !== "" && contentTask.student_groups.status_assign !== null && contentTask.student_groups.status_assign === -1 ? "doneTask" : "notDoneTask"}>{contentTask.student_groups.status_assign === -1 ? "Đã nộp bài" : "Chưa nộp bài"}</span>
+             </div>
+             <div className="time_complete_task_require">
+              <span className='is_complete_task_require'>Thời gian hoàn thành:</span>
+              <span>{contentTask.student_groups && contentTask.student_groups.time_assign}</span>
+             </div>
+            </div>
+           }
+           {
+            contentTask.student_groups && <div style={{ marginTop: "10px" }}>
+             <span className='is_complete_task_require' >File nộp bài:</span>
+             <span>{contentTask.student_groups && contentTask.student_groups.path_file && contentTask.student_groups.path_file && contentTask.student_groups.path_file.slice(16, 50)}</span>
+             <span style={{ marginLeft: "5px" }}>
+              {
+               student === "STUDENT" && contentTask.student_groups && contentTask.student_groups.path_file
+               &&
+               <Link to={require(`../../resource/${contentTask.student_groups.path_file.replaceAll('\\', '/')}`)} target="_blank" download>
+                <VerticalAlignBottomIcon className='down_load_icon1' />
+               </Link>
+
+              }
+             </span>
+            </div>
+           }
+
+           {
+            contentTask.student_groups && contentTask.student_groups.content_evaluate &&
+            <div style={{ marginTop: "10px" }}>Đánh giá hoạt động:</div>
+           }
+           {
+            contentTask.student_groups && contentTask.student_groups.content_evaluate &&
+            <div className='nhap_noi_dung_kt'>
+             <TextareaAutosize
+              value={contentTask.student_groups.content_evaluate}
+
+              placeholder="Nhập nội dung câu hỏi tại đây"
+              style={{ width: 680, height: 70, border: "1px solid rgb(233, 226, 226)" }}
+             />
+            </div>
+
+           }
+
+           {
+            contentTask.students && contentTask.students.length ?
+             <div className='list_student_class_by_group'>
+              <div className='title_list_student_class_by_group'>Danh sách thành viên nhóm</div>
+              <TableContainer component={Paper}>
+               <Table sx={{ minWidth: 600 }} aria-label="custom pagination table">
+                <TableHead>
+                 <TableRow>
+                  <TableCell align="center">Họ và tên </TableCell>
+                  <TableCell align="center">Mã số sinh viên  </TableCell>
+                  <TableCell align="center">Gmail</TableCell>
+                  <TableCell align="center">Điểm</TableCell>
+                 </TableRow>
+                </TableHead>
+                <TableBody>
+                 {(rowsPerPage > 0
+                  ? contentTask.students.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : contentTask.students
+                 ).map((row) => (
+                  <TableRow key={row.code_student} className={row.is_captain === 1 ? "is_captain" : ""}>
+                   <TableCell style={{ width: 200 }} align="center">
+                    {row.name_student}
+                   </TableCell>
+                   <TableCell style={{ width: 200 }} align="center">
+                    {row.code_student}
+                   </TableCell>
+                   <TableCell style={{ width: 200 }} align="center">
+                    <TableCell align="center">{row.email}</TableCell>
+                   </TableCell>
+                   <TableCell align="center">{row.scope ? row.scope : "--"}</TableCell>
+                  </TableRow>
+                 ))}
+
+                 {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                   <TableCell colSpan={6} />
+                  </TableRow>
+                 )}
+                </TableBody>
+                <TableFooter>
+                 <TableRow>
+                  <TablePagination
+                   rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                   colSpan={3}
+                   count={contentTask.students.length}
+                   rowsPerPage={rowsPerPage}
+                   page={page}
+                   SelectProps={{
+                    inputProps: {
+                     'aria-label': 'rows per page',
+                    },
+                    native: true,
+                   }}
+                   onPageChange={handleChangePage}
+                   onRowsPerPageChange={handleChangeRowsPerPage}
+                   ActionsComponent={TablePaginationActions}
+                  />
+                 </TableRow>
+                </TableFooter>
+               </Table>
+              </TableContainer>
+
+             </div> : ""
+           }
+
           </div>
          }
 
-         {
-          student === "STUDENT" && <div className='list_student_class_by_group'>
-           <div className='title_list_student_class_by_group'>Danh sách thành viên nhóm</div>
-           <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-             <TableHead>
-              <TableRow>
-               <TableCell>Họ và tên</TableCell>
-               <TableCell align="center">MSSV</TableCell>
-               <TableCell align="center">Gmail</TableCell>
-               <TableCell align="center">Tài liệu</TableCell>
-               <TableCell align="center">Thời gian nộp</TableCell>
-               <TableCell align="center">Điểm</TableCell>
-              </TableRow>
-             </TableHead>
-             <TableBody>
-              {contentTask.students && contentTask.students.length ? contentTask.students.map((row) => (
-               <TableRow
-                key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-               >
-                <TableCell component="th" scope="row">
-                 {row.name_student}
-                </TableCell>
-                <TableCell align="right">{row.code_student}</TableCell>
-                <TableCell align="right">{row.email}</TableCell>
-                <TableCell align="center">{row.file_assign ? row.file_assign : "--"}</TableCell>
-                <TableCell align="center">{row.time_assign ? row.time_assign : "--"}</TableCell>
-                <TableCell align="center" className={"evaluate"}>{row.scope ? row.scope : "--"}</TableCell>
-               </TableRow>
-              )) : ""}
-             </TableBody>
-            </Table>
-           </TableContainer>
-          </div>
-         }
+
+
 
         </div>
        }

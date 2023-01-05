@@ -13,14 +13,14 @@ const useStyles = makeStyles(theme => ({
  dialogWrapper: {
   // padding: theme.spacing(2),
   position: 'absolute',
-  top: "10%",
+  top: "0%",
   width: "50%",
   height: "auto",
   marginBottom: "20px",
  },
  dialogTitle: {
   paddingRight: '10px',
-  background: "blue",
+  background: "#385cce",
   color: "white"
  }
 }))
@@ -145,7 +145,7 @@ function EvaluateForGroup(props) {
    <Dialog open={openModal} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
     <DialogTitle className={classes.dialogTitle}>
      <div style={{ display: 'flex' }}>
-      <Typography variant="h6" component="div" style={{ flexGrow: 1, color: "white" }}>
+      <Typography variant="h6" component="div" style={{ flexGrow: 1, color: "white" }} className="customize_modal">
        Đánh giá nhóm
       </Typography>
       < Button

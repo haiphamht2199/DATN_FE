@@ -40,6 +40,10 @@ function DetailClass() {
     dispatch({
      type: 'GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID',
      payload: searchParams.get("class_id")
+    });
+    dispatch({
+     type: 'GET_DETAIL_INFORMATION_EXAM_CLASS_BY_ID',
+     payload: searchParams.get("class_id")
     })
    }
   }

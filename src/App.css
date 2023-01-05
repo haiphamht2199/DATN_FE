@@ -1266,6 +1266,12 @@ button {
   margin-top: -2px;
 }
 
+.down_load_icon1 {
+  font-size: 25px !important;
+  color: rgb(50, 50, 255);
+  margin-top: 0px;
+}
+
 .listProgramStudy {
   padding-top: 30px;
   padding-left: 20px;
@@ -1603,7 +1609,7 @@ li .actions .fa-spinner {
   font-weight: 600;
   font-size: 18px;
   border-bottom: 1px solid gray;
-  width: 100%;
+  width: 44vw;
 }
 
 .list_student_class_by_group {
@@ -1617,6 +1623,17 @@ li .actions .fa-spinner {
   font-size: 16px;
   font-weight: 500;
   height: auto;
+}
+
+.descript_task_lesson_task {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  height: auto;
+}
+
+.customize_modal {
+  background: #385cce !important;
 }
 
 .infomation_detail_program_content .detail_task_right {
@@ -1701,6 +1718,22 @@ li .actions .fa-spinner {
   background: #fff;
 }
 
+.list_content_custom_task {
+  width: 100%;
+  height: auto;
+  background: #fff;
+  border-left: 1px solid rgb(207, 203, 203);
+  border-bottom: 1px solid rgb(207, 203, 203);
+  border-right: 1px solid rgb(207, 203, 203);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 20px 30px;
+}
+
+.is_complete_task_require {
+  margin-right: 10px;
+}
+
 .detail_lesson_right img {
   width: 100%;
   height: 100%;
@@ -1772,6 +1805,41 @@ li .actions .fa-spinner {
   padding-left: 20px;
 }
 
+.custom_link {
+
+  color: blue !important;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.chart_class_overiew {
+  width: 100%;
+  height: auto;
+  display: flex;
+  padding: 20px 25px;
+  gap: 4%;
+}
+
+.chart_class_overiew .chart_left {
+  width: 48%;
+
+  border: 1px solid rgb(153, 150, 147);
+  height: 300px;
+  text-align: center;
+  border-radius: 8px;
+  margin-top: 30px;
+}
+
+.name_lession_task {
+  font-size: 16px;
+  padding: 10px;
+}
+
+.content_exam {
+  display: flex;
+  gap: 3px
+}
+
 .descript_lession_program {
   height: auto;
   width: auto;
@@ -1789,6 +1857,17 @@ li .actions .fa-spinner {
   gap: 10px;
   font-size: 14px;
   font-weight: 600;
+}
+
+.text_name_chart {
+  font-size: 16px;
+  font-weight: 500;
+  float: left;
+  padding-left: 40px;
+}
+
+.css-1ndpvdd-MuiTableCell-root {
+  font-size: 16px !important;
 }
 
 .descipt_task {
@@ -1938,11 +2017,19 @@ li .actions .fa-spinner {
 }
 
 .is_time_complete_task_require {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   justify-content: space-between;
   font-size: 16px;
   font-weight: 600;
+}
+
+.list_student_class_by_group .MuiTableRow-root.css-1q1u3t4-MuiTableRow-root {
+  border-bottom: 1px solid rgba(224, 224, 224, 1) !important;
+}
+
+.css-1yhpg23-MuiTableCell-root {
+  border-bottom: none !important;
 }
 
 .status_assign_task {

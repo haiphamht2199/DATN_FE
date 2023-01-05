@@ -220,6 +220,22 @@ function* addNewStudentClassId(action) {
 
  }
 }
+function* getDetailExamClass(action) {
+ try {
+  let NewStudentRes = yield all([axios.get(`/teacher/exam/create_exam/details?class_id=${action.payload}`,)]);
+  let AllStudent = NewStudentRes[0].data;
+  console.log("AllStudent:", AllStudent)
+  if (AllStudent.code === 200) {
+
+   yield put({
+    type: "GET_ALL_EXAM_BY_ID_SUCCESS",
+    payload: AllStudent.data
+   })
+  }
+ } catch (error) {
+
+ }
+}
 export default function* lession() {
  yield takeLatest('GET_LESSIONS', getLession);
  yield takeLatest('UPLOAD_IMAGE_CLASS', uploadImageClass)
@@ -233,5 +249,6 @@ export default function* lession() {
  yield takeLatest('GET_ALL_PROGRAM_CATEGERY_CLASS_BY_ID', getAllcategoryProgramByClassId);
  yield takeLatest('GET_ALL_LIST_STUDENT_CLASS_BY_ID', getAllStudentByClassId);
  yield takeLatest('EDIT_SAVE_STUDENT_BY_CLASS_ID_REST', saveEditStudentByClassId);
- yield takeLatest('ADD_NEW_STUDENT_CLASS_ID_ASYNC', addNewStudentClassId)
+ yield takeLatest('ADD_NEW_STUDENT_CLASS_ID_ASYNC', addNewStudentClassId);
+ yield takeLatest('GET_DETAIL_INFORMATION_EXAM_CLASS_BY_ID', getDetailExamClass)
 }

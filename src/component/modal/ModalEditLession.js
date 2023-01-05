@@ -36,14 +36,14 @@ const useStyles = makeStyles(theme => ({
   dialogWrapper: {
     // padding: theme.spacing(2),
     position: 'absolute',
-    top: "10%",
+    top: "0%",
     width: "50%",
     height: "auto",
     marginBottom: "20px",
   },
   dialogTitle: {
     paddingRight: '10px',
-    background: "blue",
+    background: "#385cce",
     color: "white"
   }
 }))
@@ -53,7 +53,9 @@ function ModalEditLession(props) {
   const [value, setValue] = useState();
   const [auth, setAuth] = useState(true);
   const { lessonData, openModal, SetModalOpen, indexPr, editNameActive, _key } = props;
+  console.log("editNameActive:", editNameActive)
   const [endDate, setEndDate] = useState("");
+  console.log("endDate:", endDate)
   const [nameLesson, setNameLesson] = useState("");
   const [descriptionLesson, setDescriptionLesson] = useState("");
   const [imageLesson, setImageLesson] = useState("")
@@ -66,12 +68,12 @@ function ModalEditLession(props) {
   const [nameTask, setNameActive] = useState("");
   const [timeDurationTask, setTimeDurationActive] = useState("");
   const [descriptionTask, setDescriptionActive] = useState("");
-  const [isRequireFinishTask, setIsRequireFinishTask] = useState("");
+  const [isRequireFinishTask, setIsRequireFinishTask] = useState(true);
   const toggleTab = (index) => {
     setToggleState(index)
   }
   const handleChangeActive = (event) => {
-    editNameActive.isRequireFinishTask = event.target.checked
+    editNameActive.isRequireFinishTask = event.target.checked ? 1 : 0
     setIsRequireFinishTask(event.target.checked);
   };
   const handleChangeDescription = (html) => {
@@ -135,18 +137,19 @@ function ModalEditLession(props) {
 
   }, []);
   const handleEndDateChange = useCallback((value) => {
+    let _value = Moment(value).format('DD/MM/YYYY') + " " + Moment(value).format('HH:mm:ss');
     setEndDate(value);
-    let _value = Moment(value).format('DD/MM/YYYY') + " " + Moment(value).format('HH:mm:ss')
+    editNameActive.timeDateFinished = _value
     dispatch({
-      type: 'CHANGE_END_DATE',
+      type: 'CHANGE_END_DATE_TASK',
       value: _value
     })
-  }, [endDate]);
+  }, [endDate, editNameActive]);
   return (
     <Dialog open={openModal} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
-      <DialogTitle className={classes.dialogTitle}>
+      <DialogTitle className={classes.dialogTitle} >
         <div style={{ display: 'flex' }}>
-          <Typography variant="h6" component="div" style={{ flexGrow: 1, color: "white" }}>
+          <Typography variant="h6" component="div" style={{ flexGrow: 1, color: "white" }} >
             {props._key === "lession" ? "Chỉnh sửa bài học" : "Hoạt động bài học"}
           </Typography>
           < Button
@@ -366,7 +369,6 @@ function ModalEditLession(props) {
                     <FormControlLabel
                       control={
                         <Switch
-                          defaultChecked
                           checked={editNameActive.isRequireFinishTask}
                           onChange={handleChangeActive}
                           aria-label="login switch"

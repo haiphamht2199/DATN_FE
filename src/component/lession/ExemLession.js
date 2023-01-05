@@ -123,7 +123,7 @@ function ExemLession() {
     }
    }
    arrayQuestions[indexEdit] = newEditQues;
-
+   setCheckSave(true)
   }
   setArrayQuestions(arrayQuestions);
   setContentExam("");

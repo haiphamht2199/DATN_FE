@@ -9,7 +9,9 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 function Sidebar() {
+ const navigate = useNavigate();
  const dispatch = useDispatch();
  const [isOpen, setIsOpen] = useState(useSelector(state => state.menu.isOpenMenu));
  const user = useSelector(state => state.user);
@@ -66,7 +68,16 @@ function Sidebar() {
   // console.log("isSxpan:", newItem.isSxpan)
   // menuSide[index] = newItem;
   // setMenuSides(menuSide)
- }, [menuSides, menuSide])
+ }, [menuSides, menuSide]);
+ const handleClick = useCallback((path) => {
+  if (user.student === "ADMIN") {
+   navigate(path)
+  } else {
+   if (user.student === "STUDENT") {
+    navigate('/student/home')
+   }
+  }
+ }, [user])
  return (
   <>
    <div style={{ width: isOpen ? "15%" : "4%" }} className='sidebar'>
@@ -92,7 +103,7 @@ function Sidebar() {
          <div style={{ display: isOpen ? "block" : "none" }} onClick={() => handleSxpan(index)} className=' icon_expan'>{index === 1 ? expan ? item.icon_expan_less : item.icon_expan : expan1 ? item.icon_expan_less : item.icon_expan}</div>
 
         </div>
-        {index === 1 ? expan && <Link to={item.path}><div style={{ marginLeft: "48px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div></Link> : expan1 && <div style={{ marginLeft: "48px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div>}
+        {index === 1 ? expan && <div onClick={() => handleClick(item.path)} style={{ marginLeft: "48px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div> : expan1 && <div style={{ marginLeft: "48px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div>}
        </div>
       ))
      }

@@ -17,6 +17,8 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import SpeedIcon from '@mui/icons-material/Speed';
 import TableHead from '@mui/material/TableHead';
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, } from 'recharts';
+
 function TablePaginationActions(props) {
  const theme = useTheme();
  const { count, page, rowsPerPage, onPageChange } = props;
@@ -82,14 +84,14 @@ function createData(name, calories, fat) {
 }
 
 const rows = [
- createData('Tâm lý học ưmgs dụng ', 10, 20),
- createData('Mo phỏng thực tại', 20, 30),
+ createData('Tâm lý học ứng dụng ', 10, 20),
+ createData('Mô phỏng thực tại', 20, 30),
  createData('Thực tại tăng cường', 30, 30),
  createData('Kĩ năng mềm', 10, 20),
  createData('Tâm lý học nghề nghiệp', 30, 20),
  createData('Giáo dục học', 30, 10),
  createData('Thiết kế phim dạy học', 40, 10),
- createData('Mo phỏng trong dạy học', 20, 30),
+ createData('Mô phỏng trong dạy học', 20, 30),
 ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
 const Overview = ({ props }) => {
  const [page, setPage] = React.useState(0);
@@ -107,7 +109,95 @@ const Overview = ({ props }) => {
   setRowsPerPage(parseInt(event.target.value, 10));
   setPage(0);
  };
+ const data = [
+  {
+   name: '0',
+   uv: 400,
+   pv: 240,
+   amt: 240,
+  },
+  {
+   name: '1',
+   uv: 300,
+   pv: 139,
+   amt: 221,
+  },
+  {
+   name: '2',
+   uv: 200,
+   pv: 980,
+   amt: 229,
+  },
+  {
+   name: '3',
+   uv: 278,
+   pv: 390,
+   amt: 200,
+  },
 
+ ];
+ const data1 = [
+  {
+   name: '0',
+   uv: 400,
+   pv: 240,
+   amt: 240,
+  },
+  {
+   name: '1',
+   uv: 300,
+   pv: 139,
+   amt: 221,
+  },
+  {
+   name: '2',
+   uv: 200,
+   pv: 980,
+   amt: 229,
+  },
+  {
+   name: '3',
+   uv: 278,
+   pv: 390,
+   amt: 200,
+  },
+  {
+   name: '4',
+   uv: 189,
+   pv: 480,
+   amt: 218,
+  },
+  {
+   name: '5',
+   uv: 239,
+   pv: 380,
+   amt: 250,
+  },
+  {
+   name: '6',
+   uv: 349,
+   pv: 430,
+   amt: 210,
+  },
+  {
+   name: '7',
+   uv: 189,
+   pv: 480,
+   amt: 218,
+  },
+  {
+   name: '8',
+   uv: 239,
+   pv: 380,
+   amt: 250,
+  },
+  {
+   name: '9',
+   uv: 349,
+   pv: 430,
+   amt: 210,
+  },
+ ];
  return (
   <>
    <div className='overview_container'>
@@ -140,10 +230,10 @@ const Overview = ({ props }) => {
           <TableCell style={{ width: 100 }} align="center">
            {row.name}
           </TableCell>
-          <TableCell style={{ width: 200 }} align="center">
+          <TableCell style={{ width: 200 }} align="center" className='custom_link'>
            {row.calories}
           </TableCell>
-          <TableCell style={{ width: 200 }} align="center">
+          <TableCell style={{ width: 200 }} align="center" className='custom_link'>
            {row.fat}
           </TableCell>
          </TableRow>
@@ -177,6 +267,69 @@ const Overview = ({ props }) => {
        </TableFooter>
       </Table>
      </TableContainer>
+    </div>
+   </div>
+   <div className='chart_class_overiew'>
+    <div className='chart_left'>
+     <p className='text_name_chart'>Số môn học</p>
+     <ResponsiveContainer width="100%" height="100%">
+      <BarChart
+       width={500}
+       height={300}
+       data={data}
+       margin={{
+        top: 5,
+        right: 30,
+        left: 20,
+        bottom: 5,
+       }}
+      >
+       <CartesianGrid strokeDasharray="3 3" />
+       <XAxis dataKey="name" />
+       <YAxis />
+       <Tooltip />
+       <Legend />
+       <Bar dataKey="pv" fill="#41f9fe" />
+       <Bar dataKey="uv" fill="#31c318" />
+      </BarChart>
+     </ResponsiveContainer>
+    </div>
+    <div className='chart_left'>
+     <p className='text_name_chart'>Số học sinh</p>
+     <ResponsiveContainer width="100%" height="100%">
+      <BarChart
+       width={500}
+       height={300}
+       data={data}
+       margin={{
+        top: 5,
+        right: 30,
+        left: 20,
+        bottom: 5,
+       }}
+      >
+       <CartesianGrid strokeDasharray="3 3" />
+       <XAxis dataKey="name" />
+       <YAxis />
+       <Tooltip />
+       <Legend />
+       <Bar dataKey="pv" fill="#41f9fe" />
+       <Bar dataKey="uv" fill="#31c318" />
+      </BarChart>
+     </ResponsiveContainer>
+    </div>
+   </div>
+   <div className='chart_class_overiew'>
+    <div className='chart_left'>
+     <p className='text_name_chart'>Tỉ lệ hoàn thành bài học</p>
+     <LineChart width={500} height={300} data={data1}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" interval="preserveEnd" />
+      <YAxis interval="preserveEnd" />
+      <Legend />
+      <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
+      <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+     </LineChart>
     </div>
    </div>
   </>

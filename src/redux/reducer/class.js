@@ -84,7 +84,6 @@ export default function Class(state = {}, action) {
       return {
         ...state,
         dateTimeEnd: action.value
-
       }
     case 'UPLOAD_DOCUMENT_SUCCESS':
       return {
@@ -100,7 +99,8 @@ export default function Class(state = {}, action) {
       return {
         ...state,
         class_id: action.payload.class_id,
-        success: true
+        success: true,
+        toggleState: 2
       }
     case 'DELETE_SUCCESS_ADD_CLASS':
       return {
@@ -193,7 +193,8 @@ export default function Class(state = {}, action) {
           typeLesson: "0",
           timeDuration: '',
           scopeLesson: "0",
-          indexLesson: newProgramTable5[action.index - 1].createLessonRequestList.length + 1
+          indexLesson: newProgramTable5[action.index - 1].createLessonRequestList.length + 1,
+          timeDateFinished: ""
         }
         newProgramTable5[action.index - 1].createLessonRequestList.push(_data);
         // newProgramTable5[action.index - 1].createLesson.errClass = false;
@@ -266,6 +267,11 @@ export default function Class(state = {}, action) {
       console.log("actionEdit:", action);
       return {
         ...state
+      }
+    case 'NEXT_PAGE_ADD_CLASS':
+      return {
+        ...state,
+        toggleState: 2
       }
     case 'GET_CLASS_INFORMATION_BY_ID_SUCCESS':
       console.log("action:", action.payload)
@@ -351,6 +357,14 @@ export default function Class(state = {}, action) {
         documentList: action.payload.documentList,
         pathFileImage: action.payload.path_file_image,
       }
+    case 'GET_ALL_EXAM_BY_ID_SUCCESS':
+      return {
+        ...state,
+        classDetail: {
+          ...state.classDetail,
+          exam: action.payload
+        }
+      }
     case 'GET_ALL_PROGRAM_CLASS_BY_ID':
       let payloadData = action.payload;
       let DataArayProgram = [];
@@ -370,13 +384,14 @@ export default function Class(state = {}, action) {
             item.lessons.forEach((ele, index1) => {
               createLessonRequestList.push({
                 nameLesson: ele.name_lesson,
-                pathLesson: ele.path_lesson.replaceAll("\\", "/"),
+                pathLesson: ele.path_lesson && ele.path_lesson.replaceAll("\\", "/"),
                 typeLesson: ele.type_lesson,
                 timeDuration: ele.time_duration,
                 scopeLesson: ele.scope_lesson,
                 indexLesson: index1 + 1,
                 lessonId: ele.id_lesson,
-                descriptionLesson: ele.description
+                descriptionLesson: ele.description,
+
               })
             })
           }

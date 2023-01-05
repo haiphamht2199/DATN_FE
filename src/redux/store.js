@@ -47,7 +47,7 @@ const initialState = {
     success1: false,
     upload: false,
     documentList: [],
-    exam: [],
+    exam: "",
     listStudent: [],
     editStudent: "",
     listClass: [],
@@ -57,6 +57,7 @@ const initialState = {
     programCategoryIdsToRemove: [],
     idsLessonToRemove: [],
     idsTaskToRemove: [],
+    toggleState: 1,
     classDetail: {
       class_id: "",
       name_class: "",
@@ -70,7 +71,7 @@ const initialState = {
       arrayProgram: [],
       allCategoryProgram: [],
       module_class_id: 1,
-
+      exam: ""
     }
   },
 

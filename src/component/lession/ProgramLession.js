@@ -34,6 +34,7 @@ function ProgramLession(props) {
   const [indexPr, setIndexPr] = useState(1);
   const [open, setOpen] = React.useState(false);
   const [programId, setProgramId] = useState("");
+  const [add, setAdd] = useState(false)
   console.log("programCategoryIdsToRemove:", _class.programCategoryIdsToRemove);
   console.log("idsLessonToRemove:", _class.idsLessonToRemove);
   console.log("idsTaskToRemove:", _class.idsTaskToRemove)
@@ -99,14 +100,19 @@ function ProgramLession(props) {
     setNameActive("")
   }, [arrayLesstion, nameLession, nameActive]);
   const DeleteNewLession = useCallback((id, index, lessonId) => {
-    console.log("id_lesson:", lessonId)
+    if (searchParams.get("class_id")) {
+      setAdd(false);
+    } else {
+      setAdd(true)
+    }
     dispatch({
-      type: 'DELETE_LESSISON_ACTIVE',
+      type: 'cccccccc',
       id,
       index,
-      lessonId
+      lessonId,
+      add
     })
-  }, []);
+  }, [add]);
   const DeleteNewTask = useCallback((id, index, taskId) => {
     dispatch({
       type: 'DELETE_LESSISON_TASK',
@@ -158,6 +164,7 @@ function ProgramLession(props) {
             item.index = index + 1;
             item.editLessonRequestList = element.createLessonRequestList;
             item.idsLessonToRemove = element.idsLessonToRemove;
+            element.createTaskRequestList.isRequireFinishTask = element.createTaskRequestList.isRequireFinishTask ? 1 : 0;
             item.editTaskRequestList = element.createTaskRequestList;
             item.idsTaskToRemove = element.idsTaskToRemove
             arrayData.push(item)
@@ -171,6 +178,7 @@ function ProgramLession(props) {
             toast.success("edit program success", {
               position: toast.POSITION.TOP_CENTER
             });
+
           }
         } catch (error) {
           toast.warn("edit program faild !", {
@@ -180,10 +188,33 @@ function ProgramLession(props) {
 
 
       } else {
-        dispatch({
-          type: 'HANDLE_CREATE_PROGRAM_BY_CLASS',
-          payload: _class
-        })
+        try {
+          if (_class) {
+
+            if (_class.arrayProgram.length) {
+              _class.arrayProgram.map(item => {
+                item.classId = _class.class_id;
+                delete item.toggleStateAddClass
+              })
+            }
+            console.log("_class:", _class.arrayProgram);
+            let programRes = await axios.post('/teacher/program_category/create', _class.arrayProgram);
+            if (programRes.data.code === 200) {
+              toast.success("create program success", {
+                position: toast.POSITION.TOP_CENTER
+              });
+              setTimeout(() => {
+                props.setToggleState(3)
+              }, [])
+            }
+          }
+        } catch (error) {
+
+        }
+        // dispatch({
+        //   type: 'HANDLE_CREATE_PROGRAM_BY_CLASS',
+        //   payload: _class
+        // })
       }
 
     } else {
@@ -351,7 +382,7 @@ function ProgramLession(props) {
                                 />
                               </div>
                               {
-                                !item.errClass && <div style={{ color: "red", paddingLeft: "20px", marginBottom: "20px" }}>Tên bài học không được để trống!</div>
+                                item.errClass && <div style={{ color: "red", paddingLeft: "20px", marginBottom: "20px" }}>Tên bài học không được để trống!</div>
                               }
                             </div>
                           }
