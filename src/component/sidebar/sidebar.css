@@ -49,14 +49,36 @@
 
 .link_content {
  display: flex;
- gap: 30px;
- margin-top: 30px;
+ gap: 20px;
+ margin-top: 20px;
+ justify-content: space-between;
+}
+
+.link_content_child {
+ display: flex;
+ gap: 20px;
+ justify-content: space-between;
 }
 
 .comtenSidebar {
  margin-top: 30px;
 }
 
-.icon_expan {
+.icon_expan1,
+.icon_expan2,
+.icon_expan3 {
  cursor: pointer;
+ margin-right: 7px;
+}
+
+.parent_side1 {
+ margin-left: -50%;
+}
+
+.parent_side {
+ margin-left: -13%;
+}
+
+.customize_side {
+ color: blue;
 }

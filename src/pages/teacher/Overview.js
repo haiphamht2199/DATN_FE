@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -17,9 +17,11 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import SpeedIcon from '@mui/icons-material/Speed';
 import TableHead from '@mui/material/TableHead';
+import { useDispatch, useSelector } from "react-redux";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, } from 'recharts';
 
 function TablePaginationActions(props) {
+ const dispatch = useDispatch();
  const theme = useTheme();
  const { count, page, rowsPerPage, onPageChange } = props;
 
@@ -38,7 +40,16 @@ function TablePaginationActions(props) {
  const handleLastPageButtonClick = (event) => {
   onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
  };
-
+ useEffect(() => {
+  dispatch({
+   type: 'SHOW_LOADING_START'
+  });
+  setTimeout(() => {
+   dispatch({
+    type: 'SHOW_LOADING_END'
+   })
+  }, 1000)
+ }, [])
  return (
   <Box sx={{ flexShrink: 0, ml: 2.5 }}>
    <IconButton

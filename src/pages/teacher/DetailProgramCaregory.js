@@ -105,12 +105,22 @@ function DetailProgramCaregory() {
     console.log("programId:", programId)
   }, [programId])
   useEffect(() => {
+    dispatch({
+      type: 'SHOW_LOADING_START'
+    })
     const program_id = searchParams.get("program_category_id");
     async function fetchData(program_id) {
       if (program_id) {
         let programCategoryDetailRes = await axios.get(`/teacher/sys/program_category/detail?program_id=${program_id}`);
         if (programCategoryDetailRes.data.code === 200) {
-          setDetailProgram(programCategoryDetailRes.data.data)
+          setTimeout(() => {
+            setDetailProgram(programCategoryDetailRes.data.data);
+            dispatch({
+              type: 'SHOW_LOADING_END'
+            })
+          }, 500)
+
+
         }
       }
       // ...

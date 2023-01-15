@@ -12,8 +12,13 @@ const Home = () => {
  console.log("courses:", courses)
  useEffect(() => {
   dispatch({
-   type: 'GET_ALL_COURSE_STUDENT'
-  })
+   type: 'SHOW_LOADING_START'
+  });
+  setTimeout(() => {
+   dispatch({
+    type: 'GET_ALL_COURSE_STUDENT'
+   })
+  }, 500)
  }, [])
  return (
   <div className='detail_class'>
@@ -72,6 +77,22 @@ const Home = () => {
 
      }
 
+
+    </div>
+   </div>
+   <div className='list_course_student_home'>
+    <div className='title_list_course'>
+     Khóa học có thể đăng kí
+    </div>
+    <div className='content_list_course'>
+
+    </div>
+   </div>
+   <div className='list_course_student_home'>
+    <div className='title_list_course'>
+     Bài viết nổi bật
+    </div>
+    <div className='content_list_course'>
 
     </div>
    </div>

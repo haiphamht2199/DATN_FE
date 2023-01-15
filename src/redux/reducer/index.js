@@ -6,6 +6,7 @@ import modal from './modal';
 import _class from './class';
 import moduleClass from './moduleClass';
 import student from './student';
+import showLoading from './showLoading';
 export default combineReducers({
  lession: lession,
  menu: menu,
@@ -13,5 +14,6 @@ export default combineReducers({
  modal: modal,
  _class: _class,
  moduleClass: moduleClass,
- student: student
+ student: student,
+ showLoading: showLoading
 })

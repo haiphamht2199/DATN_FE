@@ -14,6 +14,7 @@ import AutorenewIcon from '@mui/icons-material/Autorenew';
 import { DataGrid } from '@mui/x-data-grid';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ListProgramStudy from '../tables/ListProgramStudy';
+import ListInforStudent from '../tables/ListInforStudent';
 function createData(name, calories, fat, carbs, protein) {
  return { name, calories, fat, carbs, protein };
 }

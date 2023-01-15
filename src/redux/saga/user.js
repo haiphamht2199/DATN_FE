@@ -14,12 +14,12 @@ let config = {
 function* handleLogin(action) {
  try {
 
-  const user = yield all([axios.post('http://localhost:8080/api/auth/login', action.payload)]);
+  const user = yield all([axios.post('http://localhost:8081/api/auth/login', action.payload)]);
   let userRes = user[0].data;
   if (userRes.code === 200) {
    localStorage.setItem('token', userRes.data.access_token);
    if (localStorage.getItem('token')) {
-    let dataRes = yield all([axios.get('http://localhost:8080/api/auth/current', {
+    let dataRes = yield all([axios.get('http://localhost:8081/api/auth/current', {
      headers: {
       'Access-Control-Allow-Origin': '*',
       'Authorization': "Bearer " + userRes.data.access_token,
@@ -54,6 +54,9 @@ function* getAllCourseStudent() {
     type: "GETT_ALL_COURSE_SUCCESS",
     payload: listCourse.data
 
+   });
+   yield put({
+    type: "SHOW_LOADING_END",
    })
   }
  } catch (error) {
@@ -70,6 +73,10 @@ function* getCourseDetail(action) {
    yield put({
     type: "GET_CLASS_INFORMATION_BY_ID_STUDENT_SUCCESS",
     payload: classDetail.data
+   });
+   yield put({
+    type: "SHOW_LOADING_END",
+
    })
   }
  } catch (error) {

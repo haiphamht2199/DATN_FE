@@ -25,7 +25,7 @@ function Sidebar() {
  };
  const menuSide = [
   {
-   path: "/",
+   path: "/home",
    name: "Tổng quan",
    icon: <SpeedIcon />,
    isSxpan: false
@@ -69,7 +69,18 @@ function Sidebar() {
   // menuSide[index] = newItem;
   // setMenuSides(menuSide)
  }, [menuSides, menuSide]);
- const handleClick = useCallback((path) => {
+ const handleClick = useCallback((path, index) => {
+  let parent = document.querySelectorAll('.customize_exspand');
+
+  if (parent.length) {
+   revoveClassList(parent, index);
+   if (index === 1) {
+    parent[0].classList.add("customize_side");
+   } else {
+    parent[1].classList.add("customize_side");
+   }
+
+  }
   if (user.student === "ADMIN") {
    navigate(path)
   } else {
@@ -77,7 +88,38 @@ function Sidebar() {
     navigate('/student/home')
    }
   }
- }, [user])
+ }, [user]);
+ const handleClick1 = useCallback((path, index) => {
+  let parent = document.querySelectorAll('.customize_exspand');
+  if (parent.length) {
+   revoveClassList(parent, index)
+   parent[index].classList.add("customize_side");
+  }
+  if (user.student === "ADMIN") {
+   navigate(path)
+  } else {
+   if (user.student === "STUDENT") {
+    navigate('/kiem-tra')
+   }
+  }
+ }, [user]);
+ const revoveClassList = (data, index) => {
+  for (let i = 0; i < data.length; i++) {
+   if (i !== index) {
+    data[i].classList.remove("customize_side")
+   }
+  }
+ }
+ const handleClickChild = (index) => {
+  if (index === 0) {
+   navigate('/home')
+  }
+  let parent = document.querySelectorAll('.link_content');
+  if (parent.length) {
+   revoveClassList(parent, parent)
+   parent[index].classList.add("customize_side");
+  }
+ }
  return (
   <>
    <div style={{ width: isOpen ? "15%" : "4%" }} className='sidebar'>
@@ -94,19 +136,23 @@ function Sidebar() {
        <p>{user.student === "ADMIN" ? "@Teacher" : "@Student"}</p>
       </div>
      </div>
-     {
-      menuSides.map((item, index) => (
-       <div>
-        <div className='link_content'>
-         <div className="icon">{item.icon}</div>
-         <div style={{ display: isOpen ? "block" : "none", cursor: "pointer" }} className="link_text">{item.name}</div>
-         <div style={{ display: isOpen ? "block" : "none" }} onClick={() => handleSxpan(index)} className=' icon_expan'>{index === 1 ? expan ? item.icon_expan_less : item.icon_expan : expan1 ? item.icon_expan_less : item.icon_expan}</div>
+     <div >
+      {
+       menuSides.map((item, index) => (
+        <div >
+         <div className='link_content' onClick={() => handleClickChild(index)}>
+          <div className='link_content_child'>
+           <div className="icon">{item.icon}</div>
+           <div style={{ display: isOpen ? "block" : "none", cursor: "pointer" }} className="link_text">{item.name}</div>
+          </div>
+          <div style={{ display: isOpen ? "block" : "none" }} onClick={() => handleSxpan(index)} className={`icon_expan${index + 1}`}>{index === 1 ? expan ? item.icon_expan_less : item.icon_expan : expan1 ? item.icon_expan_less : item.icon_expan}</div>
 
+         </div>
+         {index === 1 ? expan && <div onClick={() => handleClick(item.path, index)} className="customize_exspand" style={{ marginLeft: "40px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div> : expan1 && <div className="customize_exspand" onClick={() => handleClick1("/kiem-tra", index)} style={{ marginLeft: "40px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div>}
         </div>
-        {index === 1 ? expan && <div onClick={() => handleClick(item.path)} style={{ marginLeft: "48px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div> : expan1 && <div style={{ marginLeft: "48px", display: isOpen ? "block" : "none", cursor: "pointer" }}>{item.text}</div>}
-       </div>
-      ))
-     }
+       ))
+      }
+     </div>
     </div>
     <div>
 

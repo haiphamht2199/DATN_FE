@@ -102,6 +102,49 @@ export default function Class(state = {}, action) {
         success: true,
         toggleState: 2
       }
+    case 'DELETE_DATA':
+
+      return {
+        ...state,
+        class_id: "",
+        nameClass: "",
+        moduleClassId: 1,
+        description: "",
+        dateTimeStart: "",
+        dateTimeEnd: "",
+        pathFileImage: "",
+        scope: 0,
+        success: false,
+        success1: false,
+        upload: false,
+        documentList: [],
+        exam: "",
+        listStudent: [],
+        editStudent: "",
+        listClass: [],
+        arrayProgram: [],
+        editLesson: "",
+        listIdRemoveDocument: [],
+        programCategoryIdsToRemove: [],
+        idsLessonToRemove: [],
+        idsTaskToRemove: [],
+        toggleState: 1,
+        classDetail: {
+          class_id: "",
+          name_class: "",
+          tag_class: "",
+          scope_class: 0,
+          total_students: 0,
+          status_class: 1,
+          start_time: null,
+          end_time: null,
+          path_file_image: "",
+          arrayProgram: [],
+          allCategoryProgram: [],
+          module_class_id: 1,
+          exam: ""
+        }
+      }
     case 'DELETE_SUCCESS_ADD_CLASS':
       return {
         ...state,
@@ -421,7 +464,19 @@ export default function Class(state = {}, action) {
         ...state,
         arrayProgram: DataArayProgram
       }
-
+    case 'GET_ALL_ANALITIC_CLASS_SUCCESS':
+      let dataAnalytic = [];
+      dataAnalytic.push(action.payload);
+      console.log("dataAnalytic:", dataAnalytic);
+      if (action.payload) {
+        return {
+          ...state,
+          classDetail: {
+            ...state.classDetail,
+            analytic: action.payload
+          }
+        }
+      }
     default:
       return state;
   }

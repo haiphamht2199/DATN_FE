@@ -14,7 +14,8 @@ import Signup from './pages/autho/Signup';
 import ProgramDetail from './pages/teacher/ProgramDetail';
 import Home from './pages/student/Home';
 import DetailProgramCaregory from './pages/teacher/DetailProgramCaregory';
-
+import GlobalLoading from './component/gbobalLoading/index'
+import HomePage from './pages/HomePage';
 
 function App() {
   const dispatch = useDispatch()
@@ -41,9 +42,13 @@ function App() {
         <Routes>
           <Route path="/register" element={<Signup />} />
         </Routes>
+        <Routes>
+          <Route path="/trang-chu" element={<HomePage />} />
+        </Routes>
         {
           token &&
           <div className='container'>
+            <GlobalLoading />
             <Sidebar />
             <div style={{ width: isOpen ? "85%" : "95%" }} className="content_container">
 

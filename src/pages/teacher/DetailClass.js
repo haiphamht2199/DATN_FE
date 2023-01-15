@@ -5,50 +5,67 @@ import InformationListProgramStudy from '../../component/class/InformationListPr
 import ManagerStudent from '../../component/class/ManagerStudent';
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import Statiscal from '../../component/class/Statiscal';
 function DetailClass() {
  const dispatch = useDispatch();
  const detailClass = useSelector(state => state._class.classDetail);
  const student = useSelector(state => state.user.student);
  console.log("classDetail:", detailClass);
  console.log("student:", student)
- const [toggleStateAddClass, setToggleStateAddClass] = useState(1);
+ const [toggleStateAddClass, setToggleStateAddClass] = useState(student === 'ADMIN' ? 0 : 1);
  const [searchParams, setSearchParams] = useSearchParams();
  const toggleTabAddClass = (index) => {
 
   setToggleStateAddClass(index);
  }
  useEffect(() => {
+  dispatch({
+   type: 'SHOW_LOADING_START'
+  })
   if (student === "STUDENT") {
-   dispatch({
-    type: 'GET_DETAIL_INFORMATION_CLASS_STUDENT_BY_ID',
-    payload: searchParams.get("tag_class")
-   })
-   dispatch({
-    type: 'GET_DETAIL_INFORMATION_PROGRAM_STUDENT_CLASS_BY_ID',
-    payload: searchParams.get("class_id")
-   })
-  } else {
-   if (searchParams.get("class_id")) {
+   setTimeout(() => {
     dispatch({
-     type: 'GET_DETAIL_INFORMATION_CLASS_BY_ID',
-     payload: searchParams.get("class_id")
+     type: 'GET_DETAIL_INFORMATION_CLASS_STUDENT_BY_ID',
+     payload: searchParams.get("tag_class")
     })
     dispatch({
-     type: 'GET_DETAIL_INFORMATION_AND_DOCUMENT_CLASS_BY_ID',
-     payload: searchParams.get("class_id")
-    });
-    dispatch({
-     type: 'GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID',
+     type: 'GET_DETAIL_INFORMATION_PROGRAM_STUDENT_CLASS_BY_ID',
      payload: searchParams.get("class_id")
     });
     dispatch({
      type: 'GET_DETAIL_INFORMATION_EXAM_CLASS_BY_ID',
      payload: searchParams.get("class_id")
-    })
+    });
+   }, 500)
+
+  } else {
+   if (searchParams.get("class_id")) {
+    setTimeout(() => {
+     dispatch({
+      type: 'GET_ALL_ANALITIC_CLASS',
+      payload: searchParams.get("class_id")
+     })
+     dispatch({
+      type: 'GET_DETAIL_INFORMATION_CLASS_BY_ID',
+      payload: searchParams.get("class_id")
+     })
+     dispatch({
+      type: 'GET_DETAIL_INFORMATION_AND_DOCUMENT_CLASS_BY_ID',
+      payload: searchParams.get("class_id")
+     });
+     dispatch({
+      type: 'GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID',
+      payload: searchParams.get("class_id")
+     });
+     dispatch({
+      type: 'GET_DETAIL_INFORMATION_EXAM_CLASS_BY_ID',
+      payload: searchParams.get("class_id")
+     });
+    }, 500)
    }
   }
 
- }, [])
+ }, []);
  return (
   <>
    {
@@ -64,7 +81,12 @@ function DetailClass() {
      <div className='content_detail_class'>
       {
        student === "ADMIN" && <div className="bloc-tabs_detail_class">
-
+        <div
+         className={toggleStateAddClass === 0 ? "tabs_detail_class active_tabs_detail_class" : "tabs_detail_class"}
+         onClick={() => toggleTabAddClass(0)}
+        >
+         Thống kê
+        </div>
         <div
          className={toggleStateAddClass === 1 ? "tabs_detail_class active_tabs_detail_class" : "tabs_detail_class"}
          onClick={() => toggleTabAddClass(1)}
@@ -85,6 +107,10 @@ function DetailClass() {
          Quản lý sinh viên
         </div>
        </div>
+      }
+      {
+       student === "ADMIN" && toggleStateAddClass === 0 &&
+       <Statiscal />
       }
 
       {

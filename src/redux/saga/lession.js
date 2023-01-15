@@ -95,6 +95,9 @@ function* getAllClass() {
     yield put({
      type: "GET_ALL_CLASS_SUCCESS",
      payload: AllClass
+    });
+    yield put({
+     type: "SHOW_LOADING_END",
     })
    }
   }
@@ -127,6 +130,9 @@ function* getClassDetailById(action) {
    yield put({
     type: "GET_CLASS_INFORMATION_BY_ID_SUCCESS",
     payload: classDetail.data
+   });
+   yield put({
+    type: "SHOW_LOADING_END",
    })
   }
  } catch (error) {
@@ -236,6 +242,22 @@ function* getDetailExamClass(action) {
 
  }
 }
+function* getAllAnalyticClass(action) {
+ try {
+  let getAllAnalyticClassRes = yield all([axios.get(`/teacher/analytics?class_id=${action.payload}`)]);
+  let getAllAnalyticClass = getAllAnalyticClassRes[0].data;
+  console.log("getAllAnalyticClass:", getAllAnalyticClass)
+  if (getAllAnalyticClass.code === 200) {
+
+   yield put({
+    type: "GET_ALL_ANALITIC_CLASS_SUCCESS",
+    payload: getAllAnalyticClass.data
+   })
+  }
+ } catch (error) {
+
+ }
+}
 export default function* lession() {
  yield takeLatest('GET_LESSIONS', getLession);
  yield takeLatest('UPLOAD_IMAGE_CLASS', uploadImageClass)
@@ -250,5 +272,6 @@ export default function* lession() {
  yield takeLatest('GET_ALL_LIST_STUDENT_CLASS_BY_ID', getAllStudentByClassId);
  yield takeLatest('EDIT_SAVE_STUDENT_BY_CLASS_ID_REST', saveEditStudentByClassId);
  yield takeLatest('ADD_NEW_STUDENT_CLASS_ID_ASYNC', addNewStudentClassId);
- yield takeLatest('GET_DETAIL_INFORMATION_EXAM_CLASS_BY_ID', getDetailExamClass)
+ yield takeLatest('GET_DETAIL_INFORMATION_EXAM_CLASS_BY_ID', getDetailExamClass);
+ yield takeLatest('GET_ALL_ANALITIC_CLASS', getAllAnalyticClass)
 }

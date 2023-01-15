@@ -71,7 +71,8 @@ const initialState = {
       arrayProgram: [],
       allCategoryProgram: [],
       module_class_id: 1,
-      exam: ""
+      exam: "",
+      analytic: ""
     }
   },
 
@@ -83,6 +84,9 @@ const initialState = {
   },
   student: {
     courses: []
+  },
+  showLoading: {
+    isloading: false
   }
 }
 const store = () => {

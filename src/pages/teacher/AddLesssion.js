@@ -54,25 +54,37 @@ const AddLesssion = ({ props }) => {
     })
   }
   useEffect(() => {
-    dispatch({
-      type: 'GET_DETAIL_INFORMATION_CLASS_BY_ID',
-      payload: searchParams.get("class_id")
-    })
-    dispatch({
-      type: 'GET_DETAIL_INFORMATION_AND_DOCUMENT_CLASS_BY_ID',
-      payload: searchParams.get("class_id")
-    });
-    dispatch({
-      type: 'GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID',
-      payload: searchParams.get("class_id")
-    })
+    if (searchParams.get("class_id")) {
+      dispatch({
+        type: 'SHOW_LOADING_START'
+      });
+      setTimeout(() => {
+        dispatch({
+          type: 'GET_DETAIL_INFORMATION_CLASS_BY_ID',
+          payload: searchParams.get("class_id")
+        })
+        dispatch({
+          type: 'GET_DETAIL_INFORMATION_AND_DOCUMENT_CLASS_BY_ID',
+          payload: searchParams.get("class_id")
+        });
+        dispatch({
+          type: 'GET_DETAIL_INFORMATION_PROGRAM_CLASS_BY_ID',
+          payload: searchParams.get("class_id")
+        });
+        dispatch({
+          type: 'SHOW_LOADING_END'
+        });
+      }, 500)
+    }
   }, [searchParams.get("class_id")]);
   useEffect(() => {
     if (_class.classDetail.class_id && _class.classDetail.documentList) {
+
       dispatch({
         type: 'GET_ALL_INFORMATION_CLASS_BY_ID',
         payload: _class.classDetail
       })
+
     }
   }, [_class.classDetail]);
   useEffect(() => {
@@ -83,6 +95,13 @@ const AddLesssion = ({ props }) => {
       })
     }
   }, [_class.classDetail]);
+  useEffect(() => {
+    if (!searchParams.get("class_id")) {
+      dispatch({
+        type: 'DELETE_DATA',
+      })
+    }
+  }, [searchParams.get("class_id")]);
   useEffect(() => {
     setNameLession(_class.nameClass);
     setMajors(_class.moduleClassId)
