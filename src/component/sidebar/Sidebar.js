@@ -15,7 +15,7 @@ function Sidebar() {
  const dispatch = useDispatch();
  const [isOpen, setIsOpen] = useState(useSelector(state => state.menu.isOpenMenu));
  const user = useSelector(state => state.user);
- console.log("user:", user)
+
  const toggle = () => {
   setIsOpen(!isOpen);
   dispatch({
@@ -60,14 +60,7 @@ function Sidebar() {
    setExpan1(!expan1)
   }
 
-  // console.log("isSxpan000:", item.isSxpan)
-  // let newItem = {
-  //  ...item,
-  //  isSxpan: !item.isSxpan
-  // }
-  // console.log("isSxpan:", newItem.isSxpan)
-  // menuSide[index] = newItem;
-  // setMenuSides(menuSide)
+
  }, [menuSides, menuSide]);
  const handleClick = useCallback((path, index) => {
   let parent = document.querySelectorAll('.customize_exspand');

@@ -69,7 +69,6 @@ function* addNewClass(action) {
    documentList: documentList
 
   }
-  console.log("newClass:", newClass)
   const newClassRes = yield all([axios.post('/teacher/classes/create_class', newClass)]);
   let dataNewClass = newClassRes[0].data;
   if (dataNewClass.code === 200) {
@@ -87,7 +86,6 @@ function* getAllClass() {
  try {
   const getAllClassRes = yield all([axios.get('/teacher/sys/class_category/get_all_class_category?page=0&size=100')]);
   let data = getAllClassRes[0].data;
-  console.log("AllClass:", data);
 
   if (data.code === 200) {
    let AllClass = data.data.results;
@@ -109,7 +107,6 @@ function* getAllClass() {
 function* createProgramByClass(action) {
  try {
   let arrayProgram = action.payload.arrayProgram;
-  console.log("arrayProgram:", arrayProgram)
   if (arrayProgram.length) {
    let programRes = yield all([axios.post('/teacher/program_category/create', arrayProgram)]);
    if (programRes.code === 200) {
@@ -157,7 +154,6 @@ function* getAllProgramByClassId(action) {
  try {
   let ProgramRes = yield all([axios.get(`/teacher/sys/class_category/get_information_detail_program_categories?class_id=${action.payload}`)]);
   let ProData = ProgramRes[0].data;
-  console.log("ProData:", ProData)
   if (ProData.code === 200) {
    yield put({
     type: "GET_CLASS_PROGRAM_BY_ID_SUCCESS",
@@ -172,7 +168,6 @@ function* getAllcategoryProgramByClassId(action) {
  try {
   let AllProgramCatrgoryRes = yield all([axios.get(`/teacher/sys/program_category/find_all_program_categories?page=0&size=100&classId=${action.payload}`)]);
   let AllCategory = AllProgramCatrgoryRes[0].data;
-  console.log("AllCategory:", AllCategory)
   if (AllCategory.code === 200) {
    yield put({
     type: "GET_ALL_CATEGORY_PROGRAM_BY_ID_SUCCESS",
@@ -186,7 +181,6 @@ function* getAllcategoryProgramByClassId(action) {
 function* getAllStudentByClassId(action) {
  try {
   let listStudentRes = yield all([axios.get(`/teacher/manager_student?page=0&size=100&classId=${action.payload}`)]);
-  console.log("listStudentRes:", listStudentRes);
   let AllStudent = listStudentRes[0].data;
   if (AllStudent.code === 200) {
    yield put({
@@ -200,7 +194,6 @@ function* getAllStudentByClassId(action) {
 }
 function* saveEditStudentByClassId(action) {
  try {
-  console.log("action.data", action.data)
   let StudentRes = yield all([axios.put('/teacher/manager_student/edit_class_student', action.data)]);
   let AllStudent = StudentRes[0].data;
   if (AllStudent.code === 200) {
@@ -215,7 +208,6 @@ function* saveEditStudentByClassId(action) {
 function* addNewStudentClassId(action) {
  try {
   let NewStudentRes = yield all([axios.post('/teacher/manager_student/create_new_student', action.data)]);
-  console.log("NewStudentRes:", NewStudentRes)
   let AllStudent = NewStudentRes[0].data;
   if (AllStudent.code === 200) {
    yield put({
@@ -230,7 +222,6 @@ function* getDetailExamClass(action) {
  try {
   let NewStudentRes = yield all([axios.get(`/teacher/exam/create_exam/details?class_id=${action.payload}`,)]);
   let AllStudent = NewStudentRes[0].data;
-  console.log("AllStudent:", AllStudent)
   if (AllStudent.code === 200) {
 
    yield put({
@@ -246,7 +237,6 @@ function* getAllAnalyticClass(action) {
  try {
   let getAllAnalyticClassRes = yield all([axios.get(`/teacher/analytics?class_id=${action.payload}`)]);
   let getAllAnalyticClass = getAllAnalyticClassRes[0].data;
-  console.log("getAllAnalyticClass:", getAllAnalyticClass)
   if (getAllAnalyticClass.code === 200) {
 
    yield put({

@@ -53,9 +53,7 @@ function ModalEditLession(props) {
   const [value, setValue] = useState();
   const [auth, setAuth] = useState(true);
   const { lessonData, openModal, SetModalOpen, indexPr, editNameActive, _key } = props;
-  console.log("editNameActive:", editNameActive)
   const [endDate, setEndDate] = useState("");
-  console.log("endDate:", endDate)
   const [nameLesson, setNameLesson] = useState("");
   const [descriptionLesson, setDescriptionLesson] = useState("");
   const [imageLesson, setImageLesson] = useState("")
@@ -69,6 +67,7 @@ function ModalEditLession(props) {
   const [timeDurationTask, setTimeDurationActive] = useState("");
   const [descriptionTask, setDescriptionActive] = useState("");
   const [isRequireFinishTask, setIsRequireFinishTask] = useState(true);
+  console.log("value:", value)
   const toggleTab = (index) => {
     setToggleState(index)
   }

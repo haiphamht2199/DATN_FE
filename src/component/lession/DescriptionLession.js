@@ -62,18 +62,17 @@ function DescriptionLession({ setToggleState }) {
   const dispatch = useDispatch();
   const lession = useSelector((state) => state.lession);
   const _class = useSelector((state) => state._class);
-  console.log("______class:", _class)
   let image = useSelector((state) => state._class.pathFileImage);
-  console.log("image:", image)
+
   const [value, setValue] = useState("")
   // let startDate = useSelector((state) => state._class.dateTimeStart);
   // let endDate = _class.dateTimeEnd;
   const [description, setDescription] = useState(_class.description);
   const [startDate, setStartDate] = useState(new Date("2022/10/30 00:00:00"));
-  console.log("startDate:", startDate)
+
   const [endDate, setEndDate] = useState("");
   const [isFieldDateErr, setIsFieldDateErr] = useState(false);
-  console.log("gggahsdyhu:", _class);
+
 
   const changeStartDate = (value) => {
     startDate = value;
@@ -91,12 +90,13 @@ function DescriptionLession({ setToggleState }) {
   }, [endDate])
 
   const handleChangeDecription = useCallback(async value => {
-
-    dispatch({
-      type: 'CHANGE_DECRIPTION',
-      description: value
-    })
-    setDescription(value)
+    setDescription(value);
+    setTimeout(() => {
+      dispatch({
+        type: 'CHANGE_DECRIPTION',
+        description: value
+      })
+    }, 200)
   }, [description])
   useEffect(() => {
     dispatch({
@@ -104,8 +104,10 @@ function DescriptionLession({ setToggleState }) {
     })
   }, [])
   useEffect(() => {
-    setDescription(_class.description)
-  }, [_class.description])
+    if (!description) {
+      setDescription(_class.description)
+    }
+  }, [_class.description, setDescription])
   const handleImage = (e) => {
     let file = e.target.files[0];
     const imageData = new FormData();
@@ -210,7 +212,6 @@ function DescriptionLession({ setToggleState }) {
   }, [_class,]);
   useEffect(() => {
     if (_class.success) {
-      console.log("success:", _class.success)
       toast.success("Tạo lớp học thành công!", {
         position: toast.POSITION.TOP_CENTER
       });
@@ -252,7 +253,6 @@ function DescriptionLession({ setToggleState }) {
       value: _value
     })
 
-    console.log("start_date:", value)
   }, [data, startDate, endDate]);
 
   const handleEndDateChange = useCallback((value) => {

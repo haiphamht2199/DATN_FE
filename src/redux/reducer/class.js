@@ -20,7 +20,6 @@ export default function Class(state = {}, action) {
 
       let studentEdit = state.listStudent.filter(student => student.email === action.email);
       if (studentEdit.length) {
-        console.log("studentEdit:", studentEdit)
         return {
           ...state,
           editStudent: studentEdit[0]
@@ -49,13 +48,12 @@ export default function Class(state = {}, action) {
         editStudent: ""
       }
     case 'UPLOAD_IMAGE_CLASS_SUCCESS':
-      console.log("action:", action)
+
       return {
         ...state,
         pathFileImage: action.payload.replaceAll("\\", "/")
       }
     case 'REMOVE_IMAGE_CLASS':
-      console.log("remove")
       return {
         ...state,
         pathFileImage: ""
@@ -152,7 +150,7 @@ export default function Class(state = {}, action) {
         success1: false
       }
     case 'ADD_NEW_STUDENT_BY_ID_SUCCESS':
-      console.log("seccess");
+
       return {
 
         ...state,
@@ -164,7 +162,7 @@ export default function Class(state = {}, action) {
         success: true
       }
     case 'DELETE_DOCUMENT_FILE':
-      console.log("action:", action.payload)
+
       return {
         ...state,
         documentList: state.documentList.filter(file => file.file_path_document !== action.payload),
@@ -177,7 +175,9 @@ export default function Class(state = {}, action) {
         nameProgramCategory: '',
         index: 1,
         createLessonRequestList: [],
-        createTaskRequestList: []
+        createTaskRequestList: [],
+        idsLessonToRemove: [],
+        idsTaskToRemove: [],
       }
       return {
         ...state,
@@ -209,11 +209,14 @@ export default function Class(state = {}, action) {
 
       newProgramTable3.push({
         classId: state.class_id ? state.class_id : "",
+        program_category_id: Math.floor(Math.random() * 100),
         toggleStateAddClass: 1,
         nameProgramCategory: '',
         index: newProgramTable3[newProgramTable3.length - 1].index + 1,
         createLessonRequestList: [],
-        createTaskRequestList: []
+        createTaskRequestList: [],
+        idsLessonToRemove: [],
+        idsTaskToRemove: [],
       });
       return {
         ...state,
@@ -237,7 +240,8 @@ export default function Class(state = {}, action) {
           timeDuration: '',
           scopeLesson: "0",
           indexLesson: newProgramTable5[action.index - 1].createLessonRequestList.length + 1,
-          timeDateFinished: ""
+          timeDateFinished: "",
+          lessonId: Math.floor(Math.random() * 1000),
         }
         newProgramTable5[action.index - 1].createLessonRequestList.push(_data);
         // newProgramTable5[action.index - 1].createLesson.errClass = false;
@@ -251,7 +255,8 @@ export default function Class(state = {}, action) {
           descriptionTask: '',
           timeDurationTask: 0,
           isRequireFinishTask: "0",
-          index: newProgramTable5[action.index - 1].createTaskRequestList.length + 1
+          index: newProgramTable5[action.index - 1].createTaskRequestList.length + 1,
+          taskId: Math.floor(Math.random() * 1000),
         }
         // newProgramTable5[action.index - 1].createTask.errActive = false;
         newProgramTable5[action.index - 1].createTaskRequestList.push(createTask);
@@ -307,7 +312,6 @@ export default function Class(state = {}, action) {
         programCategoryIdsToRemove: [...state.programCategoryIdsToRemove, action.id]
       }
     case 'HANDLE_SAVE_EDIT_PROGRAM':
-      console.log("actionEdit:", action);
       return {
         ...state
       }
@@ -317,7 +321,6 @@ export default function Class(state = {}, action) {
         toggleState: 2
       }
     case 'GET_CLASS_INFORMATION_BY_ID_SUCCESS':
-      console.log("action:", action.payload)
       return {
         ...state,
         class_id: action.payload.class_id,
@@ -343,7 +346,8 @@ export default function Class(state = {}, action) {
           class_id: action.payload.class_id,
           tag_class: action.payload.tag_class,
           path_file_image: action.payload.path_image,
-          documentList: action.payload.documents
+          documentList: action.payload.documents,
+          name_class: action.payload.name_class
         }
       }
     case
@@ -366,7 +370,6 @@ export default function Class(state = {}, action) {
         success: true
       }
     case 'GET_CLASS_PROGRAM_BY_ID_SUCCESS':
-      console.log("actionPr:", action)
       return {
         ...state,
         classDetail: {
@@ -376,7 +379,6 @@ export default function Class(state = {}, action) {
 
       }
     case 'GET_ALL_CATEGORY_PROGRAM_BY_ID_SUCCESS':
-      console.log('action:', action)
       return {
         ...state,
         classDetail: {
@@ -467,7 +469,6 @@ export default function Class(state = {}, action) {
     case 'GET_ALL_ANALITIC_CLASS_SUCCESS':
       let dataAnalytic = [];
       dataAnalytic.push(action.payload);
-      console.log("dataAnalytic:", dataAnalytic);
       if (action.payload) {
         return {
           ...state,

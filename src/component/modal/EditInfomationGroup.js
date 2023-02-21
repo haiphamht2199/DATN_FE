@@ -39,8 +39,7 @@ function EditInfomationGroup(props) {
  const [isLoading2, setisLoading2] = useState(false);
  const [validateEmail, setValidateEmail] = useState(true);
  const [evaluate, setEvaluate] = useState(row.content);
- console.log("evaluate:", evaluate);
- console.log("row:", row)
+
  const formats = [
   "header",
   "font",
@@ -79,7 +78,7 @@ function EditInfomationGroup(props) {
     status: studentStatus,
     nameGroup: studentId
    }
-   console.log("huhu", data)
+
    try {
     let editGroupRes = await axios.put('/teacher/tasks/update_task_student_groups', data);
     if (editGroupRes.data.code === 200) {

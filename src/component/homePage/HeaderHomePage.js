@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from '@mui/material/Button';
+import { Link } from "react-router-dom";
 function HeaderHomePage() {
  return (
   <div className='header_container_comonent'>
@@ -13,9 +14,11 @@ function HeaderHomePage() {
      <li>Thông tin</li>
     </ul>
    </div>
-   <div className='add_lesson_btn' style={{ background: "#385cce", borderRadius: "7px" }} >
-    <Button variant="contained" >{"+" + " " + "Đăng nhập"}</Button>
-   </div>
+   <Link to="/signin">
+    <div className='add_lesson_btn' style={{ background: "#385cce", borderRadius: "7px" }} >
+     <Button variant="contained" >{"+" + " " + "Đăng nhập"}</Button>
+    </div>
+   </Link>
   </div>
  )
 }

@@ -263,7 +263,6 @@ function ListStudents(props) {
   const [email, setEmail] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const _class = useSelector((state) => state._class);
-  console.log("_class:", _class)
   const handleClickSetting = useCallback((event, id) => {
     setAnchorEl(event.currentTarget);
     setOpenAction(!openAction);

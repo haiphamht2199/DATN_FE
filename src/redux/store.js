@@ -17,7 +17,8 @@ const initialState = {
     error: false,
     messageUpdate: "",
     isTeacher: "",
-    student: false
+    student: false,
+    userId: ""
   },
   lessions: [],
   menu: {

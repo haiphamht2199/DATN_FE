@@ -13,7 +13,7 @@ const UploadDocument = () => {
 
  return (
   <div className="App">
-   <div className="title">Upload file</div>
+   <div className="title" style={{ marginTop: "25px" }}>Upload file</div>
    <UploadFile files={files} setFiles={setFiles}
    />
    <FileList files={files} />

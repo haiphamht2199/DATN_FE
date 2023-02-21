@@ -35,9 +35,7 @@ function ProgramLession(props) {
   const [open, setOpen] = React.useState(false);
   const [programId, setProgramId] = useState("");
   const [add, setAdd] = useState(false)
-  console.log("programCategoryIdsToRemove:", _class.programCategoryIdsToRemove);
-  console.log("idsLessonToRemove:", _class.idsLessonToRemove);
-  console.log("idsTaskToRemove:", _class.idsTaskToRemove)
+
   const handleClickOpen = useCallback((id) => {
     setProgramId(id)
     setOpen(true);
@@ -49,7 +47,6 @@ function ProgramLession(props) {
   };
   const handleDelete = useCallback(() => {
     if (programId) {
-      console.log("programId:", programId)
       dispatch({
         type: 'HANDLE_DELETE_PROGRAM_CLASS',
         id: programId
@@ -64,7 +61,7 @@ function ProgramLession(props) {
       payload: { index: index, indexProgram: indexProgram }
     })
   }, [arrayLesstion]);
-  console.log("arrayLesstion:", arrayLesstion)
+
   const ThemChuongTrinhOnClick = () => {
     setOpenCt(!openCt);
     dispatch({
@@ -106,7 +103,7 @@ function ProgramLession(props) {
       setAdd(true)
     }
     dispatch({
-      type: 'cccccccc',
+      type: 'DELETE_LESSISON_ACTIVE',
       id,
       index,
       lessonId,
@@ -151,7 +148,7 @@ function ProgramLession(props) {
   const handleSubmitCreateProgram = useCallback(async () => {
     if (_class.class_id) {
       if (searchParams.get("class_id")) {
-        console.log("array:", arrayLesstion)
+
         let data = {};
         let arrayData = [];
         data.classId = searchParams.get("class_id");
@@ -173,7 +170,6 @@ function ProgramLession(props) {
         data.inforProgramToEditRequests = arrayData;
         try {
           let dataEditRes = await axios.put('/teacher/program_category/edit', data);
-          console.log("dataEditRes:", dataEditRes);
           if (dataEditRes.data.code === 200) {
             toast.success("edit program success", {
               position: toast.POSITION.TOP_CENTER
@@ -197,7 +193,7 @@ function ProgramLession(props) {
                 delete item.toggleStateAddClass
               })
             }
-            console.log("_class:", _class.arrayProgram);
+
             let programRes = await axios.post('/teacher/program_category/create', _class.arrayProgram);
             if (programRes.data.code === 200) {
               toast.success("create program success", {

@@ -52,7 +52,7 @@ function EditLessonAndTask(props) {
   const [value, setValue] = useState();
   const [auth, setAuth] = useState(true);
   const { lessonData, openModal, setOpenModalLessonAndTask, indexPr, editNameActive, _key } = props;
-  console.log("editNameActive:", editNameActive)
+
 
   const [nameLesson, setNameLesson] = useState("");
   const [descriptionLesson, setDescriptionLesson] = useState("");
@@ -320,7 +320,7 @@ function EditLessonAndTask(props) {
                 <TextField
                   fullWidth
                   variant="outlined"
-                  value="" />
+                  value='Sinh viên trong lớp' />
               </div>
               <div className='descript_class'>
                 <InputLabel  >Mô tả nội dung hoạt động </InputLabel>

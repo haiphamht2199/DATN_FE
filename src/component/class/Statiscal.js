@@ -5,6 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from '../../helper/axios';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, } from 'recharts';
 import ManagerInformation from './ManagerInformation';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20';
 function Statiscal() {
   const dispatch = useDispatch();
   const [toggleStateAddClass, setToggleStateAddClass] = useState(0);
@@ -19,14 +22,17 @@ function Statiscal() {
 
       async function fetchData(program_id) {
         if (program_id) {
+          try {
+            let programCategoryDetailRes = await axios.get(`/teacher/analytics?class_id=${program_id}`);
+            if (programCategoryDetailRes.data.code === 200) {
+              let data = [];
+              data.push(programCategoryDetailRes.data.data)
 
-          let programCategoryDetailRes = await axios.get(`/teacher/analytics?class_id=${program_id}`);
-          if (programCategoryDetailRes.data.code === 200) {
-            let data = [];
-            data.push(programCategoryDetailRes.data.data)
 
+              setAnalytic(data);
+            }
+          } catch (e) {
 
-            setAnalytic(data);
           }
         }
         // ...
@@ -129,7 +135,7 @@ function Statiscal() {
             <div className='item_content_statiscal content_header1' >
               <div className='icon_statiscal'>
                 <div className='icon_stat_praent'>
-                  <SupervisedUserCircleIcon className='icon_stat' />
+                  <InsertDriveFileIcon className='icon_stat' />
                 </div>
 
               </div>
@@ -141,7 +147,7 @@ function Statiscal() {
             <div className='item_content_statiscal content_header2'>
               <div className='icon_statiscal'>
                 <div className='icon_stat_praent'>
-                  <SupervisedUserCircleIcon className='icon_stat' />
+                  <MenuBookIcon className='icon_stat' />
                 </div>
 
               </div>
@@ -153,7 +159,7 @@ function Statiscal() {
             <div className='item_content_statiscal content_header3' >
               <div className='icon_statiscal'>
                 <div className='icon_stat_praent'>
-                  <SupervisedUserCircleIcon className='icon_stat' />
+                  <BatteryCharging20Icon className='icon_stat' />
                 </div>
 
               </div>

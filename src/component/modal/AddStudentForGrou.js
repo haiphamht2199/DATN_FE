@@ -61,7 +61,7 @@ function AddStudentForGrou(props) {
    const classes = useStyles();
    const [listStudent, setListStudent] = useState([]);
    const [arrayStdudent, setArrayAstudent] = useState([]);
-   console.log("rosdsw:", row)
+
    const theme = useTheme();
    const [personName, setPersonName] = useState([]);
 
@@ -134,7 +134,7 @@ function AddStudentForGrou(props) {
          if (data) {
             try {
                let StudentRes = await axios.post('/teacher/tasks/add_student_to_group', data);
-               console.log("StudentRes:", StudentRes);
+
                if (StudentRes.data.code === 200) {
                   toast.success("Add more student to group success!", {
                      position: toast.POSITION.TOP_CENTER

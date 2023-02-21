@@ -43,7 +43,7 @@ function EditStudentForGroup(props) {
  const [evaluate, setEvaluate] = useState("");
  const [point, setPoint] = useState("");
 
- console.log("student:", student);
+
  const formats = [
   "header",
   "font",
@@ -124,8 +124,6 @@ function EditStudentForGroup(props) {
    async function fetchData(program_id) {
     if (program_id) {
      let programCategoryDetailRes = await axios.get(`/teacher/tasks/get_task_student_detail?student_detail_id=${program_id}`);
-
-     console.log("programCategoryDetailRes:", programCategoryDetailRes)
      if (programCategoryDetailRes.data.code === 200) {
       setStudent(programCategoryDetailRes.data.data)
       setEvaluate(programCategoryDetailRes.data.data.contentEvaluate);

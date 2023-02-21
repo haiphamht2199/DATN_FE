@@ -1,14 +1,18 @@
 import CommentForm from "./CommentForm";
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import React, { useContext, useEffect, useMemo, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState, useCallback } from "react"
 import Comments from "./Comments";
+import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getComments as getCommentsApi,
   createComment as createCommentApi,
   updateComment as updateCommentApi,
   deleteComment as deleteCommentApi,
+  handleGetComment as handleGetCommentApi
 } from "../../api";
 import axios from '../../helper/axios'
+import { RestaurantMenu } from "@mui/icons-material";
 const Comment = ({
   comment,
   replies,
@@ -19,7 +23,10 @@ const Comment = ({
   dataComment,
   setListComments,
   listComments,
-  dataPost
+  dataPost,
+  setRootComments,
+  setLoading,
+  type
 }) => {
   // const isEditing =
   //   activeComment &&
@@ -30,33 +37,40 @@ const Comment = ({
   //   activeComment.id === comment.id &&
   //   activeComment.type === "replying";
   const fiveMinutes = 300000;
+  const uerId = useSelector(state => state.user.userId)
   const timePassed = new Date() - new Date(comment.createdAt) > fiveMinutes;
-  // const canDelete =
-  //  currentUserId === comment.userId && replies.length === 0 && !timePassed;
+  const canDelete =
+    uerId && uerId === comment.user_id
+
+
   const canReply = Boolean(currentUserId);
-  const canEdit = currentUserId === comment.userId && !timePassed;
+  const canEdit = uerId && uerId === comment.user_id && !timePassed;
   const replyId = parentId ? parentId : comment.comment_id;
   const createdAt = new Date(comment.createdAt).toLocaleDateString();
   const [backendComments, setBackendComments] = useState(listComments);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [areChildrenHidden, setAreChildrenHidden] = useState(comment.count > 0 ? true : false);
-  console.log("areChildrenHidden:", areChildrenHidden)
-  const [loading, setLoading] = useState(false)
-  const updateComment = (text, commentId) => {
-    updateCommentApi(text).then(() => {
-      const updatedBackendComments = backendComments.map((backendComment) => {
-        if (backendComment.id === commentId) {
-          return { ...backendComment, body: text };
+  const [areChildrenHidden, setAreChildrenHidden] = useState(comment.count && comment.parent_id === 0 ? true : false);
+  const [loadingCmt, setLoadingCmt] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams();
+  let [childComments, setChildComments] = useState([]);
+  const updateComment = (text, commentId, data, backendComments) => {
+    updateCommentApi(text, commentId, data).then((data) => {
+      let testData = backendComments;
+      if (data) {
+        for (let i = 0; i < testData.length; i++) {
+          if (testData[i].comment_id === data.idComment) {
+            testData[i].content = data.content;
+            break;
+          }
         }
-        return backendComment;
-      });
-      setBackendComments(updatedBackendComments);
+      }
+      setBackendComments(testData);
       setIsEditing(false);
     });
   };
-  const addComment = (text, parentId, _comment) => {
-    createCommentApi(text, parentId, _comment).then(async (comment) => {
+  const addComment = (text, parentId, _comment, class_id) => {
+    createCommentApi(text, parentId, _comment, class_id).then(async (comment) => {
       let data = {
         comment_id: comment.idComment,
         content: comment.content,
@@ -80,10 +94,30 @@ const Comment = ({
         content: text,
         class_id: parseInt(dataPost.class_id)
       });
-      console.log("traceRes:", traceRes)
       setIsReplying(false)
       setBackendComments([data, ...backendComments]);
     });
+  };
+  const handleGetCommentBtn = (data) => {
+    setLoadingCmt(true)
+    handleGetCommentApi(data).then((data) => {
+      let testData = [];
+      if (data && data.data && data.data.length) {
+        data.data.forEach(item => {
+          let newComment = item;
+          newComment.class_id = parseInt(searchParams.get("class_id"));
+          newComment.objectId = data.object_id;
+          newComment.type = data.type;
+          newComment.level = data.level;
+          testData.push(newComment);
+        });
+      }
+      setBackendComments(testData);
+      setTimeout(() => {
+        setAreChildrenHidden(false);
+        setLoadingCmt(false)
+      }, 500)
+    })
   };
   const commentsByParentId = useMemo(() => {
     const group = {};
@@ -96,51 +130,31 @@ const Comment = ({
   function getReplies(parentId) {
     return commentsByParentId[parentId]
   }
-  const childComments = getReplies(comment.comment_id);
-  const deleteComment = (commentId) => {
-    console.log("commentId:", commentId)
+  childComments = getReplies(comment.comment_id);
+  const deleteComment = (data, backendComments) => {
     if (window.confirm("Are you sure you want to remove comment?")) {
-      deleteCommentApi(commentId).then(async () => {
-        let datarReq = {
-          commentId: null,
-          objectId: dataPost.objectId,
-          type: 2,
-          level: 0
-        }
-        console.log("dataRes:", datarReq);
-        let dataComment = [];
-        try {
-          let listCommentsRes = await axios.post('/comments/get_comments', datarReq);
-          if (listCommentsRes.data.code === 200) {
-            let dataRes = listCommentsRes.data.data;
-            console.log("listCommentsRes:", dataRes);
-            if (dataRes) {
-              dataRes.data && dataRes.data.length && dataRes.data.forEach(item => {
-                item.level = dataRes.level;
-                item.class_id = parseInt(dataRes.class_id);
-                item.objectId = datarReq.objectId;
-                item.type = 2;
-                item.count = dataRes.count;
-                dataComment.push(item);
-              });
-            }
+      deleteCommentApi(data).then((id) => {
+        if (id) {
+          let testData = [];
+          if (backendComments.length) {
+            backendComments.forEach(item => {
+
+              if (item.comment_id !== id) {
+                let newComment = item;
+                testData.push(newComment);
+              }
+            });
+            setBackendComments(testData);
+            setAreChildrenHidden(false);
           }
-          setBackendComments(dataComment)
-        } catch (error) {
-          console.log("e:", error)
         }
       });
     }
   };
-  // useEffect(() => {
-  //   getCommentsApi().then((data) => {
-  //     setBackendComments(data);
-  //   });
-  // }, [loading]);
   return (
     <div key={comment.id} className="comment">
-      <div className="comment-image-container">
-        <AccountCircle className="user_icon_comment" />
+      <div className={`icon_student_comment ${comment.name_student ? '' : 'icon_teacher'}`}>
+        {comment.name_student ? comment.name_student[0] : 'GV'}
       </div>
       <div className="comment-right-part">
         <div className="comment-content">
@@ -153,7 +167,13 @@ const Comment = ({
             submitLabel="Cập nhật"
             hasCancelButton
             initialText={comment.content}
-            handleSubmit={(text) => updateComment(text, comment.comment_id)}
+            handleSubmit={(text) => updateComment(text, comment.comment_id, {
+              commentId: comment.comment_id,
+              objectId: dataPost.objectId,
+              type: type,
+              level: comment.level,
+              classId: parseInt(searchParams.get("class_id"))
+            }, backendComments)}
             handleCancel={() => {
               setIsEditing(false);
             }}
@@ -169,33 +189,42 @@ const Comment = ({
           >
             Phản hồi
           </div>
+          {
+            canEdit && <div
+              className="comment-action"
+              onClick={() =>
+                setIsEditing(prev => !prev)
+              }
+            >
+              Chỉnh sửa
+            </div>
+          }
 
-          {/* {canEdit && ( */}
-          <div
-            className="comment-action"
-            onClick={() =>
-              setIsEditing(prev => !prev)
-            }
-          >
-            Chỉnh sửa
-          </div>
-          {/* )} */}
 
-          <div
-            className="comment-action"
-            onClick={() => deleteComment(comment.comment_id)}
-          >
-            Xóa
-          </div>
+
+          {
+            canDelete && <div
+              className="comment-action"
+              onClick={() => deleteComment({
+                commentId: comment.comment_id,
+                objectId: dataPost.objectId,
+                type: type,
+                level: comment.level,
+                classId: parseInt(searchParams.get("class_id"))
+              }, backendComments)}
+            >
+              Xóa
+            </div>
+          }
 
         </div>
         {isReplying && (
           <CommentForm
             submitLabel="Reply"
-            handleSubmit={(text) => addComment(text, replyId, comment)}
+            handleSubmit={(text) => addComment(text, replyId, comment, searchParams.get("class_id"))}
           />
         )}
-        {childComments?.length > 0 && (
+        {(childComments?.length > 0 || comment.count > 0) && (
           <>
             <div
               className={`nested-comments-stack ${areChildrenHidden ? "hide" : ""
@@ -207,14 +236,22 @@ const Comment = ({
                 onClick={() => setAreChildrenHidden(true)}
               />
               <div className="nested-comments">
-                <Comments comments={childComments} listComments={backendComments} dataPost={dataPost} />
+                {childComments?.length > 0 && <Comments comments={childComments} listComments={backendComments} dataPost={dataPost} />}
               </div>
             </div>
             <button
               className={`btn mt-1 ${!areChildrenHidden ? "hide" : ""}`}
-              onClick={() => setAreChildrenHidden(false)}
+
+              onClick={() => handleGetCommentBtn({
+                commentId: comment.comment_id,
+                objectId: dataPost.objectId,
+                type: type,
+                level: comment.level,
+                classId: parseInt(searchParams.get("class_id"))
+              })}
             >
-              Show Replies
+              <i className={`fa fa-spinner fa-spin ${!loadingCmt ? "hide" : ""}`}></i>
+              Xem thêm
             </button>
           </>
         )

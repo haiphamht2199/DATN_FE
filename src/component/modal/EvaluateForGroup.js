@@ -41,8 +41,7 @@ function EvaluateForGroup(props) {
  const [validateEmail, setValidateEmail] = useState(true);
  const [evaluate, setEvaluate] = useState("");
  const [path, setPath] = useState(row.path ? row.path : "")
- console.log("evaluate:", evaluate);
- console.log("studentStatus:", studentStatus)
+
  const formats = [
   "header",
   "font",
@@ -81,7 +80,6 @@ function EvaluateForGroup(props) {
     level: studentStatus,
 
    }
-   console.log("huhu", data)
    try {
     let editGroupRes = await axios.post('/teacher/tasks/evaluate_student_groups_details', data);
     if (editGroupRes.data.code === 200) {
@@ -129,7 +127,6 @@ function EvaluateForGroup(props) {
       setPath(programCategoryDetailRes.data.data.path);
       setStudentStatus(programCategoryDetailRes.data.data.level)
       setRow(row);
-      console.log("evaluate:", row)
      }
     }
     // ...

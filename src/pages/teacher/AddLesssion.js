@@ -19,7 +19,6 @@ const AddLesssion = ({ props }) => {
   const [majors, setMajors] = useState(useSelector((state) => state._class.moduleClassId));
 
   const modules = useSelector((state) => state.moduleClass.modules);
-  console.log("module:", modules)
   const dispatch = useDispatch();
   const toggleTab = (index) => {
     setToggleState(index);
@@ -113,7 +112,10 @@ const AddLesssion = ({ props }) => {
           <div className='icon_preview'>
             <ArrowBackIcon />
           </div>
-          <div className='title_preview'> Quay lại trang tài khoản</div>
+          <Link to="/bai-hoc" >
+            <div className='title_preview'> Quay lại trang trước</div>
+          </Link>
+
         </div>
         <div className='content_lession'>
           <div className='title_lession'>

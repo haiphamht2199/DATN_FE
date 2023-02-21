@@ -51,7 +51,7 @@ function EditStudent(props) {
   const dispatch = useDispatch();
   let openEditStudent = useSelector(state => state.modal.editStudent);
   let EditStudent = useSelector(state => state._class.editStudent);
-  console.log("hhh:", EditStudent)
+
   const [studentId, setStudentId] = useState(EditStudent.code_student);
   const [studentName, setStudentName] = useState(EditStudent.name_student);
   const [studentEmail, setStudenEmail] = useState(EditStudent.email);

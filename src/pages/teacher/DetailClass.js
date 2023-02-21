@@ -10,8 +10,6 @@ function DetailClass() {
  const dispatch = useDispatch();
  const detailClass = useSelector(state => state._class.classDetail);
  const student = useSelector(state => state.user.student);
- console.log("classDetail:", detailClass);
- console.log("student:", student)
  const [toggleStateAddClass, setToggleStateAddClass] = useState(student === 'ADMIN' ? 0 : 1);
  const [searchParams, setSearchParams] = useSearchParams();
  const toggleTabAddClass = (index) => {

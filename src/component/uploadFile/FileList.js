@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 const FileList = ({ files }) => {
   const dispatch = useDispatch();
   let LitsFile = useSelector((state) => state._class.documentList);
-  console.log("LitsFile:", LitsFile)
   const deleteFileHandler = (_name, document_class_id) => {
     dispatch({
       type: 'DELETE_DOCUMENT_FILE',

@@ -26,7 +26,8 @@ function App() {
       dispatch({
         type: 'AUTO_LOGIN',
         payload: localStorage.getItem('token'),
-        student: localStorage.getItem('student') ? localStorage.getItem('student') : ""
+        student: localStorage.getItem('student') ? localStorage.getItem('student') : "",
+        user_id: localStorage.getItem('user_id')
       });
     }
 
@@ -37,13 +38,13 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/signin" element={<Login />} />
         </Routes>
         <Routes>
           <Route path="/register" element={<Signup />} />
         </Routes>
         <Routes>
-          <Route path="/trang-chu" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
         {
           token &&

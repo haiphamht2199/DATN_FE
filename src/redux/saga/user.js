@@ -18,6 +18,7 @@ function* handleLogin(action) {
   let userRes = user[0].data;
   if (userRes.code === 200) {
    localStorage.setItem('token', userRes.data.access_token);
+
    if (localStorage.getItem('token')) {
     let dataRes = yield all([axios.get('http://localhost:8081/api/auth/current', {
      headers: {
@@ -29,6 +30,7 @@ function* handleLogin(action) {
     })]);
     if (dataRes[0].data.code === 200) {
      localStorage.setItem('student', dataRes[0].data.data.role_name);
+     localStorage.setItem('user_id', dataRes[0].data.data.user_id);
      yield put({
       type: "SIGNIN_SUCCESS",
       token: userRes.data.access_token,
@@ -47,7 +49,6 @@ function* handleLogin(action) {
 function* getAllCourseStudent() {
  try {
   let listCourseRes = yield all([Axios.get('/student/home_page/find_all')]);
-  console.log("listCourseRes:", listCourseRes);
   let listCourse = listCourseRes[0].data;
   if (listCourse.code === 200) {
    yield put({
@@ -65,9 +66,7 @@ function* getAllCourseStudent() {
 }
 function* getCourseDetail(action) {
  try {
-  console.log("action:", action)
   let classRes = yield all([Axios.get(`/student/classes/details?tag_class=${action.payload}`)]);
-  console.log("classRes:", classRes)
   let classDetail = classRes[0].data;
   if (classDetail.code === 200) {
    yield put({
@@ -87,7 +86,6 @@ function* getAllProgram(action) {
  try {
   let ProgramRes = yield all([Axios.get(`/student/classes/list_program_categories?class_id=${action.payload}`)]);
   let ProData = ProgramRes[0].data;
-  console.log("ProData:", ProData)
   if (ProData.code === 200) {
    yield put({
     type: "GET_CLASS_PROGRAM_BY_ID_SUCCESS",

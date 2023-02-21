@@ -192,7 +192,7 @@ EnhancedTableHead.propTypes = {
 function ListProgramStudy(props) {
   const dispatch = useDispatch();
   const allCategoryProgram = useSelector(state => state._class.classDetail.allCategoryProgram);
-  console.log("allCategoryProgram:", allCategoryProgram)
+
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -217,7 +217,6 @@ function ListProgramStudy(props) {
     if (programId) {
       try {
         let successRes = await axios.delete(`/teacher/program_category/delete?program_id=${programId}`);
-        console.log("successRes:", successRes)
         if (successRes.data.code === 200) {
           toast.success("Delete program success!!", {
             position: toast.POSITION.TOP_CENTER
@@ -238,7 +237,6 @@ function ListProgramStudy(props) {
     }
   }, [programId])
   const handleClickSetting = useCallback((event, row) => {
-    console.log("program_category_id:", row.program_category_id)
     setAnchorEl(event.currentTarget);
     setOpenAction(!openAction);
     setProgramId(row.program_category_id)

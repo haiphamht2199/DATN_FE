@@ -1608,7 +1608,7 @@ button {
 .infomation_detail_program_content {
   padding: 20px 20px;
   display: flex;
-  gap: 5%;
+  gap: 1%;
   margin-top: 10px;
   width: 100%;
   height: auto;
@@ -1623,6 +1623,10 @@ button {
 }
 
 .infomation_detail_program_content .detail_lesson_right {
+  width: 100%;
+}
+
+.customizeTest {
   width: 65%;
 }
 
@@ -1971,12 +1975,15 @@ button {
 }
 
 .content_list_course {
-  margin-top: 20px;
+  margin-top: 30px;
+  display: grid;
+  list-style: none;
+  padding: 0;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
   height: auto;
-  display: flex;
-  gap: 20px;
-
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
 }
 
 .card_course {
@@ -1991,7 +1998,7 @@ button {
 
 .image_course {
   width: 100%;
-  height: 250px;
+  height: 75%;
 }
 
 .image_course img {
@@ -2346,6 +2353,7 @@ button.react-datepicker__close-icon::after {
 .comment {
   display: flex;
   margin-bottom: 28px;
+  gap: 10px;
 }
 
 .comment-image-container {
@@ -2448,7 +2456,7 @@ button.react-datepicker__close-icon::after {
   border: none;
   background: none;
   padding: 0;
-  width: 15px;
+  /* width: 15px; */
   margin-top: .5rem;
   position: relative;
   cursor: pointer;
@@ -2617,6 +2625,28 @@ button.react-datepicker__close-icon::after {
   padding-left: 16px;
 }
 
+.icon_student_comment {
+  font-size: 25px;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
+  color: #fff;
+  background: #385cce;
+  border-radius: 50%;
+  /* margin-left: 45%; */
+  margin-top: 15px;
+  padding-top: 13px;
+  padding-left: 16px;
+}
+
+.icon_teacher {
+  padding-left: 8px;
+}
+
+.recharts-wrapper {
+  height: 334px !important;
+}
+
 .name_student_cheft {
   font-size: 15px;
   margin-top: 5px;
@@ -2694,7 +2724,7 @@ button.react-datepicker__close-icon::after {
 }
 
 .history_comment {
-  width: 55%;
+  width: 100%;
   height: 200px;
   border: 1px solid #D9D9D9;
   border-radius: 9px;
@@ -2848,6 +2878,12 @@ button.react-datepicker__close-icon::after {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
+.class_child_homePage_student {
+  width: 250px;
+  height: 250px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
 .list_class_ago {
   margin-top: 50px;
   display: flex;
@@ -2856,6 +2892,11 @@ button.react-datepicker__close-icon::after {
 }
 
 .class_child_homePage img {
+  width: 100%;
+  height: 170px;
+}
+
+.class_child_homePage_student img {
   width: 100%;
   height: 170px;
 }
@@ -2943,4 +2984,149 @@ button.react-datepicker__close-icon::after {
 
 .write_homeage {
   gap: 150px;
+}
+
+.remember_forgot_password {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.submit_login .MuiButton-fullWidth {
+  width: 100%;
+  height: 50px;
+  background: #3f51b5 !important;
+
+}
+
+.buttonload {
+  background-color: #04AA6D;
+  /* Green background */
+  border: none;
+  /* Remove borders */
+  color: white;
+  /* White text */
+  padding: 12px 24px;
+  /* Some padding */
+  font-size: 16px;
+  /* Set a font-size */
+}
+
+/* Add a right margin to each icon */
+.fa {
+  margin-left: -12px;
+  margin-right: 8px;
+}
+
+.custom_time {
+  width: 30% !important;
+}
+
+.custom_lesson {
+  width: 20% !important;
+}
+
+.custom_task {
+  width: 20% !important;
+}
+
+.custom_content {
+  width: 30% !important;
+}
+
+.timeLine_student_detail_history_comment {
+  margin-bottom: 20px;
+  padding-right: 10px;
+}
+
+.trace_lesson {
+  color: red !important;
+}
+
+.trace_task {
+  color: orange !important;
+}
+
+.trace_comment {
+  color: #385cce !important;
+}
+
+.history_comment .css-1ex1afd-MuiTableCell-root {
+  border-bottom: none !important;
+}
+
+.list_document_upload_body {
+  width: 100%;
+  height: 500px;
+  border: 1px solid #D9D9D9;
+  border-radius: 9px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  margin-bottom: 30px;
+}
+
+.header_list_document_upload {
+  height: 40px;
+  background-color: #3f51b5;
+  border-top-right-radius: 9px;
+  border-top-left-radius: 9px;
+  font-size: 16px;
+  color: #fff;
+  align-items: center;
+  justify-content: start;
+  display: flex;
+  gap: 10px;
+  padding-left: 10px;
+}
+
+.list_content_docment_upload {
+  padding: 20px 25px;
+}
+
+.icon_pdf_upload {
+  width: 40px;
+  height: 40px;
+}
+
+.icon_pdf_upload img {
+  width: 100%;
+  height: 100%;
+}
+
+.left_item_upload {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.icon_link_document_upload {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.name_upload_document {
+  margin-bottom: 10px;
+  font-family: 'sans-serif';
+  font-weight: 600;
+}
+
+.url_link_document {
+  font-family: 'auto';
+}
+
+.item_content_docment_upload {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.right_item_upload {
+  margin-right: 5px;
+  cursor: pointer;
+  height: 22px;
+  width: 22px;
+  background: white;
+  margin-top: 15px;
+  border-radius: 50%;
+  border: 1px solid blue;
 }

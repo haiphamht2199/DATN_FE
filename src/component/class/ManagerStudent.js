@@ -23,7 +23,6 @@ function ManagerStudent() {
  }
  useEffect(() => {
   if (_class.success) {
-   console.log("success:", _class.success)
    toast.success("Edit class student succes!", {
     position: toast.POSITION.TOP_CENTER
    });

@@ -102,7 +102,6 @@ function DetailProgramCaregory() {
     setOpen(false);
   };
   const handleDeleteLesson = useCallback(() => {
-    console.log("programId:", programId)
   }, [programId])
   useEffect(() => {
     dispatch({
@@ -223,7 +222,6 @@ function DetailProgramCaregory() {
   }, [setOpenModalLessonAndTask, setEditNameActive])
   function Row(props) {
     const [row, setRow] = useState(props.row);
-    console.log("row:", row)
     const [open, setOpen] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [openChange, setOpenChange] = useState(false);
@@ -318,9 +316,8 @@ function DetailProgramCaregory() {
     const handleDeleteTask = useCallback(async () => {
       if (taskGroup) {
         try {
-          console.log("ajsd:", taskGroup)
+
           let successRes = await axios.delete(`/teacher/tasks?/delete_task=${taskGroup.task_group_id}`);
-          console.log("successRes:", successRes)
           if (successRes.data.code === 200) {
             toast.success("Delete task detail success", {
               position: toast.POSITION.TOP_CENTER
@@ -341,7 +338,6 @@ function DetailProgramCaregory() {
         try {
 
           let successRes = await axios.put(`/teacher/tasks/change_status_task_group?task_group_id=${taskGroup.task_group_id}`);
-          console.log("successRes:", successRes)
           if (successRes.data.code === 200) {
             toast.success("Change status task group success!", {
               position: toast.POSITION.TOP_CENTER
@@ -533,7 +529,7 @@ function DetailProgramCaregory() {
               <AddToPhotosIcon className='icon_lession' />
             </div>
             <div className='url_lession_detail'>
-              <div className='content_url'>Danh sách lớp / {nameClass}/Chi tiết lớp học/Chương trình giảng day</div>
+              <div className='content_url'>Danh sách lớp / {nameClass} / Chi tiết lớp học / Chương trình giảng day</div>
             </div>
           </div>
           <div className='content_program_category_detail'>

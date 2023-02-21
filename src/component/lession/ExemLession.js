@@ -36,7 +36,6 @@ function ExemLession() {
  const [loading, setLoading] = useState(false);
  const [idsExamDetailToRemove, setIdsExamDetailToRemove] = useState([])
  const dispatch = useDispatch();
- console.log("arrayQuestions:", arrayQuestions)
  const handleDeleteFileExam = useCallback(() => {
   if (checkSave) {
    setFileExam("");
@@ -48,7 +47,6 @@ function ExemLession() {
      break;
     }
    }
-   console.log("arrayQuestions:", arrayQuestions)
    setArrayQuestions(arrayQuestions);
    setFiles("")
    setLoading(true)
@@ -63,12 +61,12 @@ function ExemLession() {
   // upload file
   const formData = new FormData();
   formData.append("file_exam ", file);
-  console.log("file:", file)
+
   try {
    let data = await axios.post('/teacher/exam/upload_file_exam', formData);
    if (data.data.code === 200) {
     let document = { file_path_document: data.data.data, name_document: file.name }
-    console.log("data:", data)
+
     file.isUploading = false;
     setFiles(file.name);
     setFileExam(document)
@@ -134,7 +132,7 @@ function ExemLession() {
   setQuestionForm("1")
  };
  const editQuestion = (newQuestion, checkSave) => {
-  console.log("newQuestion:", newQuestion)
+
   setIdEditQues(newQuestion.id);
   setCheckSave(false)
   setContentExam(newQuestion.contentExamDetail);
@@ -212,7 +210,6 @@ function ExemLession() {
    data.idsExamDetailToRemove = idsExamDetailToRemove
    try {
     let examRes = await Axios.put('/teacher/exam/edit', data);
-    console.log("examRes:", examRes);
     if (examRes.data.code === 200) {
      toast.success("Edit exam success!", {
       position: toast.POSITION.TOP_CENTER
@@ -246,7 +243,7 @@ function ExemLession() {
      data.examDetails = arrayExam;
      try {
       let examRes = await Axios.post('/teacher/exam/create', data);
-      console.log("examRes:", examRes);
+
       if (examRes.data.code === 200) {
        toast.success("Create exam success!", {
         position: toast.POSITION.TOP_CENTER

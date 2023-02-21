@@ -6,8 +6,6 @@ export default function ModuleClass(state = {}, action) {
       let nextState = action.payload.moduleClass; // apply delta from hydration
       return nextState
     case 'GET_ALL_MODULES_SUCCESS':
-      console.log("state:", state.modules)
-      console.log("action:", typeof (action.payload))
       return {
         ...state,
         modules: action.payload

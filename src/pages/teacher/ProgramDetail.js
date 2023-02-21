@@ -41,21 +41,22 @@ function ProgramDetail() {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLesson, setIsLesson] = useState(false);
-  const [contentLesson, setContentLesson] = useState("");
+  const [contentLesson, setContentLesson] = useState(false);
   const [contentTask, setContentTask] = useState("");
   const [isTask, setIsTask] = useState(false);
   const student = useSelector(state => state.user.student)
   let arrayProgram = useSelector(state => state._class.classDetail.arrayProgram);
   const classDetail = useSelector(state => state._class.classDetail);
-  const [listComments, setListComments] = useState("");
-  console.log("contentTask:", contentTask)
-  console.log("contentLesson:", contentLesson);
+  const [listComments, setListComments] = useState([]);
+  const [backendComments, setBackendComments] = useState([]);
   const [program, setProgram] = useState("");
   const program_id = searchParams.get("program_category_id");
   const [loading, setLoading] = React.useState(false);
   const [dataPost, setDataPost] = useState({});
   const [idTraceLesson, setIdTraceLesson] = useState("");
   const [idTraceTask, setIdTraceTask] = useState("");
+  const [activeComment, setActiveComment] = useState(null);
+  const [type, setType] = useState(1);
   function handleClick() {
     setLoading(true);
   }
@@ -72,7 +73,39 @@ function ProgramDetail() {
 
     }
   }, [program_id]);
-  const handleDetailLesson = useCallback(async (item, index) => {
+  const handleDetailLesson = useCallback(async (item, index, _type) => {
+    setType(_type);
+    let datarReq = {
+      commentId: null,
+      objectId: item.id_lesson,
+      type: _type,
+      level: 0
+    }
+    try {
+      let dataComment = [];
+      let listCommentsRes = await axios.post('/comments/get_comments', datarReq);
+      if (listCommentsRes.data.code === 200) {
+        let dataRes = listCommentsRes.data.data;
+        if (dataRes) {
+          dataRes.data && dataRes.data.length && dataRes.data.forEach(item => {
+            item.level = dataRes.level;
+            item.class_id = parseInt(dataRes.class_id);
+            item.objectId = datarReq.objectId;
+            item.type = _type;
+            item.count = dataRes.count;
+            dataComment.push(item);
+          });
+        }
+      }
+      setBackendComments(dataComment);
+      let dataPostRes = {}
+      dataPostRes.level = 0;
+      dataPostRes.class_id = searchParams.get("class_id");
+      dataPostRes.objectId = item.id_lesson;
+      setDataPost(dataPostRes)
+    } catch (error) {
+      console.log("e:", error)
+    }
     if (idTraceLesson) {
       let traceRes = await axios.put(`/student/traces?id_trace=${idTraceLesson}`);
       if (traceRes.data.code === 200) {
@@ -106,7 +139,7 @@ function ProgramDetail() {
       revoveClassList(data, index)
       data[index].classList.add("customize")
     }
-  }, [isLesson, contentLesson, isTask, setIsLesson, setIsTask, setContentLesson, idTraceLesson]);
+  }, [isLesson, contentLesson, isTask, setIsLesson, setIsTask, setContentLesson, idTraceLesson, type, dataPost, setBackendComments]);
   const revoveClassList = (data, index) => {
     for (let i = 0; i < data.length; i++) {
       if (i !== index) {
@@ -114,7 +147,53 @@ function ProgramDetail() {
       }
     }
   }
-  const handleDetailTask = useCallback(async (item, index) => {
+  const handleDetailTask = useCallback(async (item, index, _type) => {
+    setType(2);
+    let datarReq = {
+      commentId: null,
+      objectId: item.id_task,
+      type: _type,
+      level: 0
+    }
+    try {
+      let dataComment = [];
+      let listCommentsRes = await axios.post('/comments/get_comments', datarReq);
+      if (listCommentsRes.data.code === 200) {
+        let dataRes = listCommentsRes.data.data;
+        if (dataRes) {
+          dataRes.data && dataRes.data.length && dataRes.data.forEach(item => {
+            item.level = dataRes.level;
+            item.class_id = parseInt(dataRes.class_id);
+            item.objectId = datarReq.objectId;
+            item.type = _type;
+            item.count = dataRes.count;
+            dataComment.push(item);
+          });
+        }
+      }
+      if (idTraceTask) {
+        let traceRes = await axios.put(`/student/traces?id_trace=${idTraceTask}`);
+        if (traceRes.data.code === 200) {
+          setIdTraceTask("")
+        }
+      } else {
+        let traceRes = await axios.post('/student/traces', {
+          id_trace_student: null,
+          object_id: item.id_task,
+          type: 2,
+          content: item.name_task,
+          class_id: searchParams.get("class_id")
+        });
+        if (traceRes.data.code === 200) {
+          setIdTraceTask(traceRes.data.data.id_trace_student)
+        }
+      }
+      setBackendComments(dataComment);
+
+    } catch (error) {
+      console.log("e:", error)
+    }
+    setActiveComment(true)
     dispatch({
       type: 'SHOW_LOADING_START'
     });
@@ -140,7 +219,8 @@ function ProgramDetail() {
         setIsTask(true);
         setContentTask(item);
       }, 500)
-    } let dataPostRes = {}
+    }
+    let dataPostRes = {}
     dataPostRes.level = 0;
     dataPostRes.class_id = searchParams.get("class_id");
     dataPostRes.objectId = item.id_task;
@@ -152,7 +232,7 @@ function ProgramDetail() {
       // revoveClassList(data, index)
       // data[index].classList.add("customize");
     }
-  }, [isLesson, contentTask, isTask, listComments, dataPost])
+  }, [isLesson, contentTask, isTask, setBackendComments, dataPost, activeComment, setActiveComment, type])
   const uploadHandler = async (event, task_groups_id) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -262,13 +342,13 @@ function ProgramDetail() {
               <AddToPhotosIcon className='icon_lession' />
             </div>
             <div className='url_lession_detail'>
-              <div className='content_url'>Danh sách lớp /{classDetail.name_class}/Chi tiết lớp học/Chương trình giảng day</div>
+              <div className='content_url'>Danh sách lớp / {classDetail.name_class} / Chi tiết lớp học / Chương trình giảng day</div>
             </div>
           </div>
           <div className='detail_info_class'>
             <div className='infomation_detail_program_content'>
               <div className='list_lesson_left'>
-                <div className='content_lesson_lest'>
+                <div className="content_lesson_lest">
                   <div className='list_lesson_left-top'>Danh sách bài học</div>
                   <div className='list_lession_content-left'>
 
@@ -278,10 +358,10 @@ function ProgramDetail() {
                         <ArrowDropDownIcon />
                       </div>
                     </div>
-                    <div className='list_content_custom'>
+                    <div className={"list_content_custom"}>
                       {
                         program.lessons && program.lessons.length && program.lessons[0].id_lesson && program.lessons.map((item, indexLess) => (
-                          <div className='content_list_lesson_class_left' onClick={() => handleDetailLesson(item, indexLess)}>
+                          <div className='content_list_lesson_class_left' onClick={() => handleDetailLesson(item, indexLess, 1)}>
                             <div className='iconAndLabel_name_class'>
                               <div>
                                 <FeedIcon className='icon_paper_custom' />
@@ -298,7 +378,7 @@ function ProgramDetail() {
                       }
                       {
                         program.tasks && program.tasks.length && program.tasks[0].id_task && program.tasks.map(((item, index) => (
-                          <div className='content_list_lesson_class_left' onClick={() => handleDetailTask(item, index + program.lessons.length)}>
+                          <div className='content_list_lesson_class_left' onClick={() => handleDetailTask(item, index + program.lessons.length, 2)}>
                             <div className='iconAndLabel_name_class'>
                               <div>
                                 <LayersIcon className='icon_paper_custom' />
@@ -317,9 +397,28 @@ function ProgramDetail() {
                   </div>
                 </div>
               </div>
-              {
-                contentLesson && isLesson && <div className='detail_lesson_right' dangerouslySetInnerHTML={{ __html: contentLesson?.description_lesson }}>
 
+              {contentLesson && isLesson &&
+                <div className='customizeTest'>
+                  <div className='detail_lesson_right' dangerouslySetInnerHTML={{ __html: contentLesson?.description_lesson }}>
+
+                  </div>
+
+                  {contentLesson && isLesson && <div className='system_comment'>
+
+
+                    <Post
+                      listComments={listComments}
+                      setListComments={setListComments}
+                      dataPost={dataPost}
+                      backendComments={backendComments}
+                      setBackendComments={setBackendComments}
+                      activeComment={activeComment}
+                      setActiveComment={setActiveComment}
+                      type={type}
+                    />
+                  </div>
+                  }
                 </div>
               }
               {
@@ -344,7 +443,7 @@ function ProgramDetail() {
                     <div className='header_lesson_name_class_top' style={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px", marginTop: "30px" }}>
                       <div className='name_lession_task'>Thông tin hoạt động nhóm</div>
                       {
-                        student === "STUDENT" && contentTask.student_groups && contentTask.student_groups.status_assign === -1
+                        student === "STUDENT" && contentTask.student_groups && contentTask.student_groups && !contentTask.student_groups.path_file
                         && <div className='icon_arround_lessson'>
                           <Button variant="outlined" className='icon_arround_lessson_btn' component="label" startIcon={<CloudUploadIcon />}>
                             Nộp bài
@@ -381,7 +480,7 @@ function ProgramDetail() {
                         contentTask.student_groups && <div className='is_time_complete_task_require'>
                           <div>
                             <span className='is_complete_task_require'>Tình trạng hoạt động:</span>
-                            <span className={contentTask.student_groups !== "" && contentTask.student_groups.status_assign !== null && contentTask.student_groups.status_assign !== -1 ? "doneTask" : "notDoneTask"}>{contentTask.student_groups.status_assign !== -1 ? "Đã nộp bài" : "Chưa nộp bài"}</span>
+                            <span className={contentTask.student_groups !== "" && contentTask.student_groups && contentTask.student_groups.path_file && contentTask.student_groups.path_file ? "doneTask" : "notDoneTask"}>{contentTask.student_groups && contentTask.student_groups.path_file && contentTask.student_groups.path_file !== -1 ? "Đã nộp bài" : "Chưa nộp bài"}</span>
                           </div>
                           <div className="time_complete_task_require">
                             <span className='is_complete_task_require'>Thời gian hoàn thành:</span>
@@ -492,17 +591,21 @@ function ProgramDetail() {
                     </div>
 
                   }
-
-
                   <div className='system_comment'>
 
 
                     <Post
                       listComments={listComments}
-                      setListComments={listComments}
+                      setListComments={setListComments}
                       dataPost={dataPost}
-                      currentUserId="1" />
+                      backendComments={backendComments}
+                      setBackendComments={setBackendComments}
+                      activeComment={activeComment}
+                      setActiveComment={setActiveComment}
+                      type={type}
+                    />
                   </div>
+
 
 
                 </div>

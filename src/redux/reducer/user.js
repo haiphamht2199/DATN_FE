@@ -6,18 +6,27 @@ export default function user(state = {}, action) {
       let nextState = action.payload.menu; // apply delta from hydration
       return nextState
     case 'SIGNIN_SUCCESS':
-      let student = false
+      let student = false;
       return {
         ...state,
         token: action.token,
         message: action.message,
-        student: action.payload.role_name
+        student: action.payload.role_name,
+        userId: parseInt(action.payload.user_id)
       }
     case 'AUTO_LOGIN':
       return {
         ...state,
         token: action.payload,
-        student: action.student
+        student: action.student,
+        userId: parseInt(action.user_id)
+      }
+    case 'DELETE_TOKEN':
+      return {
+        ...state,
+        token: '',
+        userId: '',
+        student: ''
       }
 
 

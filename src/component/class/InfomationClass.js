@@ -15,7 +15,6 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { Card } from "@material-ui/core";
 function InfomationClass(props) {
   const { detailClass } = props;
-  console.log("detailClass:", detailClass)
   const [toggleState, setToggleState] = useState(1);
   const student = useSelector(state => state.user.student)
   const toggleTab = (index) => {

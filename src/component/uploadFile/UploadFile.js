@@ -15,12 +15,10 @@ function UploadFile({ files, setFiles, removeFile }) {
   // upload file
   const formData = new FormData();
   formData.append("file_document", file);
-  console.log("file:", file)
   try {
    let data = await axios.post('/teacher/document/create_file_document', formData);
    if (data.data.code === 200) {
     let document = { file_path_document: data.data.data, name_document: file.name }
-    console.log("data:", data)
     file.isUploading = false;
     setFiles([...files, file]);
 

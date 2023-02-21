@@ -28,6 +28,7 @@ import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import axios from '../../helper/axios';
 const StyledMenu = styled((props) => (
   <Menu
     elevation={0}
@@ -267,32 +268,52 @@ function ListInforStudent(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   let listStudent = useSelector(state => state._class.listStudent);
   const [email, setEmail] = useState("");
+  const [code, setcode] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const _class = useSelector((state) => state._class);
-  console.log("_class:", _class)
-  const handleClickSetting = useCallback((event, id) => {
+  const handleClickSetting = useCallback((event, id, code) => {
     setAnchorEl(event.currentTarget);
     setOpenAction(!openAction);
-    setEmail(id)
-  }, [email]);
+    setEmail(id);
+    setcode(code)
+  }, [email, code]);
   const handleClose = (anchorEl, modalOpenEditStudent) => {
 
     setAnchorEl(null);
     setOpenAction(false)
   };
-  const handleOpenModal = useCallback((id) => {
-    props.setEditDetail(false)
-    dispatch({
-      type: "GET_STUDENT_CLASS",
-      email: id
-    })
-    // dispatch({
-    //  type: "CHANGE_MODAL_EDIT_STUDENT",
-    //  payload: openEditStudent,
+  const handleOpenModal = useCallback(async (id, codeStudent) => {
+    if (codeStudent) {
+      try {
+        const dataRes = await axios.post('/teacher/trace_student/student_detail', {
+          codeStudent: codeStudent,
+          classId: parseInt(searchParams.get("class_id"))
+        });
+        if (dataRes.data.code === 200) {
+          let data = dataRes.data.data;
+          props.setTraceStudent(data)
+        }
+        const commentRes = await axios.post('/teacher/trace_student/student_comments_detail', {
+          codeStudent: codeStudent,
+          classId: parseInt(searchParams.get("class_id"))
+        });
+        if (commentRes.data.code === 200) {
+          let data = commentRes.data.data;
+          props.setListComment(data)
+        }
+        props.setCodeStudent(codeStudent)
+        props.setEditDetail(false)
+        // dispatch({
+        //  type: "CHANGE_MODAL_EDIT_STUDENT",
+        //  payload: openEditStudent,
 
-    // });
-    setAnchorEl(null);
-    setOpenAction(false)
+        // });
+        setAnchorEl(null);
+        setOpenAction(false)
+      } catch (e) {
+
+      }
+    }
   }, [openEditStudent])
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -413,7 +434,7 @@ function ListInforStudent(props) {
                       <TableCell align="center" >20</TableCell>
                       <TableCell align="center">30</TableCell>
                       <TableCell align="center">9.5</TableCell>
-                      <TableCell align="right" style={{ paddingRight: "30px" }}><SettingsIcon style={{ cursor: "pointer" }} onClick={(e) => handleClickSetting(e, row.email)} className="iconSetting" /></TableCell>
+                      <TableCell align="right" style={{ paddingRight: "30px" }}><SettingsIcon style={{ cursor: "pointer" }} onClick={(e) => handleClickSetting(e, row.email, row.code_student)} className="iconSetting" /></TableCell>
                       <div>
                         <StyledMenu
                           id="demo-customized-menu"
@@ -425,7 +446,7 @@ function ListInforStudent(props) {
                           onClose={handleClose}
                         >
 
-                          <MenuItem onClick={() => handleOpenModal(email)} disableRipple>
+                          <MenuItem onClick={() => handleOpenModal(email, code)} disableRipple>
                             <EditIcon />
                             Xem chi tiết
                           </MenuItem>

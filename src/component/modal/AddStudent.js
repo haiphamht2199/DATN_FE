@@ -6,7 +6,8 @@ import Alert from '@mui/material/Alert';
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
 import axios from '../../helper/axios'
-
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -62,20 +63,20 @@ function AddStudent(props) {
   const [isLoading1, setisLoading1] = useState(false);
   const [isLoading2, setisLoading2] = useState(false);
   const [validateEmail, setValidateEmail] = useState(true);
-  console.log("listStudent:", listStudent)
-  const handleChange = useCallback(event => {
-    const value = event.target.value;
-    setPersonName(
-      value
-    );
-    if (listStudent.length) {
-      let student = listStudent.find(item => item.code_student === value);
-      if (student) {
-        setStudentId(student.code_student);
-        setStudenEmail(student.email_student);
-        setStudentName(student.name_student);
-      }
-    }
+  const [open, setOpen] = React.useState(false);
+  const [options, setOptions] = React.useState([]);
+  const loading = open && options.length === 0;
+  function sleep(delay = 0) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, delay);
+    });
+  }
+  const handleChange = useCallback(value => {
+    setisLoading2(false)
+    setStudentId(value.code_student);
+    setStudenEmail(value.email_student);
+    setStudentName(value.name_student);
+
   }, [listStudent]);
   const addNewStudent = useCallback(() => {
     if (studentId) {
@@ -94,6 +95,7 @@ function AddStudent(props) {
 
       if (!ValidateEmail(studentEmail)) {
         setValidateEmail(false);
+        return;
       } else {
         setValidateEmail(true);
       }
@@ -147,7 +149,33 @@ function AddStudent(props) {
       fetchData(searchParams.get("class_id"));
 
     }
-  }, [searchParams.get("class_id")])
+  }, [searchParams.get("class_id")]);
+  React.useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    (async () => {
+      await sleep(1e3); // For demo purposes.
+
+      if (active) {
+        setOptions([...listStudent]);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [loading]);
+
+  React.useEffect(() => {
+    if (!open) {
+      setOptions([]);
+    }
+  }, [open]);
+
   return (
     <Dialog open={openModal} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
       <DialogTitle className={classes.dialogTitle}>
@@ -164,8 +192,8 @@ function AddStudent(props) {
       </DialogTitle>
       <DialogContent dividers>
         <div className='content_edit'>
-          <div>
-            <FormControl style={{ width: "100%" }}>
+          <div style={{ paddingLeft: '30%' }}>
+            {/* <FormControl style={{ width: "100%" }}>
 
               <Select
                 labelId="demo-multiple-name-label"
@@ -185,6 +213,39 @@ function AddStudent(props) {
                   </MenuItem>
                 ))}
               </Select>
+            </FormControl> */}
+            <FormControl style={{ width: "100%" }}>
+              <Autocomplete
+                id="asynchronous-demo"
+                sx={{ width: 300 }}
+                open={open}
+                onOpen={() => {
+                  setOpen(true);
+                }}
+                onClose={() => {
+                  setOpen(false);
+                }}
+                isOptionEqualToValue={(option, value) => option.code_student === value.code_student}
+                onChange={(option, value) => handleChange(value)}
+                getOptionLabel={(option) => option.name_student + "-" + option.code_student}
+                options={options}
+                loading={loading}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Tìm kiếm sinh viên"
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <React.Fragment>
+                          {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                          {params.InputProps.endAdornment}
+                        </React.Fragment>
+                      ),
+                    }}
+                  />
+                )}
+              />
             </FormControl>
           </div>
           <div className='edit_name_lession'>
@@ -198,7 +259,7 @@ function AddStudent(props) {
               value={studentId}
               onChange={(e) => setStudentId(e.target.value)}
             />
-            {isLoading && <Alert severity="error" style={{ color: "red" }}>Mã số sinh viên không được để trống!</Alert>}
+            {!studentId && <Alert severity="error" style={{ color: "red" }}>Mã số sinh viên không được để trống!</Alert>}
           </div>
           <div className='edit_name_lession'>
             <InputLabel style={{ marginBottom: "10px" }} required>Họ và tên </InputLabel>
@@ -211,7 +272,7 @@ function AddStudent(props) {
               value={studentName}
               onChange={(e) => setStudentName(e.target.value)}
             />
-            {isLoading1 && <Alert severity="error" style={{ color: "red" }}>Tên sinh viên không được để trống!</Alert>}
+            {!studentName && <Alert severity="error" style={{ color: "red" }}>Tên sinh viên không được để trống!</Alert>}
           </div>
           <div className='edit_name_lession'>
             <InputLabel style={{ marginBottom: "10px" }} required>Địa chỉ email </InputLabel>
@@ -225,7 +286,7 @@ function AddStudent(props) {
               onChange={(e) => setStudenEmail(e.target.value)}
             />
             {isLoading2 ? <Alert severity="error" style={{ color: "red" }}>Email không được để trống!</Alert> : ""}
-            {!validateEmail ? <Alert severity="error" style={{ color: "red" }}>Email không đúng định dạng!</Alert> : ""}
+            {!studentEmail ? <Alert severity="error" style={{ color: "red" }}>Email không đúng định dạng!</Alert> : ""}
           </div>
           <div>
             <Grid item xs={12}>
